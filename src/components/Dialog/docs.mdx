@@ -1,0 +1,31 @@
+import Dialog from '@/components/Dialog'
+import { DialogBasicDemo, DialogControlledDemo, DialogVariantsDemo } from './dialog.demos'
+
+# Dialog
+
+Hộp thoại xác nhận đơn giản, hỗ trợ controlled/uncontrolled, backdrop/Escape và a11y.
+
+## Usage
+```tsx
+function Example() {
+  const [open, setOpen] = React.useState(false)
+  return (
+    <>
+      <button className="btn btn-primary btn-md" onClick={() => setOpen(true)}>Open</button>
+      <Dialog title="Confirm" confirmText="Are you sure?" open={open} onOpenChange={setOpen} />
+    </>
+  )
+}
+```
+
+## Examples
+
+<DialogBasicDemo />
+<DialogControlledDemo />
+<DialogVariantsDemo />
+
+## A11y
+
+- Với icon-only button trong nội dung dialog (nếu có), thêm `aria-label`.
+
+

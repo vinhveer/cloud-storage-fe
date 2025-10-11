@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer components {
+    /* Base button styles — luôn có */
+    .btn {
+      @apply inline-flex items-center justify-center font-medium shadow-sm
+             focus:outline-none focus:ring-2 focus:ring-offset-2
+             transition-all duration-200 ease-in-out rounded-md;
+    }
+  
+    /* Variants */
+    .btn-primary {
+      @apply bg-blue-600 hover:bg-blue-700 text-white border-0 focus:ring-blue-500;
+    }
+    .btn-secondary {
+      @apply bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 focus:ring-blue-500;
+    }
+    .btn-danger {
+      @apply bg-red-600 hover:bg-red-700 text-white border-0 focus:ring-red-500;
+    }
+  
+    /* Sizes */
+    .btn-sm {
+      @apply px-2 py-1 text-xs;
+    }
+    .btn-md {
+      @apply px-4 py-2 text-sm;
+    }
+    .btn-lg {
+      @apply px-6 py-3 text-base;
+    }
+    .btn-xl {
+      @apply px-8 py-4 text-lg;
+    }
+    .btn-2xl {
+      @apply px-10 py-5 text-xl;
+    }
+  
+    /* Icon-only / circular */
+    .btn-icon-sm { @apply w-8 h-8 text-xs rounded-full; }
+    .btn-icon-md { @apply w-10 h-10 text-sm rounded-full; }
+    .btn-icon-lg { @apply w-12 h-12 text-base rounded-full; }
+    .btn-icon-xl { @apply w-14 h-14 text-lg rounded-full; }
+    .btn-icon-2xl { @apply w-16 h-16 text-xl rounded-full; }
+  }
+
+/* Markdown prose style cho MDX docs */
+@layer components {
+  .prose-docs {
+    @apply prose prose-sm md:prose-base lg:prose-lg max-w-none;
+  }
+}
+  

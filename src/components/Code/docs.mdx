@@ -1,0 +1,23 @@
+import Code from '@/components/Code'
+import { CodeBasicDemo, CodeHeaderToggleDemo } from '@/components/Code/code.demos'
+
+# Code
+
+Component hiển thị code với highlight và nút Copy.
+
+## Usage
+```tsx
+<Code code={`console.log('hi')`} language="ts" />
+```
+
+## Examples
+
+<CodeBasicDemo />
+<CodeHeaderToggleDemo />
+
+## Lưu ý
+
+- Highlight auto được cấu hình trong `src/lib/highlight.ts`.
+- Sao chép có fallback trong `src/utils/clipboard.ts`.
+
+

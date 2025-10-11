@@ -1,0 +1,217 @@
+---
+alwaysApply: false
+---
+Got it — here’s a concise **English** version with **no omissions** from the original (including the full component template).
+
+---
+
+## Mandatory Process When Creating a Component
+
+1. Create the component following the principles in this document.
+2. Write documentation as described in the “Docs Writing Guide.”
+
+---
+
+## React Component Standards (Cursor Rules)
+
+### General Principles
+
+* **ES6 + TypeScript**: Use explicit types; **never use `any`**. If `any` cannot be removed yet, inform users to address it together. Use **discriminated unions** when appropriate.
+* **Alias imports**: Prefer `@/`, `@data` over deep relative paths.
+* **Shared utilities**: Place constants/utilities in `src/constants`, `src/utils`, or `src/lib`.
+* **No global CSS imports in components**: Only import global styles in `src/main.tsx` or the root layout.
+* **No `console.log` in `src/`** except temporary debugging (must be removed before commit).
+
+### Component Structure
+
+* File: `ComponentName.tsx`. Export the main component by name.
+* Declare props at the top:
+
+  * `type ComponentNameProps = { ... }`
+  * Provide default values directly in parameter destructuring.
+* Accept `className` and merge with `clsx`.
+* Loading/disabled: if `isLoading` exists, auto-disable and show a spinner.
+
+  * Use `Loading` and the size maps from `src/constants/sizing.ts` (`buttonToSpinnerSize`, `loadingSizePixels`).
+* Accessibility (a11y):
+
+  * If icon-only, you **must** provide an `aria-label` (add a dev-guard warning).
+* Complex rendering: extract `ComponentNameContent` to reduce branching in the main component.
+
+### Data & Logic
+
+* Prefer **discriminated unions** over optional fields plus `any` casts.
+* Avoid nested ternaries; use maps/dictionaries for value mapping.
+* Prefer early returns; avoid `try/catch` unless you handle the error specifically.
+
+### Tailwind/CSS
+
+* Use only valid Tailwind classes (e.g., use `break-words` instead of `overflow-wrap-anywhere`).
+* Use `min-h-dvh` (or `min-h-screen` if `dvh` is not supported).
+* For custom utilities, define in `@layer components` and use `@apply`, then use that utility class in components.
+
+### Import highlight/clipboard
+
+* Configure highlighting in `src/lib/highlight.ts` (import the theme once, register when needed).
+* Clipboard copy uses `src/utils/clipboard.ts` with a safe fallback.
+
+### Component Template
+
+```tsx
+import clsx from 'clsx'
+import Loading from '@/components/Loading'
+import { buttonToSpinnerSize } from '@/constants/sizing'
+
+type MyButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: 'primary' | 'secondary' | 'danger'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  icon?: React.ReactNode
+  value?: string
+  isLoading?: boolean
+  loadingText?: string
+}
+
+function MyButtonContent({
+  icon,
+  value,
+  children,
+  isLoading,
+  loadingText,
+  size = 'md',
+}: Pick<MyButtonProps, 'icon' | 'value' | 'children' | 'isLoading' | 'loadingText' | 'size'>) {
+  if (isLoading) {
+    return (
+      <>
+        <Loading className="mr-2 inline-flex" size={buttonToSpinnerSize[size]} />
+        {loadingText ?? value ?? children ?? 'Loading'}
+      </>
+    )
+  }
+  return (
+    <>
+      {icon && value && (
+        <>
+          <span className="mr-2">{icon}</span>
+          {value}
+        </>
+      )}
+      {icon && !value && !children && icon}
+      {value && !icon && value}
+      {children}
+    </>
+  )
+}
+
+export function MyButton({
+  variant = 'primary',
+  size = 'md',
+  icon,
+  value,
+  isLoading = false,
+  loadingText,
+  children,
+  className,
+  ...rest
+}: MyButtonProps) {
+  const isIconOnly = !!icon && !value && !children
+  const sizeClass = isIconOnly ? `btn-icon-${size}` : `btn-${size}`
+  const variantClass = `btn-${variant}`
+
+  // Dev-guard: require aria-label when icon-only
+  try {
+    const isDev =
+      (typeof import.meta !== 'undefined' &&
+        (import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) ?? false
+    if (isDev && isIconOnly && !(rest as Record<string, unknown>)['aria-label']) {
+      console.warn('MyButton: icon-only requires aria-label')
+    }
+  } catch {}
+
+  return (
+    <button
+      {...rest}
+      type={rest.type ?? 'button'}
+      disabled={rest.disabled || isLoading}
+      className={clsx(
+        'btn',
+        variantClass,
+        sizeClass,
+        className,
+        isLoading && 'opacity-80 cursor-not-allowed'
+      )}
+    >
+      <MyButtonContent
+        icon={icon}
+        value={value}
+        isLoading={isLoading}
+        loadingText={loadingText}
+        size={size}
+      >
+        {children}
+      </MyButtonContent>
+    </button>
+  )
+}
+```
+
+### Quick Pre-Commit Checklist
+
+* Alias imports: no deep `../../..` paths in new/edited components.
+* No `import '../index.css'` in components.
+* No `console.log` in `src/`.
+* No `any` in new code; use unions/guards.
+* No nested ternaries for simple mappings (use a map).
+* Icon-only Button has `aria-label` (or triggers the dev-guard).
+* Accepts `className` and merges with `clsx`.
+
+### Docs Writing Guide (MDX-based)
+
+* Location & structure (per component):
+  
+  * `src/components/<Name>/docs.mdx`
+  * `src/components/<Name>/<name>.demos.tsx`
+  * Component code in `src/components/<Name>.tsx`
+
+* Authoring MDX:
+  
+  * MDX may import and render React components and demos directly.
+  * Example:
+  
+  ```mdx
+  import { Button } from '@/components/Button'
+  import { ButtonVariantsDemo } from '@/components/Button/button.demos'
+  
+  # Button
+  
+  ## Usage
+  ```tsx
+  <Button variant="primary" aria-label="Confirm">Confirm</Button>
+  ```
+  
+  ## Examples
+  <ButtonVariantsDemo />
+  ```
+
+* Routing:
+  
+  * Docs are loaded dynamically at `/samples/<slug>` where `<slug>` is the component folder (`button`, `dialog`, ...).
+  * Do not edit `@data` or any registry to add docs routes.
+
+* Demos:
+  
+  * Put small, focused demos in `<name>.demos.tsx` and import them in MDX.
+  * Do not use any demo registry.
+
+* Props Table (optional auto-gen):
+  
+  * Recommended to auto-generate JSON with a build step (e.g., `react-docgen-typescript`) and render via a PropsTable component.
+  * If writing manually, use Markdown tables and do not use `any`.
+
+* A11y & code blocks:
+  
+  * Icon-only examples must include `aria-label`.
+  * Set accurate code fence languages (`tsx`, `ts`, `js`, `json`, …).
+
+* Typography isolation:
+  
+  * Docs use Tailwind Typography. To prevent prose styles from affecting embedded components, a remark plugin can auto-apply `not-prose` to JSX nodes. Otherwise, add `className="not-prose"` on wrappers as needed.
