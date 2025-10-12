@@ -10,18 +10,18 @@ export default function SampleDynamicPage() {
     .join(' ')
 
   return (
-    <div className="space-y-4">
-      <nav aria-label="Breadcrumb" className="text-sm text-gray-500">
+    <div className="space-y-4 text-gray-900 dark:text-gray-100">
+      <nav aria-label="Breadcrumb" className="text-sm text-gray-500 dark:text-gray-400">
         <ol className="flex items-center space-x-2">
           <li>
-            <Link to="/" className="hover:underline">Home</Link>
+            <Link to="/" className="hover:underline text-blue-600 dark:text-blue-400">Home</Link>
           </li>
           <li>/</li>
           <li>
-            <Link to="/samples" className="hover:underline">Samples</Link>
+            <Link to="/samples" className="hover:underline text-blue-600 dark:text-blue-400">Samples</Link>
           </li>
           <li>/</li>
-          <li className="text-gray-700 font-medium">{title || 'Detail'}</li>
+          <li className="text-gray-700 dark:text-gray-300 font-medium">{title || 'Detail'}</li>
         </ol>
       </nav>
       <MDXContent slug={slug} />
