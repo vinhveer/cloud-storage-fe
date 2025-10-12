@@ -1,9 +1,6 @@
 ---
 alwaysApply: false
 ---
-Got it — here’s a concise **English** version with **no omissions** from the original (including the full component template).
-
----
 
 ## Mandatory Process When Creating a Component
 
@@ -24,7 +21,11 @@ Got it — here’s a concise **English** version with **no omissions** from the
 
 ### Component Structure
 
-* File: `ComponentName.tsx`. Export the main component by name.
+* File location: `src/components/ComponentName.tsx`.
+* Exports:
+  
+  * Prefer a named export `export const ComponentName = …` for shared components.
+  * Default export is acceptable; ensure the function is named (for stack traces), e.g. `export default function ComponentName() { … }`.
 * Declare props at the top:
 
   * `type ComponentNameProps = { ... }`
@@ -44,16 +45,31 @@ Got it — here’s a concise **English** version with **no omissions** from the
 * Avoid nested ternaries; use maps/dictionaries for value mapping.
 * Prefer early returns; avoid `try/catch` unless you handle the error specifically.
 
+* Controlled vs Uncontrolled patterns (when applicable):
+  
+  * Provide controlled props: `value`/`open` + `onChange`/`onOpenChange`.
+  * Provide uncontrolled defaults: `defaultValue`/`defaultOpen`.
+  * Use internal state only when uncontrolled; always call the change handler on state transitions.
+  * Keep behavior parity between modes; do not add features to one mode only.
+
 ### Tailwind/CSS
 
 * Use only valid Tailwind classes (e.g., use `break-words` instead of `overflow-wrap-anywhere`).
 * Use `min-h-dvh` (or `min-h-screen` if `dvh` is not supported).
 * For custom utilities, define in `@layer components` and use `@apply`, then use that utility class in components.
 
-### Import highlight/clipboard
+### Naming & Folders
 
-* Configure highlighting in `src/lib/highlight.ts` (import the theme once, register when needed).
-* Clipboard copy uses `src/utils/clipboard.ts` with a safe fallback.
+* Component folders/files: PascalCase for component directories under `src/components/` (e.g., `Button/`), main file `ComponentName.tsx` at the component root.
+* Docs/demos live alongside components: `src/components/<Name>/docs.mdx`, `src/components/<Name>/<name>.demos.tsx`.
+* Route slugs for docs are lowercase (e.g., `button`, `dialog`).
+
+### Code blocks in docs (no custom Code component)
+
+* Use fenced code blocks directly in MDX (```ts, ```tsx, ```json, ...).
+* Do not create or use a shared `Code` component for docs.
+* If you need copy-to-clipboard, implement it inline in MDX or a tiny local helper; avoid adding a global component.
+* Syntax highlighting should be handled by the MDX/remark/rehype pipeline or global styles, not per-component code.
 
 ### Component Template
 
@@ -194,8 +210,13 @@ export function MyButton({
 
 * Routing:
   
-  * Docs are loaded dynamically at `/samples/<slug>` where `<slug>` is the component folder (`button`, `dialog`, ...).
+  * Docs are loaded dynamically at `/samples/<slug>` where `<slug>` is the lowercase component folder (`button`, `dialog`, ...).
   * Do not edit `@data` or any registry to add docs routes.
+
+* Samples index list:
+  
+  * The overview list at `/samples` is driven by `@data/sample-data.mock.ts`.
+  * Update that file to add/remove items shown on the list (navigation only; routing still resolves dynamically via MDX files).
 
 * Demos:
   

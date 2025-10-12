@@ -5,7 +5,27 @@ import { ButtonVariantsDemo, ButtonSizesDemo, ButtonIconsDemo, ButtonLoadingDemo
 
 Nút chuẩn của hệ thống. Hỗ trợ variant, kích thước, và trạng thái loading.
 
-## Usage
+## Mục đích & trường hợp xử lý
+
+- Hành động chính/phụ/cảnh báo với `primary | secondary | danger`.
+- Trạng thái `loading`: tự disable, hiển thị spinner theo `size`.
+- Hỗ trợ `icon-only`, `value`, hoặc `children` linh hoạt.
+- Nhiều kích thước: `sm | md | lg | xl | 2xl`.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| variant | 'primary' | 'secondary' | 'danger' | 'primary' | Kiểu nút |
+| size | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'md' | Kích thước; icon-only dùng lớp `btn-icon-*` |
+| icon | React.ReactNode | - | Icon hiển thị trước nội dung |
+| value | string | - | Văn bản khi không dùng `children` |
+| isLoading | boolean | false | Hiển thị spinner và disable nút |
+| loadingText | string | - | Nội dung thay thế khi loading |
+| className | string | - | Bổ sung class Tailwind |
+| ...rest | React.ButtonHTMLAttributes<HTMLButtonElement> | - | Thuộc tính button gốc; `type` mặc định `'button'` |
+
+## Cách dùng
 ```tsx
 <Button variant="primary" aria-label="Confirm">Confirm</Button>
 ```
@@ -20,8 +40,12 @@ Nút chuẩn của hệ thống. Hỗ trợ variant, kích thước, và trạng
 
 <ButtonLoadingDemo />
 
-## A11y
+## Lưu ý
 
-- Icon-only button phải có `aria-label`.
+- Nút chỉ có icon bắt buộc phải có `aria-label` (đã có dev-guard).
+- `isLoading` sẽ tự động disable nút và hiển thị spinner.
+- Ưu tiên dùng `type="button"` khi nút không submit form (mặc định đã là `button`).
+- Không lồng `<button>` vào `<button>`; dùng `<span>`/`<div>` nếu cần wrapper.
+- `className` được merge, có thể bổ sung tiện lợi các utility Tailwind.
 
 

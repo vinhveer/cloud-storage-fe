@@ -1,5 +1,5 @@
 import { createRoute } from '@tanstack/react-router'
-import SamplesPage from '@/pages/Samples'
+import SamplesPage from '@/pages/samples'
 // Legacy sample pages removed in favor of MDX-based pages
 import SampleDynamicPage from '@/pages/samples/[slug]'
 import SampleLayout from '@/app/layout/SampleLayout'

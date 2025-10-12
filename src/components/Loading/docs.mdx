@@ -5,7 +5,21 @@ import { LoadingSizesDemo, LoadingUsageDemo } from '@/components/Loading/loading
 
 Spinner hiển thị trạng thái đang xử lý. Hỗ trợ các size: `sm | md | lg | xl | 2xl`.
 
-## Usage
+## Mục đích & trường hợp xử lý
+
+- Hiển thị tiến trình ngắn khi đang tải dữ liệu/thực thi thao tác.
+- Dùng độc lập hoặc lồng trong nút (kết hợp `Button` trạng thái `isLoading`).
+- Tùy chọn nhiều kích thước để phù hợp ngữ cảnh UI.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| size | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'md' | Kích thước spinner |
+| className | string | - | Bổ sung class Tailwind |
+| ariaLabel | string | 'Loading' | Văn bản a11y mô tả ngắn gọn |
+
+## Cách dùng
 ```tsx
 <Loading ariaLabel="Loading" />
 ```
@@ -15,8 +29,10 @@ Spinner hiển thị trạng thái đang xử lý. Hỗ trợ các size: `sm | m
 <LoadingUsageDemo />
 <LoadingSizesDemo />
 
-## A11y
+## Lưu ý
 
-- Luôn đặt `ariaLabel` mô tả ngắn gọn hành động/tiến trình.
+- Luôn truyền `ariaLabel` phù hợp ngữ cảnh (đọc bởi screen reader).
+- Spinner kế thừa `currentColor`; đổi màu bằng class màu văn bản (`text-*`).
+- Không chặn tương tác: nếu cần chặn, bao thêm overlay/backdrop riêng.
 
 

@@ -10,6 +10,5 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'Button', href: '/samples/button' },
   { title: 'Dialog', href: '/samples/dialog' },
   { title: 'Loading', href: '/samples/loading' },
-  { title: 'Code', href: '/samples/code' },
 ]
 

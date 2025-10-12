@@ -5,7 +5,34 @@ import { DialogBasicDemo, DialogControlledDemo, DialogVariantsDemo } from './dia
 
 Hộp thoại xác nhận đơn giản, hỗ trợ controlled/uncontrolled, backdrop/Escape và a11y.
 
-## Usage
+## Mục đích & trường hợp xử lý
+
+- Xác nhận hành động quan trọng (xóa, rời trang, v.v.).
+- Hỗ trợ chế độ controlled (`open`, `onOpenChange`) và uncontrolled (`defaultOpen`).
+- Đóng bằng phím `Escape` và click backdrop (có thể tắt từng cái).
+- Nút Confirm có 3 kiểu: `danger | primary | neutral`.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| id | string | sinh tự động | Id gốc của modal (phục vụ aria-*) |
+| title | string | - | Tiêu đề hộp thoại |
+| confirmText | string | 'Are you sure?' | Nội dung xác nhận |
+| confirmButtonText | string | 'Confirm' | Nhãn nút xác nhận |
+| cancelButtonText | string | 'Cancel' | Nhãn nút hủy |
+| confirmHref | string | '#' | Liên kết mặc định khi không có `onConfirm` |
+| confirmType | 'danger' | 'primary' | 'neutral' | 'danger' | Kiểu nút xác nhận |
+| open | boolean | - | Trạng thái controlled |
+| defaultOpen | boolean | false | Trạng thái ban đầu ở uncontrolled |
+| onOpenChange | (open: boolean) => void | - | Callback khi đổi trạng thái |
+| onConfirm | () => void | Promise<void> | - | Xử lý khi nhấn Confirm (prevent default, auto đóng sau khi xong) |
+| onCancel | () => void | - | Xử lý khi nhấn Cancel/đóng |
+| closeOnEsc | boolean | true | Cho phép đóng bằng phím Escape |
+| closeOnBackdrop | boolean | true | Cho phép đóng khi click nền |
+| className | string | - | Bổ sung class Tailwind |
+
+## Cách dùng
 ```tsx
 function Example() {
   const [open, setOpen] = React.useState(false)
@@ -24,8 +51,12 @@ function Example() {
 <DialogControlledDemo />
 <DialogVariantsDemo />
 
-## A11y
+## Lưu ý
 
-- Với icon-only button trong nội dung dialog (nếu có), thêm `aria-label`.
+- Controlled: truyền `open` và `onOpenChange`. Uncontrolled: dùng `defaultOpen`.
+- `onConfirm` nếu có sẽ `preventDefault()`, chạy async và tự đóng sau khi hoàn tất.
+- Nếu không có `onConfirm`, nút Confirm là link điều hướng theo `confirmHref`.
+- `closeOnEsc`/`closeOnBackdrop` điều khiển hành vi đóng; tắt nếu cần bắt buộc thao tác.
+- Modal đã có `role="dialog"`, `aria-modal`, `aria-labelledby`, `aria-describedby`.
 
 
