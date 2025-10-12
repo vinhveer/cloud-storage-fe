@@ -213,10 +213,12 @@ export function MyButton({
   * Docs are loaded dynamically at `/samples/<slug>` where `<slug>` is the lowercase component folder (`button`, `dialog`, ...).
   * Do not edit `@data` or any registry to add docs routes.
 
-* Samples index list:
+* Samples index list & navigation:
   
   * The overview list at `/samples` is driven by `@data/sample-data.mock.ts`.
   * Update that file to add/remove items shown on the list (navigation only; routing still resolves dynamically via MDX files).
+  * The docs layout no longer uses a sidebar; use a breadcrumb on the index and inside pages as needed.
+  * Layout uses a centered Tailwind `container` (non-fluid). Keep content within the container.
 
 * Demos:
   

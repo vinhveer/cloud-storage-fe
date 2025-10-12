@@ -16,21 +16,21 @@ Hộp thoại xác nhận đơn giản, hỗ trợ controlled/uncontrolled, back
 
 | Tên | Kiểu | Mặc định | Mô tả |
 | --- | --- | --- | --- |
-| id | string | sinh tự động | Id gốc của modal (phục vụ aria-*) |
-| title | string | - | Tiêu đề hộp thoại |
-| confirmText | string | 'Are you sure?' | Nội dung xác nhận |
-| confirmButtonText | string | 'Confirm' | Nhãn nút xác nhận |
-| cancelButtonText | string | 'Cancel' | Nhãn nút hủy |
-| confirmHref | string | '#' | Liên kết mặc định khi không có `onConfirm` |
-| confirmType | 'danger' | 'primary' | 'neutral' | 'danger' | Kiểu nút xác nhận |
-| open | boolean | - | Trạng thái controlled |
-| defaultOpen | boolean | false | Trạng thái ban đầu ở uncontrolled |
-| onOpenChange | (open: boolean) => void | - | Callback khi đổi trạng thái |
-| onConfirm | () => void | Promise<void> | - | Xử lý khi nhấn Confirm (prevent default, auto đóng sau khi xong) |
-| onCancel | () => void | - | Xử lý khi nhấn Cancel/đóng |
-| closeOnEsc | boolean | true | Cho phép đóng bằng phím Escape |
-| closeOnBackdrop | boolean | true | Cho phép đóng khi click nền |
-| className | string | - | Bổ sung class Tailwind |
+| id | `string` | sinh tự động | Id gốc của modal (phục vụ aria-*) |
+| title | `string` | - | Tiêu đề hộp thoại |
+| confirmText | `string` | `'Are you sure?'` | Nội dung xác nhận |
+| confirmButtonText | `string` | `'Confirm'` | Nhãn nút xác nhận |
+| cancelButtonText | `string` | `'Cancel'` | Nhãn nút hủy |
+| confirmHref | `string` | `'#'` | Liên kết mặc định khi không có `onConfirm` |
+| confirmType | `'danger' \| 'primary' \| 'neutral'` | `'danger'` | Kiểu nút xác nhận |
+| open | `boolean` | - | Trạng thái controlled |
+| defaultOpen | `boolean` | `false` | Trạng thái ban đầu ở uncontrolled |
+| onOpenChange | `(open: boolean) => void` | - | Callback khi đổi trạng thái |
+| onConfirm | `() => void \| Promise<void>` | - | Xử lý khi nhấn Confirm (prevent default, auto đóng sau khi xong) |
+| onCancel | `() => void` | - | Xử lý khi nhấn Cancel/đóng |
+| closeOnEsc | `boolean` | `true` | Cho phép đóng bằng phím Escape |
+| closeOnBackdrop | `boolean` | `true` | Cho phép đóng khi click nền |
+| className | `string` | - | Bổ sung class Tailwind |
 
 ## Cách dùng
 ```tsx

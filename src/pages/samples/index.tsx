@@ -3,7 +3,16 @@ import { sampleMenuItems, samplesTitle, samplesIntro } from '@data/sample-data.m
 
 export default function SamplesPage() {
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      <nav aria-label="Breadcrumb" className="text-sm text-gray-500">
+        <ol className="flex items-center space-x-2">
+          <li>
+            <Link to="/" className="hover:underline">Home</Link>
+          </li>
+          <li>/</li>
+          <li className="text-gray-700 font-medium">Samples</li>
+        </ol>
+      </nav>
       <h1 className="text-2xl font-bold">{samplesTitle}</h1>
       <p className="text-gray-700">{samplesIntro}</p>
       <ul className="list-disc pl-6 space-y-1">
