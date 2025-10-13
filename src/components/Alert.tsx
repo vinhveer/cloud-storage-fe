@@ -60,7 +60,13 @@ export default function Alert({
   useEffect(() => {
     const el = contentRef.current
     if (!el) return
-    const update = () => setIconSize(el.getBoundingClientRect().height)
+    const update = () => {
+      const h = el.getBoundingClientRect().height
+      // Slightly larger comfortable sizing: base on content height, then clamp to 22–26px
+      let size = Math.round(h - 8)
+      size = Math.max(30, Math.min(40, size))
+      setIconSize(size)
+    }
     update()
     let ro: ResizeObserver | null = null
     if (typeof ResizeObserver !== 'undefined') {
@@ -82,10 +88,10 @@ export default function Alert({
       className={clsx('not-prose border rounded-lg px-4 py-1.5 mb-2', typeClasses[type], dismissible && 'relative', className)}
     >
       <div className="flex items-stretch">
-        <div className="flex-shrink-0 self-stretch flex items-center justify-center px-2">
+        <div className="flex-shrink-0 self-stretch flex items-center justify-center px-2 py-1.5">
           {icon ?? (
             <IconComp
-              className={clsx(iconColorClasses[type])}
+              className={clsx('block', iconColorClasses[type])}
               style={{ height: iconSize, width: iconSize }}
             />
           )}
