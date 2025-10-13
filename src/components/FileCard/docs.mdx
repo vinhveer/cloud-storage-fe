@@ -15,10 +15,11 @@ Thẻ hiển thị tệp với icon, tiêu đề, mô tả ngắn và nút “De
 
 | Tên | Kiểu | Mặc định | Mô tả |
 | --- | --- | --- | --- |
-| iconClass | `string` | `'fas fa-file'` | Lớp icon (ví dụ Font Awesome) |
+| icon | `IconName` | `'file'` | Tên icon: 'file', 'file-alt', 'file-csv', 'file-image', 'file-word', 'file-excel', 'file-pdf', 'file-lines', 'folder' |
+| iconColor | `string` | `'text-blue-600'` | Tailwind class cho màu icon |
 | title | `string` | - | Tiêu đề bắt buộc |
 | subtitle | `string` | - | Mô tả ngắn tùy chọn |
-| detailsHref | `string` | `'#'` | Liên kết điều hướng khi bấm “Details” |
+| detailsHref | `string` | `'#'` | Liên kết điều hướng khi bấm "Details" |
 | width | `number` | `100` | Độ rộng phần trăm của thẻ (áp dụng inline style) |
 | className | `string` | - | Bổ sung class Tailwind |
 | ...rest | `React.HTMLAttributes<HTMLDivElement>` | - | Thuộc tính `div` gốc |
@@ -28,7 +29,8 @@ Thẻ hiển thị tệp với icon, tiêu đề, mô tả ngắn và nút “De
 <FileCard
   title="Báo cáo tài chính Q1"
   subtitle="Cập nhật ngày 12/10/2025"
-  iconClass="fas fa-file-invoice"
+  icon="file-pdf"
+  iconColor="text-red-600"
   detailsHref="/files/financial-q1"
   width={50}
 />
@@ -45,5 +47,6 @@ Thẻ hiển thị tệp với icon, tiêu đề, mô tả ngắn và nút “De
 ## Lưu ý
 
 - `width` được áp dụng trực tiếp vào style `{ width: 'X%' }` để kiểm soát bố cục linh hoạt trong lưới.
-- Đảm bảo đã nạp thư viện icon tương ứng (ví dụ Font Awesome) nếu bạn dùng `iconClass` mặc định hoặc tùy chỉnh.
+- Sử dụng SVG icons từ `@/lib/icons` thay vì Font Awesome.
 - `className` được merge với các lớp mặc định (bo góc, viền, đổ bóng, hiệu ứng hover).
+- Hỗ trợ dark mode với các class Tailwind dark:*.

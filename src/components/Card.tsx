@@ -47,19 +47,19 @@ export const Card = ({
       ? 'shadow-2xl'
       : 'shadow-lg'
 
-  const borderClass = border ? 'border border-gray-200' : ''
+  const borderClass = border ? 'border border-gray-200 dark:border-gray-700' : ''
 
   return (
     <div
       {...rest}
-      className={clsx('not-prose bg-white rounded-xl', paddingClass, shadowClass, borderClass, className)}
+      className={clsx('not-prose bg-white dark:bg-gray-800 rounded-xl', paddingClass, shadowClass, borderClass, className)}
     >
       {(title || subtitle) && (
         <div className="mb-6">
           {title && (
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h2>
           )}
-          {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-gray-600 dark:text-gray-400">{subtitle}</p>}
         </div>
       )}
 

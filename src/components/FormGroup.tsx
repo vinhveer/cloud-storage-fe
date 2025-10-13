@@ -22,7 +22,7 @@ export default function FormGroup({
   return (
     <div {...rest} className={clsx('not-prose space-y-2', className)}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
         </label>
       )}
@@ -32,9 +32,9 @@ export default function FormGroup({
       </div>
 
       {error ? (
-        <p id={errorId} className="text-sm text-red-600">{error}</p>
+        <p id={errorId} className="text-sm text-red-600 dark:text-red-400">{error}</p>
       ) : help ? (
-        <p id={helpId} className="text-sm text-gray-500">{help}</p>
+        <p id={helpId} className="text-sm text-gray-500 dark:text-gray-400">{help}</p>
       ) : null}
     </div>
   )

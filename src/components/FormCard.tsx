@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import Card from '@/components/Card'
+import Card from './Card'
 
 export type FormCardProps = React.HTMLAttributes<HTMLDivElement> & {
   title?: string
@@ -35,7 +35,7 @@ export default function FormCard({
     <div
       {...rest}
       className={clsx(
-        'not-prose min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8',
+        'not-prose min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8',
         className
       )}
     >
