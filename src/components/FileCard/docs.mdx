@@ -1,0 +1,49 @@
+import { FileCard } from '@/components/FileCard'
+import { FileCardBasicDemo, FileCardWidthDemo, FileCardIconDemo } from './filecard.demos'
+
+# FileCard
+
+Thẻ hiển thị tệp với icon, tiêu đề, mô tả ngắn và nút “Details”. Hỗ trợ điều chỉnh độ rộng theo phần trăm.
+
+## Mục đích & trường hợp xử lý
+
+- Hiển thị item tệp/tài liệu với icon và thông tin ngắn gọn.
+- Điều hướng nhanh tới trang chi tiết qua liên kết `detailsHref`.
+- Dễ sắp xếp theo lưới bằng thuộc tính `width` (tính theo phần trăm `%`).
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| iconClass | `string` | `'fas fa-file'` | Lớp icon (ví dụ Font Awesome) |
+| title | `string` | - | Tiêu đề bắt buộc |
+| subtitle | `string` | - | Mô tả ngắn tùy chọn |
+| detailsHref | `string` | `'#'` | Liên kết điều hướng khi bấm “Details” |
+| width | `number` | `100` | Độ rộng phần trăm của thẻ (áp dụng inline style) |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `React.HTMLAttributes<HTMLDivElement>` | - | Thuộc tính `div` gốc |
+
+## Cách dùng
+```tsx
+<FileCard
+  title="Báo cáo tài chính Q1"
+  subtitle="Cập nhật ngày 12/10/2025"
+  iconClass="fas fa-file-invoice"
+  detailsHref="/files/financial-q1"
+  width={50}
+/>
+```
+
+## Examples
+
+<FileCardBasicDemo />
+
+<FileCardWidthDemo />
+
+<FileCardIconDemo />
+
+## Lưu ý
+
+- `width` được áp dụng trực tiếp vào style `{ width: 'X%' }` để kiểm soát bố cục linh hoạt trong lưới.
+- Đảm bảo đã nạp thư viện icon tương ứng (ví dụ Font Awesome) nếu bạn dùng `iconClass` mặc định hoặc tùy chỉnh.
+- `className` được merge với các lớp mặc định (bo góc, viền, đổ bóng, hiệu ứng hover).
