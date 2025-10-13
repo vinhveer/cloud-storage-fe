@@ -1,0 +1,59 @@
+import { NavGroup } from '@/components/NavGroup'
+import { NavGroupBasicDemo, NavGroupVerticalDemo, NavGroupWithBadgesDemo } from './navgroup.demos'
+
+# NavGroup
+
+Thanh điều hướng dạng pills, hỗ trợ ngang/dọc, trạng thái active, icon class và badge.
+
+## Mục đích & trường hợp xử lý
+
+- Chuyển đổi nhanh giữa các mục trong một vùng giao diện.
+- Hỗ trợ bố cục linh hoạt: ngang (mặc định) hoặc dọc.
+- Có thể hiển thị số lượng/badge, icon class (Font/FA) nếu cần.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| items | `NavItem[]` | `[]` | Danh sách mục điều hướng |
+| activeItem | `string \| null` | `null` | Mục đang active; khớp theo `id` hoặc `label` |
+| orientation | `'horizontal' \| 'vertical'` | `'horizontal'` | Hướng hiển thị |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `React.HTMLAttributes<HTMLElement>` | - | Thuộc tính gốc cho `<nav>` |
+
+### NavItem
+
+| Trường | Kiểu | Mô tả |
+| --- | --- | --- |
+| id | `string` | Định danh duy nhất |
+| label | `string` | Nhãn hiển thị |
+| href | `string` | Liên kết (mặc định `#`) |
+| icon | `string` | Class icon (ví dụ: `far fa-inbox`) |
+| badge | `string \| number` | Huy hiệu số/văn bản |
+
+## Cách dùng
+```tsx
+<NavGroup
+  items=[
+    { id: 'home', label: 'Home', href: '#' },
+    { id: 'files', label: 'Files', href: '#' },
+    { id: 'settings', label: 'Settings', href: '#' },
+  ]
+  activeItem="files"
+/>
+```
+
+## Examples
+
+<NavGroupBasicDemo />
+
+<NavGroupVerticalDemo />
+
+<NavGroupWithBadgesDemo />
+
+## Lưu ý
+
+- Khi `orientation='vertical'` sẽ dùng lớp `flex-col space-y-1`; ngược lại là `flex-row space-x-1`.
+- `icon` là class string, được render dưới dạng `<i className="..." />`.
+- `badge` hiển thị trong thẻ `<span>` với các lớp nền/xám mặc định.
+- `className` được merge, có thể tùy chỉnh thêm bố cục.

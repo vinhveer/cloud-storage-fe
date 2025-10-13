@@ -24,4 +24,5 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'FormSelect', href: '/samples/formselect' },
   { title: 'FormSwitch', href: '/samples/formswitch' },
   { title: 'FormTextarea', href: '/samples/formtextarea' },
+  { title: 'NavGroup', href: '/samples/navgroup' },
 ]
