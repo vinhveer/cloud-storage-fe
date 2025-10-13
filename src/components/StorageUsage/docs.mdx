@@ -1,0 +1,43 @@
+import StorageUsage from "@/components/StorageUsage";
+import {
+  StorageUsageBasicDemo,
+  StorageUsageVariantsDemo,
+} from "./storage-usage.demos";
+
+# StorageUsage
+
+Thanh tiến trình thể hiện dung lượng đã sử dụng trên tổng dung lượng.
+
+## Mục đích & trường hợp xử lý
+
+- Hiển thị phần trăm sử dụng dung lượng và nhãn mô tả.
+- Dùng trong dashboard hoặc trang quản lý tài khoản/lưu trữ.
+
+## Props
+
+| Tên            | Kiểu                                   | Mặc định        | Mô tả                               |
+| -------------- | -------------------------------------- | --------------- | ----------------------------------- |
+| used           | `number`                               | -               | Dung lượng đã dùng (GB)             |
+| total          | `number`                               | -               | Tổng dung lượng (GB)                |
+| precision      | `number`                               | `2`             | Số chữ số thập phân khi hiển thị GB |
+| colorClassName | `string`                               | `'bg-blue-600'` | Lớp màu cho thanh tiến trình        |
+| className      | `string`                               | -               | Bổ sung class Tailwind              |
+| ...rest        | `React.HTMLAttributes<HTMLDivElement>` | -               | Thuộc tính `div` gốc                |
+
+## Cách dùng
+
+```tsx
+<StorageUsage used={12.34} total={50} />
+```
+
+## Examples
+
+<StorageUsageBasicDemo />
+
+<StorageUsageVariantsDemo />
+
+## Lưu ý
+
+- Giá trị phần trăm được clamp trong khoảng `0-100`.
+- Khi `total <= 0`, thành phần tự dùng giá trị an toàn để tránh chia cho 0.
+- Sử dụng `colorClassName` để thay đổi màu thanh tiến trình.

@@ -1,0 +1,52 @@
+import Card from "@/components/Card";
+import {
+  CardBasicDemo,
+  CardPaddingDemo,
+  CardShadowBorderDemo,
+} from "./card.demos";
+
+# Card
+
+Thẻ nội dung chung với tiêu đề, mô tả ngắn, padding, shadow và border.
+
+## Mục đích & trường hợp xử lý
+
+- Hiển thị một khối nội dung có bố cục rõ ràng, dễ tái sử dụng.
+- Tùy biến nhanh khoảng đệm (`padding`), độ đổ bóng (`shadow`) và đường viền (`border`).
+- Hỗ trợ tiêu đề (`title`) và mô tả (`subtitle`) tùy chọn.
+
+## Props
+
+| Tên       | Kiểu                                              | Mặc định | Mô tả                                |
+| --------- | ------------------------------------------------- | -------- | ------------------------------------ |
+| title     | `string`                                          | -        | Tiêu đề của Card                     |
+| subtitle  | `string`                                          | -        | Mô tả ngắn dưới tiêu đề              |
+| padding   | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'`          | `'lg'`   | Khoảng đệm xung quanh nội dung       |
+| shadow    | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | `'lg'`   | Độ đổ bóng của Card                  |
+| border    | `boolean`                                         | `true`   | Bật/tắt đường viền `border-gray-200` |
+| className | `string`                                          | -        | Bổ sung class Tailwind               |
+| ...rest   | `React.HTMLAttributes<HTMLDivElement>`            | -        | Thuộc tính `div` gốc                 |
+
+## Cách dùng
+
+```tsx
+<Card title="Tiêu đề" subtitle="Mô tả ngắn">
+  <p>Nội dung của card.</p>
+  <p>Có thể đặt mọi JSX bên trong.</p>
+  <a className="btn btn-primary btn-sm">Xem thêm</a>
+</Card>
+```
+
+## Examples
+
+<CardBasicDemo />
+
+<CardPaddingDemo />
+
+<CardShadowBorderDemo />
+
+## Lưu ý
+
+- `className` được merge với các class mặc định (`bg-white rounded-xl`).
+- `padding`/`shadow` dùng các lớp Tailwind hợp lệ; khi `none` sẽ không áp dụng lớp tương ứng.
+- `border` bật/tắt `border border-gray-200`.

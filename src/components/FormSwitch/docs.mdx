@@ -1,0 +1,42 @@
+import FormSwitch from '@/components/FormSwitch'
+import { FormSwitchBasicDemo, FormSwitchControlledDemo } from './form-switch.demos'
+
+# FormSwitch
+
+Nút gạt (switch) có nhãn, hỗ trợ controlled/uncontrolled, lỗi và trợ giúp.
+
+## Mục đích & trường hợp xử lý
+
+- Bật/tắt một tùy chọn dạng boolean trong form.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| label | `string` | - | Nhãn hiển thị bên trái switch |
+| required | `boolean` | `false` | Thêm dấu `*` cạnh nhãn |
+| error | `string \| null` | - | Thông báo lỗi |
+| help | `string \| null` | - | Gợi ý/hướng dẫn |
+| checked | `boolean` | - | Trạng thái controlled |
+| defaultChecked | `boolean` | - | Trạng thái ban đầu (uncontrolled) |
+| onCheckedChange | `(checked: boolean) => void` | - | Callback khi đổi trạng thái |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `React.ButtonHTMLAttributes<HTMLButtonElement>` | - | Thuộc tính button gốc |
+
+## Cách dùng
+```tsx
+<FormSwitch label="Kích hoạt" defaultChecked help="Có thể thay đổi bất kỳ lúc nào" />
+```
+
+## Examples
+
+<FormSwitchBasicDemo />
+
+<FormSwitchControlledDemo />
+
+## Lưu ý
+
+- Controlled: truyền `checked` + `onCheckedChange`. Uncontrolled: dùng `defaultChecked`.
+- `aria-pressed` phản ánh trạng thái để hỗ trợ a11y.
+
+

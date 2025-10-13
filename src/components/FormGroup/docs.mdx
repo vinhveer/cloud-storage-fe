@@ -1,0 +1,40 @@
+import FormGroup from '@/components/FormGroup'
+import { FormGroupBasicDemo, FormGroupWithHelpDemo } from './form-group.demos'
+
+# FormGroup
+
+Container nhóm trường form với nhãn, lỗi và trợ giúp.
+
+## Mục đích & trường hợp xử lý
+
+- Gom nhóm các input liên quan, hiển thị nhãn chung, lỗi hoặc help.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| label | `string` | - | Nhãn cho nhóm |
+| error | `string \| null` | - | Thông báo lỗi của nhóm |
+| help | `string \| null` | - | Gợi ý/hướng dẫn |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `React.HTMLAttributes<HTMLDivElement>` | - | Thuộc tính `div` gốc |
+
+## Cách dùng
+```tsx
+<FormGroup label="Thông tin cá nhân" help="Vui lòng điền đầy đủ">
+  <input className="border rounded px-3 py-2 w-full" placeholder="Họ tên" />
+  <input className="border rounded px-3 py-2 w-full" placeholder="Email" />
+</FormGroup>
+```
+
+## Examples
+
+<FormGroupBasicDemo />
+
+<FormGroupWithHelpDemo />
+
+## Lưu ý
+
+- `aria-describedby` gắn tới help/error để hỗ trợ a11y.
+
+

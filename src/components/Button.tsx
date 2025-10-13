@@ -69,7 +69,7 @@ export const Button = ({
       {...rest}
       type={rest.type ?? "button"}
       disabled={rest.disabled || isLoading}
-      className={clsx("btn", variantClass, sizeClass, className, isLoading && "opacity-80 cursor-not-allowed")}
+      className={clsx("not-prose btn", variantClass, sizeClass, className, isLoading && "opacity-80 cursor-not-allowed")}
     >
       <ButtonContent
         icon={icon}

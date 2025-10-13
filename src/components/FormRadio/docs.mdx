@@ -1,0 +1,51 @@
+import FormRadio from '@/components/FormRadio'
+import { FormRadioBasicDemo, FormRadioStatesDemo, FormRadioCustomDemo } from './form-radio.demos'
+
+# FormRadio
+
+Nhóm lựa chọn radio với nhãn, bắt buộc, lỗi và trợ giúp.
+
+## Mục đích & trường hợp xử lý
+
+- Cho phép chọn một giá trị duy nhất trong danh sách.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| label | `string` | - | Nhãn cho nhóm radio |
+| required | `boolean` | `false` | Bắt buộc; thêm dấu `*` |
+| error | `string \| null` | - | Thông báo lỗi |
+| help | `string \| null` | - | Gợi ý/hướng dẫn |
+| options | `{ value: string; label: string; disabled?: boolean }[]` | `[]` | Danh sách lựa chọn |
+| name | `string` | `'radio'` | Thuộc tính `name` chung |
+| inputClassName | `string` | - | Class bổ sung cho input radio |
+| className | `string` | - | Class container |
+| ...rest | `React.HTMLAttributes<HTMLDivElement>` | - | Thuộc tính `div` gốc |
+
+## Cách dùng
+```tsx
+<FormRadio
+  label="Giới tính"
+  required
+  name="gender"
+  options={[
+    { value: 'male', label: 'Nam' },
+    { value: 'female', label: 'Nữ' },
+  ]}
+/>
+```
+
+## Examples
+
+<FormRadioBasicDemo />
+
+<FormRadioStatesDemo />
+
+<FormRadioCustomDemo />
+
+## Lưu ý
+
+- Dùng `name` giống nhau để các radio cùng nhóm hoạt động đúng.
+
+

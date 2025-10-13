@@ -1,0 +1,51 @@
+import FormCard from '@/components/FormCard'
+import { FormCardBasicDemo, FormCardWithFormDemo } from './form-card.demos'
+
+# FormCard
+
+Bố cục card cho form, căn giữa trang, hỗ trợ form nội bộ hoặc nội dung thường.
+
+## Mục đích & trường hợp xử lý
+
+- Tạo nhanh giao diện form (login/register/forgot) với Card.
+- Dùng `action`/`method` để render form HTML; nếu không có, hiển thị nội dung thường.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| title | `string` | - | Tiêu đề trên `Card` |
+| subtitle | `string` | - | Mô tả ngắn dưới tiêu đề |
+| action | `string` | - | URL gửi form; nếu không có, hiển thị nội dung thường |
+| method | `'GET' \| 'POST' \| 'PUT' \| 'PATCH' \| 'DELETE'` | `'POST'` | Phương thức form; `GET/POST` dùng trực tiếp, còn lại dùng `_method` hidden |
+| csrfToken | `string` | - | Token CSRF (ẩn) khi `method !== 'GET'` |
+| formProps | `React.FormHTMLAttributes<HTMLFormElement>` | - | Thuộc tính bổ sung cho thẻ `form` |
+| footer | `React.ReactNode` | - | Vùng footer dưới `Card` |
+| cardClassName | `string` | - | Bổ sung class cho `Card` |
+| className | `string` | - | Bổ sung class cho wrapper ngoài |
+| ...rest | `React.HTMLAttributes<HTMLDivElement>` | - | Thuộc tính `div` gốc |
+
+## Cách dùng
+```tsx
+<FormCard title="Đăng nhập" subtitle="Chào mừng trở lại" action="/login" method="POST">
+  <div className="space-y-4">
+    {/* Fields ở đây */}
+  </div>
+  <button className="btn btn-primary btn-md w-full">Đăng nhập</button>
+  
+</FormCard>
+```
+
+## Examples
+
+<FormCardBasicDemo />
+
+<FormCardWithFormDemo />
+
+## Lưu ý
+
+- Khi `method` không phải `GET/POST`, thành phần tự thêm input ẩn `_method`.
+- Khi có `csrfToken` và `method !== 'GET'`, tự thêm input ẩn `_token`.
+- Dùng `cardClassName` để tùy biến `Card` bên trong.
+
+

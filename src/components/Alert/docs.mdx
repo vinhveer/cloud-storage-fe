@@ -1,0 +1,39 @@
+import { AlertBasicDemo, AlertCustomContentDemo } from './alert.demos'
+
+# Alert
+
+Hiển thị thông báo theo trạng thái, hỗ trợ icon, tiêu đề, nội dung và nút đóng.
+
+## When to use
+
+- Thông báo ngắn gọn trạng thái: success, error, warning, info.
+- Cho phép người dùng tự ẩn khi `dismissible` bật.
+
+## Demos
+
+### Cơ bản
+
+<AlertBasicDemo />
+
+### Nội dung tuỳ chỉnh
+
+<AlertCustomContentDemo />
+
+## API
+
+| Prop | Type | Default | Mô tả |
+| --- | --- | --- | --- |
+| `type` | `'success' | 'error' | 'warning' | 'info'` | `'info'` | Kiểu thông báo |
+| `heading` | `string \| null` | `null` | Tiêu đề (tuỳ chọn) |
+| `message` | `string` | `''` | Nội dung văn bản ngắn |
+| `dismissible` | `boolean` | `true` | Hiển thị nút đóng |
+| `icon` | `React.ReactNode` | `—` | Ghi đè icon mặc định |
+| `onDismiss` | `() => void` | `—` | Gọi khi đóng alert |
+| `...rest` | `React.HTMLAttributes<HTMLDivElement>` | `—` | Thuộc tính HTML bổ sung |
+
+## Ghi chú
+
+- Icon mặc định dùng SVG nội bộ, có thể thay bằng `icon`.
+- Sử dụng Tailwind cho màu sắc theo `type`.
+
+
