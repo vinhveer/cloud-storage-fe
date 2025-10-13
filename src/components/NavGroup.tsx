@@ -1,6 +1,7 @@
 import clsx from 'clsx'
+import React from 'react'
 
-type NavItem = {
+export type NavItem = {
   id: string
   label: string
   href?: string
@@ -8,22 +9,27 @@ type NavItem = {
   badge?: string | number
 }
 
-type NavGroupProps = {
+export type NavGroupProps = React.HTMLAttributes<HTMLElement> & {
   items?: NavItem[]
   activeItem?: string | null
   orientation?: 'horizontal' | 'vertical'
 }
 
-export default function NavGroup({
+export const NavGroup = ({
   items = [],
   activeItem = null,
   orientation = 'horizontal',
-}: NavGroupProps) {
+  className,
+  ...rest
+}: NavGroupProps) => {
   const orientationClasses =
     orientation === 'vertical' ? 'flex-col space-y-1' : 'flex-row space-x-1'
 
   return (
-    <nav className={clsx('not-prose flex', orientationClasses, 'p-1 bg-gray-100 rounded-lg')}>
+    <nav
+      {...rest}
+      className={clsx('not-prose flex', orientationClasses, 'p-1 bg-gray-100 rounded-lg', className)}
+    >
       {items.map((item) => {
         const isActive = activeItem === item.id || activeItem === item.label
 
@@ -51,3 +57,5 @@ export default function NavGroup({
     </nav>
   )
 }
+
+export default NavGroup
