@@ -11,7 +11,7 @@ export type FormFileUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElemen
   onFilesChange?: (files: File[]) => void
 }
 
-export default function FormFile_upload({
+export default function FormFileUpload({
   label,
   required = false,
   error,

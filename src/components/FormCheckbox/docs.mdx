@@ -1,5 +1,5 @@
-import FormCheckbox from '@/components/FormCheckbox'
-import { FormCheckboxBasicDemo, FormCheckboxStatesDemo, FormCheckboxControlledDemo } from './form-checkbox.demos'
+import FormCheckbox, { useFormCheckbox } from '@/components/FormCheckbox'
+import { FormCheckboxBasicDemo, FormCheckboxStatesDemo, FormCheckboxControlledDemo, FormCheckboxFormDemo } from './form-checkbox.demos'
 
 # FormCheckbox
 
@@ -20,6 +20,10 @@ import { FormCheckboxBasicDemo, FormCheckboxStatesDemo, FormCheckboxControlledDe
 | className | `string` | - | Bổ sung class Tailwind |
 | ...rest | `Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>` | - | Thuộc tính input gốc (trừ `type`) |
 
+### Hook `useFormCheckbox`
+
+Trả về `{ inputId, helpId, errorId, inputClasses, ariaDescribedBy, validateRequired }` để tái sử dụng/validate.
+
 ## Cách dùng
 ```tsx
 <FormCheckbox label="Tôi đồng ý" required />
@@ -32,6 +36,10 @@ import { FormCheckboxBasicDemo, FormCheckboxStatesDemo, FormCheckboxControlledDe
 <FormCheckboxStatesDemo />
 
 <FormCheckboxControlledDemo />
+
+### Form submit với validate required
+
+<FormCheckboxFormDemo />
 
 ## Lưu ý
 

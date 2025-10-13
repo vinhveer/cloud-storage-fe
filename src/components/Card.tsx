@@ -21,7 +21,7 @@ export const Card = ({
 }: CardProps) => {
   const paddingClass =
     padding === 'none'
-      ? ''
+      ? 'p-0'
       : padding === 'sm'
       ? 'p-4'
       : padding === 'md'
@@ -55,7 +55,7 @@ export const Card = ({
       className={clsx('not-prose bg-white dark:bg-gray-800 rounded-xl', paddingClass, shadowClass, borderClass, className)}
     >
       {(title || subtitle) && (
-        <div className="mb-6">
+        <div className={clsx(padding === 'none' ? 'mb-0' : 'mb-6')}>
           {title && (
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h2>
           )}

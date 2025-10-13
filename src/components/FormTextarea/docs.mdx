@@ -3,7 +3,7 @@ import { FormTextareaBasicDemo, FormTextareaStatesDemo } from './form-textarea.d
 
 # FormTextarea
 
-Textarea với label, placeholder, rows, bắt buộc, lỗi và trợ giúp.
+Textarea. Label/help/error được cung cấp bởi `FormGroup`.
 
 ## Mục đích & trường hợp xử lý
 
@@ -13,18 +13,16 @@ Textarea với label, placeholder, rows, bắt buộc, lỗi và trợ giúp.
 
 | Tên | Kiểu | Mặc định | Mô tả |
 | --- | --- | --- | --- |
-| label | `string` | - | Nhãn phía trên textarea |
 | placeholder | `string` | `''` | Gợi ý nội dung |
-| required | `boolean` | `false` | Bắt buộc; thêm dấu `*` và thuộc tính `required` |
-| error | `string \| null` | - | Thông báo lỗi dưới trường |
-| help | `string \| null` | - | Gợi ý/hướng dẫn dưới trường |
 | rows | `number` | `4` | Số hàng hiển thị |
 | className | `string` | - | Bổ sung class Tailwind |
 | ...rest | `Omit&lt;React.TextareaHTMLAttributes&lt;HTMLTextAreaElement&gt;, 'placeholder' &#124; 'rows'&gt;` | - | Thuộc tính textarea gốc |
 
 ## Cách dùng
 ```tsx
-<FormTextarea label="Ghi chú" placeholder="Nhập ghi chú..." rows={6} />
+<FormGroup label="Ghi chú" help="Bạn có thể cập nhật sau.">
+  <FormTextarea placeholder="Nhập ghi chú..." rows={6} />
+</FormGroup>
 ```
 
 ## Examples
@@ -35,7 +33,7 @@ Textarea với label, placeholder, rows, bắt buộc, lỗi và trợ giúp.
 
 ## Lưu ý
 
-- Khi có `error`, textarea có `aria-invalid` và `aria-describedby` tới thông báo lỗi.
+- `FormGroup` thiết lập `aria-invalid`/`aria-describedby` cho `FormTextarea` qua context.
 - Dùng `rows` để đặt chiều cao mặc định; thành phần đã `resize-none` để cố định.
 
 

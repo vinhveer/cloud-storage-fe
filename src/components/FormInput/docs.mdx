@@ -3,7 +3,7 @@ import { FormInputBasicDemo, FormInputTypesDemo, FormInputStatesDemo } from './f
 
 # FormInput
 
-Input văn bản với label, placeholder, bắt buộc, lỗi và trợ giúp.
+Input văn bản. Label/help/error được cung cấp bởi `FormGroup`.
 
 ## Mục đích & trường hợp xử lý
 
@@ -13,18 +13,16 @@ Input văn bản với label, placeholder, bắt buộc, lỗi và trợ giúp.
 
 | Tên | Kiểu | Mặc định | Mô tả |
 | --- | --- | --- | --- |
-| label | `string` | - | Nhãn hiển thị phía trên input |
 | type | `React.HTMLInputTypeAttribute` | `'text'` | Kiểu input (`text`, `email`, `password`, ...) |
 | placeholder | `string` | `''` | Gợi ý nội dung |
-| required | `boolean` | `false` | Bắt buộc; thêm dấu `*` và thuộc tính `required` |
-| error | `string \| null` | - | Thông báo lỗi dưới trường |
-| help | `string \| null` | - | Gợi ý/hướng dẫn dưới trường |
 | className | `string` | - | Bổ sung class Tailwind |
 | ...rest | `Omit&lt;React.InputHTMLAttributes&lt;HTMLInputElement&gt;, 'type' &#124; 'placeholder'&gt;` | - | Thuộc tính input gốc |
 
 ## Cách dùng
 ```tsx
-<FormInput label="Email" type="email" placeholder="you@example.com" required />
+<FormGroup label="Email" help="Chúng tôi không chia sẻ email.">
+  <FormInput type="email" placeholder="you@example.com" />
+</FormGroup>
 ```
 
 ## Examples
@@ -37,7 +35,7 @@ Input văn bản với label, placeholder, bắt buộc, lỗi và trợ giúp.
 
 ## Lưu ý
 
-- Khi có `error`, input có `aria-invalid` và `aria-describedby` tới thông báo lỗi.
-- Có thể truyền `id` để quản lý liên kết `label` ↔ `input`.
+- `FormGroup` thiết lập `aria-invalid`/`aria-describedby` cho `FormInput` qua context.
+- Có thể truyền `id` nếu cần kiểm soát thuộc tính của input.
 
 

@@ -3,7 +3,7 @@ import { FormSwitchBasicDemo, FormSwitchControlledDemo } from './form-switch.dem
 
 # FormSwitch
 
-Nút gạt (switch) có nhãn, hỗ trợ controlled/uncontrolled, lỗi và trợ giúp.
+Nút gạt (switch). Label/help/error được cung cấp bởi `FormGroup`.
 
 ## Mục đích & trường hợp xử lý
 
@@ -13,10 +13,6 @@ Nút gạt (switch) có nhãn, hỗ trợ controlled/uncontrolled, lỗi và tr�
 
 | Tên | Kiểu | Mặc định | Mô tả |
 | --- | --- | --- | --- |
-| label | `string` | - | Nhãn hiển thị bên trái switch |
-| required | `boolean` | `false` | Thêm dấu `*` cạnh nhãn |
-| error | `string \| null` | - | Thông báo lỗi |
-| help | `string \| null` | - | Gợi ý/hướng dẫn |
 | checked | `boolean` | - | Trạng thái controlled |
 | defaultChecked | `boolean` | - | Trạng thái ban đầu (uncontrolled) |
 | onCheckedChange | `(checked: boolean) => void` | - | Callback khi đổi trạng thái |
@@ -25,7 +21,9 @@ Nút gạt (switch) có nhãn, hỗ trợ controlled/uncontrolled, lỗi và tr�
 
 ## Cách dùng
 ```tsx
-<FormSwitch label="Kích hoạt" defaultChecked help="Có thể thay đổi bất kỳ lúc nào" />
+<FormGroup label="Kích hoạt" help="Có thể thay đổi bất kỳ lúc nào">
+  <FormSwitch defaultChecked />
+</FormGroup>
 ```
 
 ## Examples

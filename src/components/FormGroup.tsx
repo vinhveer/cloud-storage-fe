@@ -18,6 +18,7 @@ export default function FormGroup({
   const reactId = React.useId()
   const helpId = `${reactId}-help`
   const errorId = `${reactId}-error`
+  const describedById = error ? errorId : help ? helpId : undefined
 
   return (
     <div {...rest} className={clsx('not-prose space-y-2', className)}>
@@ -27,9 +28,11 @@ export default function FormGroup({
         </label>
       )}
 
-      <div className="space-y-2" aria-describedby={error ? errorId : help ? helpId : undefined}>
-        {children}
-      </div>
+      <FormFieldContext.Provider value={{ describedById, invalid: !!error }}>
+        <div className="space-y-2">
+          {children}
+        </div>
+      </FormFieldContext.Provider>
 
       {error ? (
         <p id={errorId} className="text-sm text-red-600 dark:text-red-400">{error}</p>
@@ -39,5 +42,8 @@ export default function FormGroup({
     </div>
   )
 }
+
+export type FormFieldContextValue = { describedById?: string; invalid?: boolean }
+export const FormFieldContext = React.createContext<FormFieldContextValue | null>(null)
 
 

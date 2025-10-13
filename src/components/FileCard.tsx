@@ -1,6 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
-import { iconMap, IconName } from '@/lib/icons'
+import { iconMap } from '@/lib/icons'
+import type { IconName } from '@/lib/icons'
 
 export type FileCardProps = React.HTMLAttributes<HTMLDivElement> & {
   icon?: IconName
