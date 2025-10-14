@@ -2,7 +2,7 @@ import Alert from '@/components/Alert'
 
 export function AlertBasicDemo() {
   return (
-    <div className="space-y-3">
+    <div className="space-y-1">
       <Alert heading="Information" message="This is an informational alert." />
       <Alert type="success" heading="Success" message="Everything worked!" />
       <Alert type="warning" heading="Warning" message="Be careful with this action." />
