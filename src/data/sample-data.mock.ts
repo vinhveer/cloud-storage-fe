@@ -17,7 +17,6 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'Loading', href: '/samples/loading' },
   { title: 'FormCard', href: '/samples/formcard' },
   { title: 'FormCheckbox', href: '/samples/formcheckbox' },
-  { title: 'FormFile_upload', href: '/samples/formfile_upload' },
   { title: 'FormGroup', href: '/samples/formgroup' },
   { title: 'FormInput', href: '/samples/forminput' },
   { title: 'FormRadio', href: '/samples/formradio' },  
@@ -25,5 +24,7 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'FormSwitch', href: '/samples/formswitch' },
   { title: 'FormTextarea', href: '/samples/formtextarea' },
   { title: 'NavGroup', href: '/samples/navgroup' },
-  { title: 'FormFileUpload', href: '/samples/formfileupload' },
+  { title: 'FormFile_upload', href: '/samples/formfile_upload' },
+  
 ]
+

@@ -91,7 +91,7 @@ export default function FormFileUpload({
           accept={accept}
           multiple={multiple}
           required={required}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          className="sr-only"
           onChange={handleChange}
           {...rest}
         />
