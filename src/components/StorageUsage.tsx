@@ -27,10 +27,10 @@ export default function StorageUsage({
 
   return (
     <div {...rest} className={clsx('not-prose space-y-2', className)}>
-      <div className="text-sm font-semibold text-gray-900">
+      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
         {percentage}% - Use {usedFormatted}GB of {totalFormatted}GB
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden" aria-label="storage-usage">
+      <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 overflow-hidden" aria-label="storage-usage">
         <div
           className={clsx(colorClassName, 'h-full rounded-full transition-all duration-300')}
           style={widthStyle}
