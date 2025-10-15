@@ -11,6 +11,8 @@ alwaysApply: false
 
 ## React Component Standards (Cursor Rules)
 
+Làm luôn một lần, không có dừng lại.
+
 ### General Principles
 
 * **ES6 + TypeScript**: Use explicit types; **never use `any`**. If `any` cannot be removed yet, inform users to address it together. Use **discriminated unions** when appropriate.
@@ -21,7 +23,7 @@ alwaysApply: false
 
 ### Component Structure
 
-* File location: `src/components/ComponentName.tsx`.
+* File location: `src/components/ComponentName/ComponentName.tsx`.
 * Exports:
   
   * Prefer a named export `export const ComponentName = …` for shared components.
@@ -75,7 +77,7 @@ alwaysApply: false
 
 ```tsx
 import clsx from 'clsx'
-import Loading from '@/components/Loading'
+import Loading from '@/components/Loading/Loading'
 import { buttonToSpinnerSize } from '@/constants/sizing'
 
 type MyButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -179,6 +181,8 @@ export function MyButton({
 * No nested ternaries for simple mappings (use a map).
 * Icon-only Button has `aria-label` (or triggers the dev-guard).
 * Accepts `className` and merges with `clsx`.
+* Icons: import directly from `@heroicons/react` (no wrappers, no inline `<svg>` unless missing).
+* Examples use explicit component paths: `@/components/<Name>/<Name>`.
 
 ### Docs Writing Guide (MDX-based)
 
@@ -186,7 +190,7 @@ export function MyButton({
   
   * `src/components/<Name>/docs.mdx`
   * `src/components/<Name>/<name>.demos.tsx`
-  * Component code in `src/components/<Name>.tsx`
+  * Component code in `src/components/<Name>/<Name>.tsx`
 
 * Authoring MDX:
   
@@ -194,8 +198,9 @@ export function MyButton({
   * Example:
   
   ```mdx
-  import { Button } from '@/components/Button'
+  import { Button } from '@/components/Button/Button'
   import { ButtonVariantsDemo } from '@/components/Button/button.demos'
+  import { PlusIcon } from '@heroicons/react/24/outline'
   
   # Button
   
@@ -206,6 +211,13 @@ export function MyButton({
   
   ## Examples
   <ButtonVariantsDemo />
+  
+  ## Icons
+  
+  ```tsx
+  import { XMarkIcon } from '@heroicons/react/20/solid'
+  import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
+  ```
   ```
 
 * Routing:
