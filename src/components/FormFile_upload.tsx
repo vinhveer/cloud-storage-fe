@@ -1,4 +1,5 @@
 import React from 'react'
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
 export type FormFileUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> & {
@@ -98,15 +99,7 @@ export default function FormFileUpload({
 
         <div className="space-y-2 pointer-events-none">
           <div className="flex justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="text-gray-400 dark:text-gray-500 w-8 h-8"
-              aria-hidden="true"
-            >
-              <path d="M7 18a4 4 0 0 1 0-8c.197 0 .39.017.577.049A6 6 0 0 1 20 11a3 3 0 0 1 0 6H7zm5-9.586V16a1 1 0 1 1-2 0V8.414L8.707 9.707a1 1 0 0 1-1.414-1.414l4-4a1 1 0 0 1 1.414 0l4 4a1 1 0 1 1-1.414 1.414L12 8.414z" />
-            </svg>
+            <ArrowUpTrayIcon className="text-gray-400 dark:text-gray-500 w-8 h-8" aria-hidden="true" />
           </div>
           <div>
             <p className="text-sm text-gray-600 dark:text-gray-400">

@@ -17,8 +17,6 @@ export function getSamplesRoutes() {
     component: SamplesPage,
   })
 
-  // legacy routes removed
-
   const dynamicMdxRoute = createRoute({
     getParentRoute: () => samplesRoute,
     path: '$slug',

@@ -1,7 +1,20 @@
 import React from 'react'
 import clsx from 'clsx'
-import { iconMap } from '@/lib/icons'
-import type { IconName } from '@/lib/icons'
+import { DocumentIcon, DocumentTextIcon, PhotoIcon, FolderIcon, TableCellsIcon } from '@heroicons/react/24/solid'
+
+type IconName = 'file' | 'file-alt' | 'file-csv' | 'file-image' | 'file-word' | 'file-excel' | 'file-pdf' | 'file-lines' | 'folder'
+
+const iconMap: Record<IconName, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
+  'file': DocumentIcon,
+  'file-alt': DocumentTextIcon,
+  'file-csv': TableCellsIcon,
+  'file-image': PhotoIcon,
+  'file-word': DocumentTextIcon,
+  'file-excel': TableCellsIcon,
+  'file-pdf': DocumentIcon,
+  'file-lines': DocumentTextIcon,
+  'folder': FolderIcon,
+}
 
 export type FileCardProps = React.HTMLAttributes<HTMLDivElement> & {
   icon?: IconName
@@ -36,7 +49,7 @@ export const FileCard = ({
       )}
     >
       <div className="mb-4">
-        <IconComponent size={64} className={clsx(iconColor)} />
+        <IconComponent className={clsx(iconColor, 'w-16 h-16')} />
       </div>
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>

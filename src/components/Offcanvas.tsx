@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { XMarkIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 
 type Alignment = 'left' | 'right' | 'top' | 'bottom'
@@ -126,9 +127,7 @@ export default function Offcanvas({
                 )}
                 aria-label="Close offcanvas"
               >
-                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M10 8.586 4.293 2.879A1 1 0 1 0 2.879 4.293L8.586 10l-5.707 5.707a1 1 0 1 0 1.414 1.414L10 11.414l5.707 5.707a1 1 0 0 0 1.414-1.414L11.414 10l5.707-5.707A1 1 0 0 0 15.707 2.88L10 8.586z" clipRule="evenodd" />
-                </svg>
+                <XMarkIcon className="w-4 h-4" aria-hidden="true" />
               </button>
             )}
           </div>

@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import InfoIcon from '@/components/Alert/icons/InfoIcon'
-import SuccessIcon from '@/components/Alert/icons/SuccessIcon'
-import WarningIcon from '@/components/Alert/icons/WarningIcon'
-import ErrorIcon from '@/components/Alert/icons/ErrorIcon'
+import { CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
 
 type AlertType = 'success' | 'error' | 'warning' | 'info'
 
@@ -41,10 +38,10 @@ const IconComponents: Record<
   AlertType,
   React.ComponentType<{ className?: string; style?: React.CSSProperties }>
 > = {
-  success: SuccessIcon,
-  error: ErrorIcon,
-  warning: WarningIcon,
-  info: InfoIcon,
+  success: CheckCircleIcon,
+  error: XCircleIcon,
+  warning: ExclamationTriangleIcon,
+  info: InformationCircleIcon,
 }
 
 export default function Alert({
@@ -121,9 +118,7 @@ export default function Alert({
               aria-label="Dismiss alert"
               className={clsx('inline-flex h-7 w-7 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors', iconColorClasses[type], dismissBgClasses[type])}
             >
-              <svg className="w-3.5 h-3.5 block pointer-events-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fillRule="evenodd" d="M10 8.586 4.293 2.879A1 1 0 1 0 2.879 4.293L8.586 10l-5.707 5.707a1 1 0 1 0 1.414 1.414L10 11.414l5.707 5.707a1 1 0 0 0 1.414-1.414L11.414 10l5.707-5.707A1 1 0 0 0 15.707 2.88L10 8.586z" clipRule="evenodd" />
-              </svg>
+              <XMarkIcon className="w-3.5 h-3.5 block pointer-events-none" aria-hidden="true" />
             </button>
           </div>
         )}
