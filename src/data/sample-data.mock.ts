@@ -24,7 +24,7 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'FormCheckbox', href: '/samples/formgroup/formcheckbox' },
   { title: 'FormRadio', href: '/samples/formgroup/formradio' },
   { title: 'FormSwitch', href: '/samples/formgroup/formswitch' },
-  { title: 'FormFile_upload', href: '/samples/formgroup/formfile_upload' },
+  { title: 'FormUpload', href: '/samples/formgroup/formupload' },
   { title: 'NavGroup', href: '/samples/navgroup' },
   { title: 'Subnav', href: '/samples/subnav' },
   

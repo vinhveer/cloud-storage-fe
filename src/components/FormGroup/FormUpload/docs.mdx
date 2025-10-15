@@ -1,7 +1,7 @@
-import FormFileUpload from '@/components/FormGroup/FormFile_upload/FormFile_upload'
-import { FormFileUploadBasicDemo, FormFileUploadAcceptDemo, FormFileUploadMultipleDemo } from './form-file-upload.demos'
+import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
+import { FormUploadBasicDemo, FormUploadAcceptDemo, FormUploadMultipleDemo } from './form-upload.demos'
 
-# FormFileUpload
+# FormUpload
 
 Khu vực upload hỗ trợ drag-and-drop và click để chọn file.
 
@@ -25,16 +25,16 @@ Khu vực upload hỗ trợ drag-and-drop và click để chọn file.
 
 ## Cách dùng
 ```tsx
-<FormFileUpload label="Tải lên" accept="image/*" multiple onFilesChange={(files) => console.log(files)} />
+<FormUpload label="Tải lên" accept="image/*" multiple onFilesChange={(files) => console.log(files)} />
 ```
 
 ## Examples
 
-<FormFileUploadBasicDemo />
+<FormUploadBasicDemo />
 
-<FormFileUploadAcceptDemo />
+<FormUploadAcceptDemo />
 
-<FormFileUploadMultipleDemo />
+<FormUploadMultipleDemo />
 
 ## Lưu ý
 

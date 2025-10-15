@@ -19,7 +19,7 @@ export function OffcanvasLeftNarrowDemo() {
   return (
     <div>
       <Button variant="secondary" onClick={() => setOpen(true)}>Open Left (25%)</Button>
-      <Offcanvas alignment="left" width="25" title="Left Panel" closeButton={{ position: 'left' }} open={open} onOpenChange={setOpen}>
+      <Offcanvas alignment="left" width="25" title="Left Panel" closeButton={{ position: 'right' }} open={open} onOpenChange={setOpen}>
         <p className="text-sm text-gray-700">Nội dung panel bên trái.</p>
       </Offcanvas>
     </div>
