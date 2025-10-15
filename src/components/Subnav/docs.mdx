@@ -1,0 +1,36 @@
+import { Subnav } from '@/components/Subnav'
+import { SubnavBasicDemo, SubnavVerticalDemo, SubnavWithBadgesDemo } from './subnav.demos'
+
+# Subnav
+
+Thanh điều hướng con (pills) tái sử dụng `NavGroup`, hỗ trợ ngang/dọc, trạng thái active, icon class và badge.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| items | `SubnavItem[]` | `[]` | Danh sách mục điều hướng |
+| activeItem | `string | null` | `null` | Mục đang active; khớp theo `id` hoặc `label` |
+| orientation | `'horizontal' | 'vertical'` | `'horizontal'` | Hướng hiển thị |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `React.HTMLAttributes<HTMLElement>` | - | Thuộc tính gốc cho `<nav>` |
+
+## Cách dùng
+```tsx
+<Subnav
+  items=[
+    { id: 'home', label: 'Home', href: '#' },
+    { id: 'files', label: 'Files', href: '#' },
+    { id: 'settings', label: 'Settings', href: '#' },
+  ]
+  activeItem="files"
+/>
+```
+
+## Examples
+
+<SubnavBasicDemo />
+
+<SubnavVerticalDemo />
+
+<SubnavWithBadgesDemo />

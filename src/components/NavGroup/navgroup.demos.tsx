@@ -28,9 +28,9 @@ export function NavGroupVerticalDemo() {
 
 export function NavGroupWithBadgesDemo() {
   const items: NavItem[] = [
-    { id: 'inbox', label: 'Inbox', href: '#', badge: 5, icon: 'far fa-inbox' },
-    { id: 'shared', label: 'Shared', href: '#', badge: 2, icon: 'far fa-users' },
-    { id: 'archive', label: 'Archive', href: '#', icon: 'far fa-archive' },
+    { id: 'inbox', label: 'Inbox', href: '#', badge: 5, icon: 'fas fa-inbox' },
+    { id: 'shared', label: 'Shared', href: '#', badge: 2, icon: 'fas fa-share-alt' },
+    { id: 'archive', label: 'Archive', href: '#', icon: 'fas fa-archive' },
   ]
   return (
     <div className="mt-4">
