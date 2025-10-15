@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export type UseNavbarSearchOptions<T> = {
+export type UseSearchOptions<T> = {
   onSearch?: (query: string) => Promise<T[]>
   debounceMs?: number
 }
 
-export function useNavbarSearch<T>({ onSearch, debounceMs = 250 }: UseNavbarSearchOptions<T>) {
+export function useSearch<T>({ onSearch, debounceMs = 250 }: UseSearchOptions<T>) {
   const [query, setQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [results, setResults] = useState<T[]>([])

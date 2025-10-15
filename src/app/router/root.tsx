@@ -1,6 +1,13 @@
-import { createRootRoute } from '@tanstack/react-router'
-import AppShell from '../layout/AppShell'
+import { createRootRoute, createRoute } from '@tanstack/react-router'
+import AppLayout from '@/app/layout/AppLayout'
+import HomePage from '@/pages'
 
 export const rootRoute = createRootRoute({
-  component: AppShell,
+  component: AppLayout,
+})
+
+export const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: HomePage,
 })

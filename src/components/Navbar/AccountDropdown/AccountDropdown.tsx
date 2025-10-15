@@ -15,16 +15,6 @@ export type AccountDropdownProps = {
   onOpenChange?: (open: boolean) => void
 }
 
-function getInitialsFromName(name: string): string {
-  const initials = name
-    .split(' ')
-    .filter(Boolean)
-    .map((part) => part[0]?.toUpperCase() ?? '')
-    .join('')
-    .slice(0, 2)
-  return initials || 'U'
-}
-
 export function AccountDropdown({
   userName = 'User',
   userEmail = 'user@example.com',
@@ -35,7 +25,7 @@ export function AccountDropdown({
   defaultOpen = false,
   onOpenChange,
 }: AccountDropdownProps) {
-  const { isOpen, setOpen, toggle, containerRef, initials } = useAccountDropdown({ userName, open, defaultOpen, onOpenChange })
+  const { isOpen, toggle, containerRef, initials } = useAccountDropdown({ userName, open, defaultOpen, onOpenChange })
   const [logoutOpen, setLogoutOpen] = useState(false)
 
   const onConfirmLogout = async () => {

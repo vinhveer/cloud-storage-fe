@@ -1,14 +1,12 @@
 import { createRoute } from '@tanstack/react-router'
 import SamplesPage from '@/pages/samples'
 import SampleDynamicPage from '@/pages/samples/[slug]'
-import SampleLayout from '@/app/layout/SampleLayout'
 import { rootRoute } from '../root'
 
 export function getSamplesRoutes() {
   const samplesRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/samples',
-    component: SampleLayout,
   })
 
   const samplesIndexRoute = createRoute({
@@ -23,7 +21,6 @@ export function getSamplesRoutes() {
     component: SampleDynamicPage,
   })
 
-  // Support nested sample docs like /samples/formgroup/forminput
   const nestedMdxRoute = createRoute({
     getParentRoute: () => samplesRoute,
     path: '$parent/$child',
