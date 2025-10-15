@@ -1,5 +1,5 @@
 import React from 'react'
-import FormRadio from '@/components/FormRadio/FormRadio'
+import FormRadio from '@/components/FormGroup/FormRadio/FormRadio'
 
 export function FormRadioBasicDemo() {
   return (

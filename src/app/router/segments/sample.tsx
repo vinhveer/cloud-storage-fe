@@ -23,8 +23,16 @@ export function getSamplesRoutes() {
     component: SampleDynamicPage,
   })
 
+  // Support nested sample docs like /samples/formgroup/forminput
+  const nestedMdxRoute = createRoute({
+    getParentRoute: () => samplesRoute,
+    path: '$parent/$child',
+    component: SampleDynamicPage,
+  })
+
   return samplesRoute.addChildren([
     samplesIndexRoute,
     dynamicMdxRoute,
+    nestedMdxRoute,
   ])
 }

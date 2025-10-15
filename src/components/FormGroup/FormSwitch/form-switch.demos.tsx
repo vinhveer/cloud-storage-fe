@@ -1,5 +1,5 @@
 import React from 'react'
-import FormSwitch from '@/components/FormSwitch/FormSwitch'
+import FormSwitch from '@/components/FormGroup/FormSwitch/FormSwitch'
 
 export function FormSwitchBasicDemo() {
   return (

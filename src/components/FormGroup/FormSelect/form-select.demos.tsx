@@ -1,5 +1,5 @@
 import React from 'react'
-import FormSelect from '@/components/FormSelect/FormSelect'
+import FormSelect from '@/components/FormGroup/FormSelect/FormSelect'
 
 export function FormSelectBasicDemo() {
   return (

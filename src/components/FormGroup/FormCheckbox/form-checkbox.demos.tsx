@@ -1,5 +1,5 @@
 import React from 'react'
-import FormCheckbox, { useFormCheckbox } from '@/components/FormCheckbox/FormCheckbox'
+import FormCheckbox, { useFormCheckbox } from '@/components/FormGroup/FormCheckbox/FormCheckbox'
 import { Button } from '@/components/Button/Button'
 
 export function FormCheckboxBasicDemo() {

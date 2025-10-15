@@ -1,5 +1,4 @@
-import React from 'react'
-import FormCard from '@/components/FormCard'
+import FormCard from '@/components/FormCard/FormCard'
 
 export function FormCardBasicDemo() {
   return (
