@@ -2,7 +2,7 @@ import React from 'react'
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
-export type FormFileUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> & {
+export type FormUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   label?: string
   required?: boolean
   error?: string | null
@@ -12,7 +12,7 @@ export type FormFileUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElemen
   onFilesChange?: (files: File[]) => void
 }
 
-export default function FormFileUpload({
+export default function FormUpload({
   label,
   required = false,
   error,
@@ -23,7 +23,7 @@ export default function FormFileUpload({
   onFilesChange,
   id,
   ...rest
-}: FormFileUploadProps) {
+}: FormUploadProps) {
   const [isDragging, setIsDragging] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement | null>(null)
   const reactId = React.useId()
