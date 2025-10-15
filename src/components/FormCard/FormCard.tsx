@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import Card from './Card'
+import Card from './Card/Card'
 
 export type FormCardProps = React.HTMLAttributes<HTMLDivElement> & {
   title?: string

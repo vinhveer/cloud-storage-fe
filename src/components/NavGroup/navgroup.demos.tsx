@@ -1,4 +1,4 @@
-import { NavGroup, type NavItem } from '@/components/NavGroup'
+import { NavGroup, type NavItem } from '@/components/NavGroup/NavGroup'
 
 export function NavGroupBasicDemo() {
   const items: NavItem[] = [

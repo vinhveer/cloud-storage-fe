@@ -1,5 +1,5 @@
 import React from 'react'
-import FormTextarea from '@/components/FormTextarea'
+import FormTextarea from '@/components/FormTextarea/FormTextarea'
 
 export function FormTextareaBasicDemo() {
   return (

@@ -1,4 +1,4 @@
-import { Subnav, type SubnavItem } from '@/components/Subnav'
+import { Subnav, type SubnavItem } from '@/components/Subnav/Subnav'
 
 export function SubnavBasicDemo() {
   const items: SubnavItem[] = [

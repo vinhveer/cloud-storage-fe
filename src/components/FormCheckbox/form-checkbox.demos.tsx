@@ -1,6 +1,6 @@
 import React from 'react'
-import FormCheckbox, { useFormCheckbox } from '@/components/FormCheckbox'
-import { Button } from '@/components/Button'
+import FormCheckbox, { useFormCheckbox } from '@/components/FormCheckbox/FormCheckbox'
+import { Button } from '@/components/Button/Button'
 
 export function FormCheckboxBasicDemo() {
   return (

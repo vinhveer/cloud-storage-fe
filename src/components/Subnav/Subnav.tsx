@@ -1,4 +1,4 @@
-import { NavGroup, type NavGroupProps, type NavItem } from '@/components/NavGroup'
+import { NavGroup, type NavGroupProps, type NavItem } from '@/components/NavGroup/NavGroup'
 
 export type SubnavItem = NavItem
 export type SubnavProps = NavGroupProps

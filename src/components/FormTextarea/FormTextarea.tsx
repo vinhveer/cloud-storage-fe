@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { FormFieldContext } from '@/components/FormGroup'
+import { FormFieldContext } from '@/components/FormGroup/FormGroup'
 
 export type FormTextareaProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'placeholder' | 'rows'> & {
   placeholder?: string

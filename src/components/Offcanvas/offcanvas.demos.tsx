@@ -1,6 +1,6 @@
 import React from 'react'
-import Offcanvas from '@/components/Offcanvas'
-import { Button } from '@/components/Button'
+import Offcanvas from '@/components/Offcanvas/Offcanvas'
+import { Button } from '@/components/Button/Button'
 
 export function OffcanvasRightDemo() {
   const [open, setOpen] = React.useState(false)

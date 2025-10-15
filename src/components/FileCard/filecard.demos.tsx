@@ -1,4 +1,4 @@
-import { FileCard } from '@/components/FileCard'
+import { FileCard } from '@/components/FileCard/FileCard'
 
 export function FileCardBasicDemo() {
   return (

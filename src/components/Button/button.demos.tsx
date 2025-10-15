@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button'
+import { Button } from '@/components/Button/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 
 export function ButtonVariantsDemo() {

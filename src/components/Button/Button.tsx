@@ -1,6 +1,6 @@
 import React from "react"
 import clsx from "clsx"
-import Loading from "@/components/Loading"
+import Loading from "@/components/Loading/Loading"
 import { buttonToSpinnerSize } from "@/constants/sizing"
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {

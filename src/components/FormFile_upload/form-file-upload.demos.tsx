@@ -1,5 +1,5 @@
 import React from 'react'
-import FormFileUpload from '@/components/FormFile_upload'
+import FormFileUpload from '@/components/FormFile_upload/FormFile_upload'
 
 export function FormFileUploadBasicDemo() {
   const [files, setFiles] = React.useState<File[]>([])
