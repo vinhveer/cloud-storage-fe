@@ -1,7 +1,23 @@
 import { Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { useSidebar } from '@/contexts/SidebarContext'
+import { Squares2X2Icon } from '@heroicons/react/24/outline'
 import { sampleMenuItems, samplesTitle, samplesIntro } from '@data/sample-data.mock'
 
 export default function SamplesPage() {
+  const { setItems, setActiveKey } = useSidebar()
+
+  useEffect(() => {
+    setItems(
+      sampleMenuItems.map((m) => ({
+        key: m.href,
+        title: m.title,
+        href: m.href,
+        icon: <Squares2X2Icon className="w-5 h-5" />,
+      }))
+    )
+    setActiveKey(undefined)
+  }, [setItems, setActiveKey])
   return (
     <div className="space-y-4 text-gray-900 dark:text-gray-100">
       <nav aria-label="Breadcrumb" className="text-sm text-gray-500 dark:text-gray-400">

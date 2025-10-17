@@ -1,5 +1,5 @@
 import React from 'react'
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/Dialog/Dialog'
 
 export function DialogBasicDemo() {
   const [open, setOpen] = React.useState(false)

@@ -1,5 +1,5 @@
 import React from 'react'
-import StorageUsage from '@/components/StorageUsage'
+import StorageUsage from '@/components/StorageUsage/StorageUsage'
 
 export function StorageUsageBasicDemo() {
   return (

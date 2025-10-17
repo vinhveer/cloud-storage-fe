@@ -2,8 +2,8 @@ import { useParams, Link } from '@tanstack/react-router'
 import { MDXContent } from '@/components/MDXContent'
 
 export default function SampleDynamicPage() {
-  const params = useParams({ strict: false }) as unknown as { slug?: string }
-  const slug = params?.slug ?? ''
+  const params = useParams({ strict: false }) as unknown as { slug?: string; parent?: string; child?: string }
+  const slug = (params.child ? `${params.parent}/${params.child}` : (params.slug ?? '')).trim()
   const title = slug
     .split('-')
     .map(part => (part ? part[0].toUpperCase() + part.slice(1) : part))

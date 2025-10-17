@@ -1,14 +1,12 @@
 import { createRoute } from '@tanstack/react-router'
 import SamplesPage from '@/pages/samples'
 import SampleDynamicPage from '@/pages/samples/[slug]'
-import SampleLayout from '@/app/layout/SampleLayout'
 import { rootRoute } from '../root'
 
 export function getSamplesRoutes() {
   const samplesRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/samples',
-    component: SampleLayout,
   })
 
   const samplesIndexRoute = createRoute({
@@ -17,16 +15,21 @@ export function getSamplesRoutes() {
     component: SamplesPage,
   })
 
-  // legacy routes removed
-
   const dynamicMdxRoute = createRoute({
     getParentRoute: () => samplesRoute,
     path: '$slug',
     component: SampleDynamicPage,
   })
 
+  const nestedMdxRoute = createRoute({
+    getParentRoute: () => samplesRoute,
+    path: '$parent/$child',
+    component: SampleDynamicPage,
+  })
+
   return samplesRoute.addChildren([
     samplesIndexRoute,
     dynamicMdxRoute,
+    nestedMdxRoute,
   ])
 }

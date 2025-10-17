@@ -1,0 +1,49 @@
+import FormCheckbox, { useFormCheckbox } from '@/components/FormGroup/FormCheckbox/FormCheckbox'
+import { FormCheckboxBasicDemo, FormCheckboxStatesDemo, FormCheckboxControlledDemo, FormCheckboxFormDemo } from './form-checkbox.demos'
+
+# FormCheckbox
+
+Ô chọn (checkbox) với nhãn, bắt buộc, lỗi và trợ giúp.
+
+## Mục đích & trường hợp xử lý
+
+- Bật/tắt tùy chọn trong form, hỗ trợ a11y và trạng thái lỗi.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| label | `string` | - | Nhãn hiển thị cạnh checkbox |
+| required | `boolean` | `false` | Bắt buộc; thêm dấu `*` và thuộc tính `required` |
+| error | `string \| null` | - | Thông báo lỗi dưới trường |
+| help | `string \| null` | - | Gợi ý/hướng dẫn dưới trường |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>` | - | Thuộc tính input gốc (trừ `type`) |
+
+### Hook `useFormCheckbox`
+
+Trả về `{ inputId, helpId, errorId, inputClasses, ariaDescribedBy, validateRequired }` để tái sử dụng/validate.
+
+## Cách dùng
+```tsx
+<FormCheckbox label="Tôi đồng ý" required />
+```
+
+## Examples
+
+<FormCheckboxBasicDemo />
+
+<FormCheckboxStatesDemo />
+
+<FormCheckboxControlledDemo />
+
+### Form submit với validate required
+
+<FormCheckboxFormDemo />
+
+## Lưu ý
+
+- Khi có `error`, trường có `aria-invalid` và `aria-describedby` tới thông báo lỗi.
+- `id` tự sinh; có thể truyền `id` để kiểm soát và gắn `htmlFor` của label.
+
+

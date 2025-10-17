@@ -1,4 +1,5 @@
-import { Button } from '@/components/Button'
+import { Button } from '@/components/Button/Button'
+import { PlusIcon } from '@heroicons/react/24/outline'
 
 export function ButtonVariantsDemo() {
   return (
@@ -25,15 +26,7 @@ export function ButtonSizesDemo() {
 
 export function ButtonIconsDemo() {
   const iconPlus = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      className="w-4 h-4"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m-7-7h14" />
-    </svg>
+    <PlusIcon className="w-4 h-4" />
   )
   return (
     <div className="flex flex-wrap gap-2 mt-4 h-full">

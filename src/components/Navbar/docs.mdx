@@ -1,0 +1,31 @@
+import Navbar from '@/components/Navbar/Navbar'
+
+# Navbar
+
+Thanh điều hướng với tiêu đề, ô tìm kiếm (async) và AccountDropdown.
+
+## Demo
+
+```tsx
+import Navbar from '@/components/Navbar/Navbar'
+
+export default function Demo() {
+  return (
+    <Navbar title="CloudStorage" />
+  )
+}
+```
+
+## Props
+
+- **title**: `string` (default: `"CloudStorage"`)
+- **onSearch**: `(query: string) => Promise<{ id: string; url: string; title: string; description?: string; icon?: React.ReactNode; }[]>`
+- **searchPlaceholder**: `string` (default: `"Search everything..."`)
+- **className**: `string`
+
+## Notes
+
+- Ô search hỗ trợ async qua `onSearch` (debounce ~250ms).
+- Kết quả render dưới dạng dropdown; click ra ngoài sẽ đóng.
+- Dùng `Button`, `Loading`, `AccountDropdown` và Heroicons theo quy chuẩn.
+

@@ -1,4 +1,4 @@
-import StorageUsage from "@/components/StorageUsage";
+import StorageUsage from "@/components/StorageUsage/StorageUsage";
 import {
   StorageUsageBasicDemo,
   StorageUsageVariantsDemo,
@@ -41,3 +41,4 @@ Thanh tiến trình thể hiện dung lượng đã sử dụng trên tổng dun
 - Giá trị phần trăm được clamp trong khoảng `0-100`.
 - Khi `total <= 0`, thành phần tự dùng giá trị an toàn để tránh chia cho 0.
 - Sử dụng `colorClassName` để thay đổi màu thanh tiến trình.
+- Hỗ trợ dark mode: văn bản và track tự đổi màu với `dark:` classes.

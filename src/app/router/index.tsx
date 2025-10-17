@@ -1,8 +1,9 @@
 import { createRouter } from '@tanstack/react-router'
-import { rootRoute } from './root'
+import { rootRoute, indexRoute } from './root'
 import { getSamplesRoutes } from './segments/sample'
 
 const routeTree = rootRoute.addChildren([
+  indexRoute,
   getSamplesRoutes(),
 ])
 

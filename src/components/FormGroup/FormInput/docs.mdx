@@ -1,0 +1,41 @@
+import FormInput from '@/components/FormGroup/FormInput/FormInput'
+import { FormInputBasicDemo, FormInputTypesDemo, FormInputStatesDemo } from './form-input.demos'
+
+# FormInput
+
+Input văn bản. Label/help/error được cung cấp bởi `FormGroup`.
+
+## Mục đích & trường hợp xử lý
+
+- Thu thập chuỗi văn bản (email, password, số, v.v.) với các trạng thái.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| type | `React.HTMLInputTypeAttribute` | `'text'` | Kiểu input (`text`, `email`, `password`, ...) |
+| placeholder | `string` | `''` | Gợi ý nội dung |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `Omit&lt;React.InputHTMLAttributes&lt;HTMLInputElement&gt;, 'type' &#124; 'placeholder'&gt;` | - | Thuộc tính input gốc |
+
+## Cách dùng
+```tsx
+<FormGroup label="Email" help="Chúng tôi không chia sẻ email.">
+  <FormInput type="email" placeholder="you@example.com" />
+</FormGroup>
+```
+
+## Examples
+
+<FormInputBasicDemo />
+
+<FormInputTypesDemo />
+
+<FormInputStatesDemo />
+
+## Lưu ý
+
+- `FormGroup` thiết lập `aria-invalid`/`aria-describedby` cho `FormInput` qua context.
+- Có thể truyền `id` nếu cần kiểm soát thuộc tính của input.
+
+

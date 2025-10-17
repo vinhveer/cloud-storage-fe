@@ -1,0 +1,44 @@
+import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
+import { FormUploadBasicDemo, FormUploadAcceptDemo, FormUploadMultipleDemo } from './form-upload.demos'
+
+# FormUpload
+
+Khu vực upload hỗ trợ drag-and-drop và click để chọn file.
+
+## Mục đích & trường hợp xử lý
+
+- Cho phép người dùng tải lên file nhanh chóng, hỗ trợ nhiều định dạng và nhiều file.
+
+## Props
+
+| Tên | Kiểu | Mặc định | Mô tả |
+| --- | --- | --- | --- |
+| label | `string` | - | Nhãn phía trên khu vực upload |
+| required | `boolean` | `false` | Bắt buộc; thêm dấu `*` và thuộc tính `required` |
+| error | `string \| null` | - | Thông báo lỗi dưới trường |
+| help | `string \| null` | - | Gợi ý/hướng dẫn dưới trường |
+| accept | `string` | `'*'` | Giá trị thuộc tính `accept` của input |
+| multiple | `boolean` | `false` | Cho phép chọn nhiều file |
+| onFilesChange | `(files: File[]) => void` | - | Callback khi file thay đổi (click/drag-drop) |
+| className | `string` | - | Bổ sung class Tailwind |
+| ...rest | `Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>` | - | Thuộc tính input gốc (trừ `type`) |
+
+## Cách dùng
+```tsx
+<FormUpload label="Tải lên" accept="image/*" multiple onFilesChange={(files) => console.log(files)} />
+```
+
+## Examples
+
+<FormUploadBasicDemo />
+
+<FormUploadAcceptDemo />
+
+<FormUploadMultipleDemo />
+
+## Lưu ý
+
+- Kéo-thả và click đều kích hoạt chọn file; khu vực đổi màu khi kéo vào.
+- `onFilesChange` nhận danh sách `File[]` đã chọn/thả.
+
+

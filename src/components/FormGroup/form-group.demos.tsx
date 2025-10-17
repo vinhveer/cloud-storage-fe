@@ -1,5 +1,5 @@
-import React from 'react'
-import FormGroup from '@/components/FormGroup'
+// import React from 'react'
+import FormGroup from '@/components/FormGroup/FormGroup'
 
 export function FormGroupBasicDemo() {
   return (
