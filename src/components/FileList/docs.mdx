@@ -1,0 +1,36 @@
+import { FileListUsageDemo } from './file-list.demos'
+
+# FileList
+
+Hiển thị danh sách tệp với 4 chế độ: list, grid, tiles, details. Hỗ trợ chọn nhiều mục, đếm tổng số, và chuyển nhanh view mode.
+
+## Demos
+
+<FileListUsageDemo />
+
+## API
+
+| Prop | Type | Default | Mô tả |
+| --- | --- | --- | --- |
+| `files` | `FileItem[]` | `[]` | Danh sách tệp |
+| `viewMode` | `'list' \| 'grid' \| 'tiles' \| 'details'` | `'list'` | Chế độ hiển thị |
+| `onViewModeChange` | `(mode) => void` | - | Callback khi đổi chế độ |
+| `className` | `string` | - | Bổ sung class Tailwind |
+
+### FileItem
+
+| Trường | Kiểu | Mô tả |
+| --- | --- | --- |
+| `id` | `string \| number` | Khoá tùy chọn |
+| `name` | `string` | Tên tệp |
+| `type` | `string` | Kiểu tệp |
+| `modified` | `string` | Ngày sửa |
+| `size` | `string` | Kích thước |
+| `icon` | `React.ReactNode` | Icon tuỳ chỉnh |
+
+## Ghi chú
+
+- `Select` bật chế độ chọn nhiều, hỗ trợ Select All/Deselect All.
+- Khi không có dữ liệu, hiển thị trạng thái rỗng thống nhất.
+
+
