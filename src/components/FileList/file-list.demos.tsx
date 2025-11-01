@@ -1,6 +1,6 @@
 import React from 'react'
-import FileList from '../FileList'
-import type { FileItem, ViewMode } from '../FileList'
+import FileList from './FileList'
+import type { FileItem, ViewMode } from './FileList'
 import { Button } from '@/components/Button'
 
 const sampleFiles: FileItem[] = [

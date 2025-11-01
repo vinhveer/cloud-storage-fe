@@ -1,5 +1,4 @@
 import { NavGroup } from '@/components/NavGroup/NavGroup'
-import { NavGroupBasicDemo, NavGroupVerticalDemo, NavGroupWithBadgesDemo } from './navgroup.demos'
 
 # NavGroup
 
@@ -43,13 +42,77 @@ Thanh điều hướng dạng pills, hỗ trợ ngang/dọc, trạng thái activ
 />
 ```
 
-## Examples
+### Demos
 
-<NavGroupBasicDemo />
+```tsx
+import { NavGroup } from '@/components/NavGroup/NavGroup'
+```
 
-<NavGroupVerticalDemo />
+#### Cơ bản
 
-<NavGroupWithBadgesDemo />
+```tsx
+{(() => {
+  const items = [
+    { id: 'home', label: 'Home', href: '#' },
+    { id: 'files', label: 'Files', href: '#' },
+    { id: 'settings', label: 'Settings', href: '#' },
+  ]
+  return <NavGroup items={items} activeItem="files" />
+})()}
+```
+
+{(() => {
+  const items = [
+    { id: 'home', label: 'Home', href: '#' },
+    { id: 'files', label: 'Files', href: '#' },
+    { id: 'settings', label: 'Settings', href: '#' },
+  ]
+  return <div className="mt-4"><NavGroup items={items} activeItem="files" /></div>
+})()}
+
+#### Dọc
+
+```tsx
+{(() => {
+  const items = [
+    { id: 'overview', label: 'Overview', href: '#' },
+    { id: 'usage', label: 'Usage', href: '#' },
+    { id: 'billing', label: 'Billing', href: '#' },
+  ]
+  return <NavGroup items={items} activeItem="overview" orientation="vertical" />
+})()}
+```
+
+{(() => {
+  const items = [
+    { id: 'overview', label: 'Overview', href: '#' },
+    { id: 'usage', label: 'Usage', href: '#' },
+    { id: 'billing', label: 'Billing', href: '#' },
+  ]
+  return <div className="mt-4"><NavGroup items={items} activeItem="overview" orientation="vertical" /></div>
+})()}
+
+#### Badge & icon
+
+```tsx
+{(() => {
+  const items = [
+    { id: 'inbox', label: 'Inbox', href: '#', badge: 5, icon: 'fas fa-inbox' },
+    { id: 'shared', label: 'Shared', href: '#', badge: 2, icon: 'fas fa-share-alt' },
+    { id: 'archive', label: 'Archive', href: '#', icon: 'fas fa-archive' },
+  ]
+  return <NavGroup items={items} activeItem="shared" />
+})()}
+```
+
+{(() => {
+  const items = [
+    { id: 'inbox', label: 'Inbox', href: '#', badge: 5, icon: 'fas fa-inbox' },
+    { id: 'shared', label: 'Shared', href: '#', badge: 2, icon: 'fas fa-share-alt' },
+    { id: 'archive', label: 'Archive', href: '#', icon: 'fas fa-archive' },
+  ]
+  return <div className="mt-4"><NavGroup items={items} activeItem="shared" /></div>
+})()}
 
 ## Lưu ý
 

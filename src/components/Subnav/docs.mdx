@@ -1,5 +1,4 @@
 import { Subnav } from '@/components/Subnav/Subnav'
-import { SubnavBasicDemo, SubnavVerticalDemo, SubnavWithBadgesDemo } from './subnav.demos'
 
 # Subnav
 
@@ -27,10 +26,74 @@ Thanh điều hướng con (pills) tái sử dụng `NavGroup`, hỗ trợ ngang
 />
 ```
 
-## Examples
+### Demos
 
-<SubnavBasicDemo />
+```tsx
+import { Subnav } from '@/components/Subnav/Subnav'
+```
 
-<SubnavVerticalDemo />
+#### Cơ bản
 
-<SubnavWithBadgesDemo />
+```tsx
+{(() => {
+  const items = [
+    { id: 'home', label: 'Home', href: '#', icon: 'fas fa-home' },
+    { id: 'files', label: 'Files', href: '#', icon: 'far fa-folder' },
+    { id: 'settings', label: 'Settings', href: '#', icon: 'fas fa-cog' },
+  ]
+  return <Subnav items={items} activeItem="files" />
+})()}
+```
+
+{(() => {
+  const items = [
+    { id: 'home', label: 'Home', href: '#', icon: 'fas fa-home' },
+    { id: 'files', label: 'Files', href: '#', icon: 'far fa-folder' },
+    { id: 'settings', label: 'Settings', href: '#', icon: 'fas fa-cog' },
+  ]
+  return <div className="mt-4"><Subnav items={items} activeItem="files" /></div>
+})()}
+
+#### Dọc
+
+```tsx
+{(() => {
+  const items = [
+    { id: 'overview', label: 'Overview', href: '#', icon: 'far fa-clipboard' },
+    { id: 'usage', label: 'Usage', href: '#', icon: 'far fa-chart-bar' },
+    { id: 'billing', label: 'Billing', href: '#', icon: 'far fa-credit-card' },
+  ]
+  return <Subnav items={items} activeItem="overview" orientation="vertical" />
+})()}
+```
+
+{(() => {
+  const items = [
+    { id: 'overview', label: 'Overview', href: '#', icon: 'far fa-clipboard' },
+    { id: 'usage', label: 'Usage', href: '#', icon: 'far fa-chart-bar' },
+    { id: 'billing', label: 'Billing', href: '#', icon: 'far fa-credit-card' },
+  ]
+  return <div className="mt-4"><Subnav items={items} activeItem="overview" orientation="vertical" /></div>
+})()}
+
+#### Badge & icon
+
+```tsx
+{(() => {
+  const items = [
+    { id: 'inbox', label: 'Inbox', href: '#', badge: 5, icon: 'fas fa-inbox' },
+    { id: 'shared', label: 'Shared', href: '#', badge: 2, icon: 'fas fa-share-alt' },
+    { id: 'archive', label: 'Archive', href: '#', icon: 'fas fa-archive' },
+  ]
+  return <Subnav items={items} activeItem="shared" />
+})()}
+```
+
+{(() => {
+  const items = [
+    { id: 'inbox', label: 'Inbox', href: '#', badge: 5, icon: 'fas fa-inbox' },
+    { id: 'shared', label: 'Shared', href: '#', badge: 2, icon: 'fas fa-share-alt' },
+    { id: 'archive', label: 'Archive', href: '#', icon: 'fas fa-archive' },
+  ]
+  return <div className="mt-4"><Subnav items={items} activeItem="shared" /></div>
+})()}

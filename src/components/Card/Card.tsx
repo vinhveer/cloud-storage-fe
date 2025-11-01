@@ -1,13 +1,5 @@
-import React from 'react'
 import clsx from 'clsx'
-
-export type CardProps = React.HTMLAttributes<HTMLDivElement> & {
-  title?: string
-  subtitle?: string
-  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
-  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-  border?: boolean
-}
+import type { CardProps } from '@/components/Card/types'
 
 export const Card = ({
   title,
@@ -47,12 +39,12 @@ export const Card = ({
       ? 'shadow-2xl'
       : 'shadow-lg'
 
-  const borderClass = border ? 'border border-gray-200 dark:border-gray-700' : ''
+  const borderClass = border ? 'card-border' : ''
 
   return (
     <div
       {...rest}
-      className={clsx('not-prose bg-white dark:bg-gray-800 rounded-xl', paddingClass, shadowClass, borderClass, className)}
+      className={clsx('card-root', paddingClass, shadowClass, borderClass, className)}
     >
       {(title || subtitle) && (
         <div className={clsx(padding === 'none' ? 'mb-0' : 'mb-6')}>
@@ -69,5 +61,3 @@ export const Card = ({
 }
 
 export default Card
-
-

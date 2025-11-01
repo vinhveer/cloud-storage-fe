@@ -6,11 +6,11 @@ import { SidebarProvider } from '@/contexts/SidebarContext'
 export default function AppLayout() {
   return (
     <SidebarProvider>
-      <div className="min-h-dvh flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <div className="min-h-dvh flex flex-col bg-white dark:bg-[#0D1117] text-gray-900 dark:text-gray-100">
         <Navbar />
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1">
           <Sidebar />
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 ml-64 h-[calc(100dvh-var(--navbar-h)-1px)] overflow-y-auto">
             <div className="container mx-auto p-4">
               <Outlet />
             </div>

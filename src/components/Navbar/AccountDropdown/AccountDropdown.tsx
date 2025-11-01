@@ -2,7 +2,7 @@ import { useState } from 'react'
 import clsx from 'clsx'
 import { Cog6ToothIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/20/solid'
 import Dialog from '@/components/Dialog/Dialog'
-import { useAccountDropdown } from '@/hooks/components/Navbar/AccountDropdown/useAccountDropdown'
+import { useAccountDropdown } from '@/components/Navbar/AccountDropdown/useAccountDropdown'
 
 export type AccountDropdownProps = {
   userName?: string
@@ -51,12 +51,12 @@ export function AccountDropdown({
       {isOpen && (
         <div
           className={clsx(
-            'absolute right-0 mt-2 min-w-72 bg-white rounded-lg shadow-lg border border-gray-200 pt-3 z-50'
+            'absolute right-0 mt-2 min-w-72 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800 pt-3 z-50'
           )}
           role="menu"
           aria-label="Account menu"
         >
-          <div className="px-4 py-3 border-b border-gray-100">
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                 {userAvatar ? (
@@ -66,8 +66,8 @@ export function AccountDropdown({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{userName}</p>
-                <p className="text-xs text-gray-500 truncate">{userEmail}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{userName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userEmail}</p>
               </div>
             </div>
           </div>
@@ -75,17 +75,17 @@ export function AccountDropdown({
           <div className="py-1">
             <a
               href={settingsHref}
-              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               role="menuitem"
             >
-              <Cog6ToothIcon className="mr-3 w-4 h-4 text-gray-400" aria-hidden="true" />
+              <Cog6ToothIcon className="mr-3 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
               Account Settings
             </a>
 
             <button
               type="button"
               onClick={() => setLogoutOpen(true)}
-              className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               role="menuitem"
             >
               <ArrowRightOnRectangleIcon className="mr-3 w-4 h-4" aria-hidden="true" />

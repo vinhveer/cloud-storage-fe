@@ -1,12 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import { FormFieldContext } from '@/components/FormGroup/FormGroup'
-
-export type SelectOption = { value: string; label: string; disabled?: boolean }
-
-export type FormSelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
-  options?: SelectOption[]
-}
+import type { FormSelectProps } from '@/components/FormGroup/FormSelect/types'
 
 export default function FormSelect({
   options = [],
@@ -19,9 +14,9 @@ export default function FormSelect({
   const selectId = id ?? `sel-${reactId}`
   const field = React.useContext(FormFieldContext)
 
-  const baseClasses = 'block w-full px-4 py-3 rounded-lg text-sm transition-all duration-200 text-gray-900 dark:text-white focus:outline-none focus:ring-2'
-  const errorClasses = 'border border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500'
-  const normalClasses = 'border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-transparent'
+  const baseClasses = 'formselect-base'
+  const errorClasses = 'formselect-error'
+  const normalClasses = 'formselect-normal'
 
   const selectClasses = clsx(baseClasses, field?.invalid ? errorClasses : normalClasses, className)
 

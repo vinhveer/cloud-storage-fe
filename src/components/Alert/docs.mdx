@@ -1,25 +1,68 @@
-import { AlertBasicDemo, AlertCustomContentDemo } from './alert.demos'
+import Alert from './Alert'
 
-# Alert
+## Alert
 
 Hiển thị thông báo theo trạng thái, hỗ trợ icon, tiêu đề, nội dung và nút đóng.
 
-## When to use
+### Để làm gì
 
-- Thông báo ngắn gọn trạng thái: success, error, warning, info.
-- Cho phép người dùng tự ẩn khi `dismissible` bật.
+- Hiển thị trạng thái nhanh: success, error, warning, info.
+- Cung cấp nút đóng để người dùng tự ẩn (`dismissible`).
 
-<h2 className="mb-1">Demos</h2>
+### Khi nào sử dụng
 
-<h3 className="mt-0 mb-1">Cơ bản</h3>
+- Khi cần thông báo ngắn gọn trong luồng thao tác.
+- Khi cần nhấn mạnh trạng thái kết quả của một hành động.
 
-<AlertBasicDemo />
+### Demos
 
-<h3 className="mt-1 mb-1">Nội dung tuỳ chỉnh</h3>
+```tsx
+import Alert from '@/components/Alert/Alert'
+```
 
-<AlertCustomContentDemo />
+#### Cơ bản
 
-## API
+- Mô tả: Dùng để hiển thị thông báo ngắn gọn theo 4 trạng thái phổ biến.
+
+```tsx
+<Alert heading="Information" message="This is an informational alert." />
+```
+
+<Alert heading="Information" message="This is an informational alert." />
+
+```tsx
+<Alert type="success" heading="Success" message="Everything worked!" />
+```
+
+<Alert type="success" heading="Success" message="Everything worked!" />
+
+```tsx
+<Alert type="warning" heading="Warning" message="Be careful with this action." />
+```
+
+<Alert type="warning" heading="Warning" message="Be careful with this action." />
+
+```tsx
+<Alert type="error" heading="Error" message="Something went wrong." />
+```
+
+<Alert type="error" heading="Error" message="Something went wrong." />
+
+#### Nội dung tuỳ chỉnh
+
+- Mô tả: Dùng khi cần nội dung dài/tuỳ chỉnh (VD: văn bản nhiều dòng, link...).
+
+```tsx
+<Alert type="info" heading="Heads up!">
+  <p>We just updated our policy. Please review the changes.</p>
+</Alert>
+```
+
+<Alert type="info" heading="Heads up!">
+  <p>We just updated our policy. Please review the changes.</p>
+</Alert>
+
+### API
 
 | Prop | Type | Default | Mô tả |
 | --- | --- | --- | --- |
@@ -31,9 +74,7 @@ Hiển thị thông báo theo trạng thái, hỗ trợ icon, tiêu đề, nội
 | `onDismiss` | `() => void` | `—` | Gọi khi đóng alert |
 | `...rest` | `React.HTMLAttributes<HTMLDivElement>` | `—` | Thuộc tính HTML bổ sung |
 
-## Ghi chú
+### Ghi chú
 
 - Icon mặc định dùng SVG nội bộ, có thể thay bằng `icon`.
-- Sử dụng Tailwind cho màu sắc theo `type`.
-
-
+- Màu sắc theo `type` sử dụng Tailwind.

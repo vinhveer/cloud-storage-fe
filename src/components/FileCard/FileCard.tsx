@@ -1,8 +1,8 @@
 import React from 'react'
 import clsx from 'clsx'
 import { DocumentIcon, DocumentTextIcon, PhotoIcon, FolderIcon, TableCellsIcon } from '@heroicons/react/24/solid'
-
-type IconName = 'file' | 'file-alt' | 'file-csv' | 'file-image' | 'file-word' | 'file-excel' | 'file-pdf' | 'file-lines' | 'folder'
+import type { IconName, FileCardProps } from '@/components/FileCard/types'
+import { Button } from '@/components/Button/Button'
 
 const iconMap: Record<IconName, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   'file': DocumentIcon,
@@ -14,15 +14,6 @@ const iconMap: Record<IconName, React.ComponentType<React.SVGProps<SVGSVGElement
   'file-pdf': DocumentIcon,
   'file-lines': DocumentTextIcon,
   'folder': FolderIcon,
-}
-
-export type FileCardProps = React.HTMLAttributes<HTMLDivElement> & {
-  icon?: IconName
-  iconColor?: string
-  title: string
-  subtitle?: string
-  detailsHref?: string
-  width?: number
 }
 
 export const FileCard = ({
@@ -44,24 +35,27 @@ export const FileCard = ({
       {...rest}
       style={computedStyle}
       className={clsx(
-        'not-prose bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600',
+        'filecard-root',
         className
       )}
     >
-      <div className="mb-4">
-        <IconComponent className={clsx(iconColor, 'w-16 h-16')} />
+      <div className="filecard-icon">
+        <IconComponent className={clsx(iconColor, 'filecard-icon-svg')} />
       </div>
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
-        {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>}
+      <div className="filecard-text">
+        <h3 className="filecard-title">{title}</h3>
+        {subtitle && <p className="filecard-subtitle">{subtitle}</p>}
       </div>
       <div>
-        <a
-          href={detailsHref}
-          className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 shadow-sm"
+        <Button
+          variant="primary"
+          size="md"
+          onClick={() => { try { window.location.href = detailsHref } catch {} }}
+          aria-label="View details"
+          className="filecard-cta"
         >
           Details
-        </a>
+        </Button>
       </div>
     </div>
   )

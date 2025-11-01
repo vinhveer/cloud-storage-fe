@@ -1,5 +1,5 @@
+import React from 'react'
 import FormTextarea from '@/components/FormGroup/FormTextarea/FormTextarea'
-import { FormTextareaBasicDemo, FormTextareaStatesDemo } from './form-textarea.demos'
 
 # FormTextarea
 
@@ -25,11 +25,49 @@ Textarea. Label/help/error được cung cấp bởi `FormGroup`.
 </FormGroup>
 ```
 
-## Examples
+### Demos
 
-<FormTextareaBasicDemo />
+```tsx
+import FormTextarea from '@/components/FormGroup/FormTextarea/FormTextarea'
+```
 
-<FormTextareaStatesDemo />
+#### Cơ bản
+
+```tsx
+<>
+  <FormTextarea label="Ghi chú" placeholder="Nhập ghi chú..." />
+  <FormTextarea label="Mô tả" rows={6} />
+</>
+```
+
+<div className="grid gap-4">
+  <FormTextarea label="Ghi chú" placeholder="Nhập ghi chú..." />
+  <FormTextarea label="Mô tả" rows={6} />
+</div>
+
+#### Trạng thái
+
+```tsx
+{(() => {
+  const [value, setValue] = React.useState('')
+  return (
+    <>
+      <FormTextarea label="Controlled" placeholder="Nhập nội dung" value={value} onChange={(e) => setValue(e.target.value)} help="Ví dụ controlled" />
+      <FormTextarea label="Có lỗi" error="Nội dung không hợp lệ" />
+    </>
+  )
+})()}
+```
+
+{(() => {
+  const [value, setValue] = React.useState('')
+  return (
+    <div className="grid gap-4">
+      <FormTextarea label="Controlled" placeholder="Nhập nội dung" value={value} onChange={(e) => setValue(e.target.value)} help="Ví dụ controlled" />
+      <FormTextarea label="Có lỗi" error="Nội dung không hợp lệ" />
+    </div>
+  )
+})()}
 
 ## Lưu ý
 

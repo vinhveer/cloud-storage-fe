@@ -1,16 +1,8 @@
 import React from 'react'
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-
-export type FormUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> & {
-  label?: string
-  required?: boolean
-  error?: string | null
-  help?: string | null
-  accept?: string
-  multiple?: boolean
-  onFilesChange?: (files: File[]) => void
-}
+import type { FormUploadProps } from '@/components/FormGroup/FormUpload/types'
+import { useFormUpload } from '@/components/FormGroup/FormUpload/formupload.hook'
 
 export default function FormUpload({
   label,
@@ -24,62 +16,34 @@ export default function FormUpload({
   id,
   ...rest
 }: FormUploadProps) {
-  const [isDragging, setIsDragging] = React.useState(false)
-  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  const { isDragging, inputRef, handleDragOver, handleDragLeave, handleDrop, handleChange, openPicker } = useFormUpload(onFilesChange)
   const reactId = React.useId()
   const helpId = `${id ?? reactId}-help`
   const errorId = `${id ?? reactId}-error`
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    const dtFiles = Array.from(e.dataTransfer.files ?? [])
-    if (dtFiles.length > 0) {
-      onFilesChange?.(dtFiles)
-    }
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? [])
-    onFilesChange?.(files)
-  }
-
-  const borderStateClass = isDragging ? 'border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+  const borderStateClass = isDragging ? 'formupload-dropzone-drag' : 'formupload-dropzone-idle'
 
   return (
-    <div className={clsx('not-prose space-y-2', className)}>
+    <div className={clsx('formupload-root', className)}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="formupload-label">
           {label}
-          {required && <span className="text-red-500 dark:text-red-400">*</span>}
+          {required && <span className="formupload-required">*</span>}
         </label>
       )}
 
       <div
-        className={clsx(
-          'relative border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200',
-          borderStateClass
-        )}
+        className={clsx('formupload-dropzone', borderStateClass)}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        onClick={() => inputRef.current?.click()}
+        onClick={openPicker}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
-            inputRef.current?.click()
+            openPicker()
           }
         }}
         aria-describedby={error ? errorId : help ? helpId : undefined}
@@ -98,15 +62,15 @@ export default function FormUpload({
         />
 
         <div className="space-y-2 pointer-events-none">
-          <div className="flex justify-center">
-            <ArrowUpTrayIcon className="text-gray-400 dark:text-gray-500 w-8 h-8" aria-hidden="true" />
+          <div className="formupload-iconwrap">
+            <ArrowUpTrayIcon className="formupload-icon" aria-hidden="true" />
           </div>
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              <span className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer">Click to upload</span>
+            <p className="formupload-hint">
+              <span className="formupload-hint-action">Click to upload</span>
               {' '}or drag and drop
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="formupload-subhint">
               {accept !== '*' ? accept.replace('*', 'any') : 'Any file type'}
               {multiple && ' (multiple files allowed)'}
             </p>
@@ -115,9 +79,9 @@ export default function FormUpload({
       </div>
 
       {error ? (
-        <p id={errorId} className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p id={errorId} className="formupload-error-text">{error}</p>
       ) : help ? (
-        <p id={helpId} className="text-sm text-gray-500 dark:text-gray-400">{help}</p>
+        <p id={helpId} className="formupload-help-text">{help}</p>
       ) : null}
     </div>
   )

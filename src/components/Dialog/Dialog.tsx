@@ -1,28 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import clsx from 'clsx'
+import { useDialogOpen, useDialogCloseActions, useDialogConfirm } from '@/components/Dialog/dialog.hook'
+import type { DialogProps } from '@/components/Dialog/types'
 
-type ConfirmType = 'danger' | 'primary' | 'neutral'
-
-export type DialogProps = {
-  id?: string
-  title: string
-  confirmText?: string
-  confirmButtonText?: string
-  cancelButtonText?: string
-  confirmHref?: string
-  confirmType?: ConfirmType
-
-  open?: boolean
-  defaultOpen?: boolean
-  onOpenChange?: (open: boolean) => void
-
-  onConfirm?: () => void | Promise<void>
-  onCancel?: () => void
-
-  closeOnEsc?: boolean
-  closeOnBackdrop?: boolean
-  className?: string
-}
 
 export default function Dialog({
   id,
@@ -44,39 +24,11 @@ export default function Dialog({
   const reactId = React.useId()
   const modalId = useMemo(() => id ?? `modal-${reactId}`, [id, reactId])
 
-  const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen)
-  const isControlled = typeof open === 'boolean'
-  const isOpen = isControlled ? (open as boolean) : internalOpen
-  const setOpen = (next: boolean) => {
-    if (!isControlled) setInternalOpen(next)
-    onOpenChange?.(next)
-  }
+  const { isOpen, setOpen } = useDialogOpen({ open, defaultOpen, onOpenChange })
 
-  useEffect(() => {
-    if (!isOpen || !closeOnEsc) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false)
-        onCancel?.()
-      }
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen, closeOnEsc, onCancel])
+  const { onBackdropClick } = useDialogCloseActions({ isOpen, setOpen, closeOnEsc, closeOnBackdrop, onCancel })
 
-  const onBackdropClick = () => {
-    if (!closeOnBackdrop) return
-    setOpen(false)
-    onCancel?.()
-  }
-
-  const onConfirmClick = async (e: React.MouseEvent) => {
-    if (onConfirm) {
-      e.preventDefault()
-      await onConfirm()
-      setOpen(false)
-    }
-  }
+  const { onConfirmClick } = useDialogConfirm({ onConfirm, setOpen })
 
   if (!isOpen) return null
 
@@ -90,7 +42,7 @@ export default function Dialog({
   return (
     <div
       id={modalId}
-      className={clsx('not-prose fixed inset-0 bg-black/30 backdrop-blur-sm z-50', className)}
+      className={clsx('not-prose fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm z-50 opacity-0 animate-[fadeIn_150ms_ease-out_forwards]', className)}
       role="dialog"
       aria-modal="true"
       aria-labelledby={`${modalId}-title`}
@@ -99,18 +51,18 @@ export default function Dialog({
     >
       <div className="flex items-center justify-center min-h-dvh p-6">
         <div
-          className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden"
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-transparent dark:border-gray-800 opacity-0 scale-95 animate-[scaleIn_180ms_ease-out_forwards]"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="px-6 pt-5 pb-4">
             <div className="mb-3">
-              <h3 id={`${modalId}-title`} className="text-xl font-semibold text-gray-900 leading-6">
+              <h3 id={`${modalId}-title`} className="text-xl font-semibold text-gray-900 dark:text-white leading-6">
                 {title}
               </h3>
             </div>
             {confirmText && (
               <div className="mb-5">
-                <p id={`${modalId}-desc`} className="text-sm text-gray-600 leading-relaxed">
+                <p id={`${modalId}-desc`} className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                   {confirmText}
                 </p>
               </div>

@@ -1,3 +1,4 @@
+import { ArrowsUpDownIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
 type SortButtonProps = {
@@ -16,7 +17,7 @@ export default function SortButton({ onClick, className }: SortButtonProps) {
       )}
       aria-label="Sort"
     >
-      <i className="fas fa-sort" aria-hidden="true" />
+      <ArrowsUpDownIcon className="w-4 h-4" aria-hidden="true" />
       <span>Sort</span>
     </button>
   )

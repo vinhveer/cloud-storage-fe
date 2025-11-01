@@ -1,5 +1,5 @@
 import { Button } from '@/components/Button/Button'
-import { ButtonVariantsDemo, ButtonSizesDemo, ButtonIconsDemo, ButtonLoadingDemo } from './button.demos'
+import { PlusIcon } from '@heroicons/react/24/outline'
 
 # Button
 
@@ -30,15 +30,97 @@ Nút chuẩn của hệ thống. Hỗ trợ variant, kích thước, và trạng
 <Button variant="primary" aria-label="Confirm">Confirm</Button>
 ```
 
-## Examples
+### Demos
 
-<ButtonVariantsDemo />
+```tsx
+import { Button } from '@/components/Button/Button'
+```
 
-<ButtonSizesDemo />
+#### Variants
 
-<ButtonIconsDemo />
+- Mô tả: Các biến thể hiển thị mục đích hành động.
 
-<ButtonLoadingDemo />
+```tsx
+<>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="danger">Danger</Button>
+  <Button disabled>Disabled</Button>
+</>
+```
+
+<div className="flex flex-wrap gap-2 mt-2 h-full">
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="danger">Danger</Button>
+  <Button disabled>Disabled</Button>
+</div>
+
+#### Sizes
+
+- Mô tả: Nhiều kích thước phục vụ các ngữ cảnh giao diện.
+
+```tsx
+<>
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+  <Button size="xl">XL</Button>
+  <Button size="2xl">2XL</Button>
+</>
+```
+
+<div className="flex flex-wrap items-end gap-2 mt-2 h-full">
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+  <Button size="xl">XL</Button>
+  <Button size="2xl">2XL</Button>
+</div>
+
+#### Icons
+
+- Mô tả: Dùng icon-only hoặc kết hợp văn bản.
+
+```tsx
+const iconPlus = <PlusIcon className="w-4 h-4" />
+<>
+  <Button icon={iconPlus} aria-label="Add" />
+  <Button icon={iconPlus} value="Add" />
+  <Button icon={iconPlus} value="Create" variant="secondary" />
+  <Button icon={iconPlus} value="Delete" variant="danger" />
+</>
+```
+
+{(() => {
+  const iconPlus = <PlusIcon className="w-4 h-4" />
+  return (
+    <div className="flex flex-wrap gap-2 mt-2 h-full">
+      <Button icon={iconPlus} aria-label="Add" />
+      <Button icon={iconPlus} value="Add" />
+      <Button icon={iconPlus} value="Create" variant="secondary" />
+      <Button icon={iconPlus} value="Delete" variant="danger" />
+    </div>
+  )
+})()}
+
+#### Loading
+
+- Mô tả: Trạng thái đang xử lý sẽ khóa nút và hiển thị spinner.
+
+```tsx
+<>
+  <Button isLoading>Loading</Button>
+  <Button isLoading loadingText="Saving..." variant="secondary" />
+  <Button isLoading loadingText="Deleting..." variant="danger" />
+</>
+```
+
+<div className="flex flex-wrap gap-2 mt-2 h-full">
+  <Button isLoading>Loading</Button>
+  <Button isLoading loadingText="Saving..." variant="secondary" />
+  <Button isLoading loadingText="Deleting..." variant="danger" />
+</div>
 
 ## Lưu ý
 

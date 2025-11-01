@@ -1,60 +1,58 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-type Theme = 'light' | 'dark'
+type Theme = 'light' | 'dark' | 'system'
 
 type ThemeContextValue = {
   theme: Theme
-  setTheme: (theme: Theme) => void
-  toggleTheme: () => void
+  setTheme: (next: Theme) => void
+  cycleTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
+
+function prefersDark(): boolean {
+  return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+function isDark(theme: Theme): boolean {
+  return theme === 'dark' || (theme === 'system' && prefersDark())
+}
+
+function applyTheme(theme: Theme) {
+  const root = document.documentElement
+  if (isDark(theme)) root.classList.add('dark')
+  else root.classList.remove('dark')
+}
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light'
   try {
     const saved = localStorage.getItem('theme') as Theme | null
-    if (saved === 'light' || saved === 'dark') return saved
+    if (saved === 'light' || saved === 'dark' || saved === 'system') return saved
   } catch {}
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-  return prefersDark ? 'dark' : 'light'
-}
-
-function applyThemeToDocument(theme: Theme) {
-  const root = document.documentElement
-  if (theme === 'dark') root.classList.add('dark')
-  else root.classList.remove('dark')
+  return 'light'
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme)
 
+  // Apply initial theme on mount
   useEffect(() => {
-    applyThemeToDocument(theme)
-    try {
-      localStorage.setItem('theme', theme)
-    } catch {}
-  }, [theme])
-
-  useEffect(() => {
-    if (!window.matchMedia) return
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const handle = () => {
-      const saved = (() => {
-        try { return localStorage.getItem('theme') as Theme | null } catch { return null }
-      })()
-      if (saved === null) setThemeState(mq.matches ? 'dark' : 'light')
-    }
-    mq.addEventListener?.('change', handle)
-    return () => mq.removeEventListener?.('change', handle)
+    applyTheme(theme)
   }, [])
 
-  const setTheme = useCallback((next: Theme) => setThemeState(next), [])
-  const toggleTheme = useCallback(() => {
-    setThemeState(prev => (prev === 'dark' ? 'light' : 'dark'))
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next)
+    applyTheme(next)
+    try { localStorage.setItem('theme', next) } catch {}
   }, [])
 
-  const value = useMemo(() => ({ theme, setTheme, toggleTheme }), [theme, setTheme, toggleTheme])
+  const cycleTheme = useCallback(() => {
+    const next: Theme = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light'
+    setTheme(next)
+  }, [theme, setTheme])
+
+  const value = useMemo(() => ({ theme, setTheme, cycleTheme }), [theme, setTheme, cycleTheme])
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
@@ -63,3 +61,5 @@ export function useTheme() {
   if (!ctx) throw new Error('useTheme must be used within ThemeProvider')
   return ctx
 }
+
+

@@ -1,9 +1,4 @@
 import Card from "@/components/Card/Card";
-import {
-  CardBasicDemo,
-  CardPaddingDemo,
-  CardShadowBorderDemo,
-} from "./card.demos";
 
 # Card
 
@@ -37,13 +32,107 @@ Thẻ nội dung chung với tiêu đề, mô tả ngắn, padding, shadow và b
 </Card>
 ```
 
-## Examples
+### Demos
 
-<CardBasicDemo />
+```tsx
+import Card from '@/components/Card/Card'
+```
 
-<CardPaddingDemo />
+#### Cơ bản
 
-<CardShadowBorderDemo />
+- Mô tả: Card có/không có tiêu đề và mô tả.
+
+```tsx
+<>
+  <Card title="Card cơ bản" subtitle="Mô tả ngắn">
+    <p>Đặt nội dung tự do bên trong thẻ Card.</p>
+    <p>Dùng để nhóm thông tin thành khối rõ ràng.</p>
+  </Card>
+  <Card>
+    <p>Card không tiêu đề/mô tả.</p>
+  </Card>
+</>
+```
+
+<div className="grid gap-4 mt-2">
+  <Card title="Card cơ bản" subtitle="Mô tả ngắn">
+    <p>Đặt nội dung tự do bên trong thẻ Card.</p>
+    <p>Dùng để nhóm thông tin thành khối rõ ràng.</p>
+  </Card>
+  <Card>
+    <p>Card không tiêu đề/mô tả.</p>
+  </Card>
+</div>
+
+#### Padding
+
+- Mô tả: Thay đổi khoảng đệm nội dung.
+
+```tsx
+<>
+  <Card title="padding='sm'" padding="sm" />
+  <Card title="padding='md'" padding="md" />
+  <Card title="padding='lg'" padding="lg" />
+  <Card title="padding='xl'" padding="xl" />
+  <Card title="padding='none'" padding="none">
+    <p className="p-2 bg-gray-50 dark:bg-gray-800 dark:text-gray-200">Không áp lớp padding, ví dụ thêm padding nội bộ tùy ý.</p>
+  </Card>
+</>
+```
+
+<div className="grid md:grid-cols-2 gap-4 mt-2">
+  <Card title="padding='sm'" padding="sm">
+    <p>Nội dung với khoảng đệm nhỏ.</p>
+  </Card>
+  <Card title="padding='md'" padding="md">
+    <p>Nội dung với khoảng đệm vừa.</p>
+  </Card>
+  <Card title="padding='lg'" padding="lg">
+    <p>Nội dung với khoảng đệm lớn.</p>
+  </Card>
+  <Card title="padding='xl'" padding="xl">
+    <p>Nội dung với khoảng đệm rất lớn.</p>
+  </Card>
+  <Card title="padding='none'" padding="none">
+    <p className="p-2 bg-gray-50 dark:bg-gray-800 dark:text-gray-200">Không áp lớp padding, ví dụ thêm padding nội bộ tùy ý.</p>
+  </Card>
+</div>
+
+#### Shadow & Border
+
+- Mô tả: Điều chỉnh đổ bóng và viền.
+
+```tsx
+<>
+  <Card title="shadow='sm'" shadow="sm" />
+  <Card title="shadow='md'" shadow="md" />
+  <Card title="shadow='lg'" shadow="lg" />
+  <Card title="shadow='xl'" shadow="xl" />
+  <Card title="shadow='2xl'" shadow="2xl" />
+  <Card title="border=false" border={false} />
+</>
+```
+
+<div className="grid md:grid-cols-2 gap-4 mt-2">
+  <Card title="shadow='sm'" shadow="sm">
+    <p>Đổ bóng nhẹ.</p>
+  </Card>
+  <Card title="shadow='md'" shadow="md">
+    <p>Đổ bóng vừa.</p>
+  </Card>
+  <Card title="shadow='lg'" shadow="lg">
+    <p>Đổ bóng lớn.</p>
+  </Card>
+  <Card title="shadow='xl'" shadow="xl">
+    <p>Đổ bóng rất lớn.</p>
+  </Card>
+  <Card title="shadow='2xl'" shadow="2xl">
+    <p>Đổ bóng cực lớn.</p>
+  </Card>
+  <Card title="border=false" border={false}>
+    <p>Không hiển thị viền.</p>
+  </Card>
+</div>
 
 ## Lưu ý
 

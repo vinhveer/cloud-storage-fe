@@ -1,5 +1,5 @@
+import React from 'react'
 import FormSelect from "@/components/FormGroup/FormSelect/FormSelect";
-import { FormSelectBasicDemo, FormSelectStatesDemo } from "./form-select.demos";
 
 # FormSelect
 
@@ -33,11 +33,49 @@ Select với label, tùy chọn placeholder, bắt buộc, lỗi và trợ giúp
 />
 ```
 
-## Examples
+### Demos
 
-<FormSelectBasicDemo />
+```tsx
+import FormSelect from '@/components/FormGroup/FormSelect/FormSelect'
+```
 
-<FormSelectStatesDemo />
+#### Cơ bản
+
+```tsx
+<>
+  <FormSelect label="Quốc gia" options={[{ value: 'vn', label: 'Việt Nam' }, { value: 'us', label: 'United States' }]} />
+  <FormSelect label="Thành phố" required options={[{ value: 'hcm', label: 'TP.HCM' }, { value: 'hn', label: 'Hà Nội' }]} />
+</>
+```
+
+<div className="grid gap-4">
+  <FormSelect label="Quốc gia" options={[{ value: 'vn', label: 'Việt Nam' }, { value: 'us', label: 'United States' }]} />
+  <FormSelect label="Thành phố" required options={[{ value: 'hcm', label: 'TP.HCM' }, { value: 'hn', label: 'Hà Nội' }]} />
+</div>
+
+#### Trạng thái
+
+```tsx
+{(() => {
+  const [value, setValue] = React.useState('')
+  return (
+    <>
+      <FormSelect label="Controlled" value={value} onChange={(e) => setValue(e.target.value)} help="Ví dụ controlled" options={[{ value: '', label: 'Choose...' }, { value: '1', label: 'Một' }, { value: '2', label: 'Hai' }]} />
+      <FormSelect label="Có lỗi" error="Vui lòng chọn một giá trị" options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B', disabled: true }]} />
+    </>
+  )
+})()}
+```
+
+{(() => {
+  const [value, setValue] = React.useState('')
+  return (
+    <div className="grid gap-4">
+      <FormSelect label="Controlled" value={value} onChange={(e) => setValue(e.target.value)} help="Ví dụ controlled" options={[{ value: '', label: 'Choose...' }, { value: '1', label: 'Một' }, { value: '2', label: 'Hai' }]} />
+      <FormSelect label="Có lỗi" error="Vui lòng chọn một giá trị" options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B', disabled: true }]} />
+    </div>
+  )
+})()}
 
 ## Lưu ý
 

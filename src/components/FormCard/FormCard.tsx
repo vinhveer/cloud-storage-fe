@@ -1,6 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import Card from '@/components/Card/Card'
+import { Button } from '@/components/Button/Button'
 
 export type FormCardProps = React.HTMLAttributes<HTMLDivElement> & {
   title?: string
@@ -11,6 +12,9 @@ export type FormCardProps = React.HTMLAttributes<HTMLDivElement> & {
   formProps?: React.FormHTMLAttributes<HTMLFormElement>
   footer?: React.ReactNode
   cardClassName?: string
+  submitText?: string
+  onSubmitClick?: () => void
+  submitVariant?: 'primary' | 'secondary' | 'danger'
 }
 
 export default function FormCard({
@@ -23,6 +27,9 @@ export default function FormCard({
   footer,
   className,
   cardClassName,
+  submitText,
+  onSubmitClick,
+  submitVariant = 'primary',
   children,
   ...rest
 }: FormCardProps) {
@@ -48,9 +55,21 @@ export default function FormCard({
               )}
               {shouldAddCsrf && <input type="hidden" name="_token" value={csrfToken} />}
               {children}
+              {submitText && (
+                <div className="pt-2">
+                  <Button type="submit" variant={submitVariant}>{submitText}</Button>
+                </div>
+              )}
             </form>
           ) : (
-            <div className="space-y-6">{children}</div>
+            <div className="space-y-6">
+              {children}
+              {submitText && (
+                <div className="pt-2">
+                  <Button onClick={onSubmitClick} variant={submitVariant}>{submitText}</Button>
+                </div>
+              )}
+            </div>
           )}
         </Card>
 

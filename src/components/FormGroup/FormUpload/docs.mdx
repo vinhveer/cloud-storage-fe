@@ -1,5 +1,5 @@
+import React from 'react'
 import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
-import { FormUploadBasicDemo, FormUploadAcceptDemo, FormUploadMultipleDemo } from './form-upload.demos'
 
 # FormUpload
 
@@ -28,13 +28,88 @@ Khu vực upload hỗ trợ drag-and-drop và click để chọn file.
 <FormUpload label="Tải lên" accept="image/*" multiple onFilesChange={(files) => console.log(files)} />
 ```
 
-## Examples
+### Demos
 
-<FormUploadBasicDemo />
+```tsx
+import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
+```
 
-<FormUploadAcceptDemo />
+#### Cơ bản
 
-<FormUploadMultipleDemo />
+```tsx
+{(() => {
+  const [files, setFiles] = React.useState([])
+  return (
+    <div className="grid gap-3">
+      <FormUpload label="Tải lên tệp" onFilesChange={setFiles} />
+      <ul className="text-sm text-gray-600 list-disc pl-5">
+        {files.map((f) => (
+          <li key={f.name}>{f.name} ({Math.round(f.size / 1024)} KB)</li>
+        ))}
+      </ul>
+    </div>
+  )
+})()}
+```
+
+{(() => {
+  const [files, setFiles] = React.useState([])
+  return (
+    <div className="grid gap-3">
+      <FormUpload label="Tải lên tệp" onFilesChange={setFiles} />
+      <ul className="text-sm text-gray-600 list-disc pl-5">
+        {files.map((f) => (
+          <li key={f.name}>{f.name} ({Math.round(f.size / 1024)} KB)</li>
+        ))}
+      </ul>
+    </div>
+  )
+})()}
+
+#### Accept
+
+```tsx
+<FormUpload label="Chỉ ảnh" accept="image/*" onFilesChange={() => {}} />
+```
+
+<div className="grid gap-3">
+  <FormUpload label="Chỉ ảnh" accept="image/*" onFilesChange={() => {}} />
+  <div className="text-xs text-gray-500">Chỉ nhận ảnh (image/*)</div>
+</div>
+
+#### Multiple
+
+```tsx
+{(() => {
+  const [files, setFiles] = React.useState([])
+  return (
+    <div className="grid gap-3">
+      <FormUpload label="Nhiều tệp" multiple onFilesChange={setFiles} />
+      <div className="text-xs text-gray-500">Có thể kéo thả nhiều tệp cùng lúc.</div>
+      <ul className="text-sm text-gray-600 list-disc pl-5">
+        {files.map((f) => (
+          <li key={f.name}>{f.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+})()}
+```
+
+{(() => {
+  const [files, setFiles] = React.useState([])
+  return (
+    <div className="grid gap-3">
+      <FormUpload label="Nhiều tệp" multiple onFilesChange={setFiles} />
+      <div className="text-xs text-gray-500">Có thể kéo thả nhiều tệp cùng lúc.</div>
+      <ul className="text-sm text-gray-600 list-disc pl-5">
+        {files.map((f) => (
+          <li key={f.name}>{f.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+})()}
 
 ## Lưu ý
 

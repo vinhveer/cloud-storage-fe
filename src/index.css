@@ -1,7 +1,32 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root { --navbar-h: 56px; }
+  html { background-color: #ffffff; }
+  html.dark { background-color: #0D1117; }
+  body { @apply text-gray-900 dark:text-gray-100; background-color: #ffffff; height: 100dvh; overflow: hidden; }
+  html.dark body { background-color: #0D1117; }
+}
 
 @layer components {
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes scaleIn { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+  @keyframes slideInLeft { from { transform: translate3d(-100%,0,0) } to { transform: translate3d(0,0,0) } }
+  @keyframes slideInRight { from { transform: translate3d(100%,0,0) } to { transform: translate3d(0,0,0) } }
+  @keyframes slideInTop { from { transform: translate3d(0,-100%,0) } to { transform: translate3d(0,0,0) } }
+  @keyframes slideInBottom { from { transform: translate3d(0,100%,0) } to { transform: translate3d(0,0,0) } }
+  /* Sidebar custom scrollbar */
+  .sidebar-scroll, .sidebar-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+  .sidebar-scroll::-webkit-scrollbar, .sidebar-scrollbar::-webkit-scrollbar { width: 8px; }
+  .sidebar-scroll::-webkit-scrollbar-track, .sidebar-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-scroll::-webkit-scrollbar-thumb, .sidebar-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 9999px; }
+  .sidebar-scroll::-webkit-scrollbar-thumb:hover, .sidebar-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
+
+  .dark .sidebar-scroll, .dark .sidebar-scrollbar { scrollbar-color: #4b5563 transparent; }
+  .dark .sidebar-scroll::-webkit-scrollbar-thumb, .dark .sidebar-scrollbar::-webkit-scrollbar-thumb { background-color: #4b5563; }
+  .dark .sidebar-scroll::-webkit-scrollbar-thumb:hover, .dark .sidebar-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #6b7280; }
     /* Base button styles — luôn có */
     .btn {
       @apply inline-flex items-center justify-center font-medium shadow-sm
@@ -52,3 +77,117 @@
   }
 }
   
+/* Alert component styles */
+@layer components {
+  .alert-root { @apply border rounded-lg px-4 py-1 mb-3; }
+  .alert-root--dismissible { @apply relative; }
+
+  .alert-icon-wrap { @apply flex-shrink-0 flex items-center justify-center px-2; }
+  .alert-icon { @apply block; }
+
+  .alert-variant-success { @apply bg-green-50 border-green-200 text-green-800 dark:bg-green-900/30 dark:border-green-800 dark:text-green-200; }
+  .alert-variant-error { @apply bg-red-50 border-red-200 text-red-800 dark:bg-red-900/30 dark:border-red-800 dark:text-red-200; }
+  .alert-variant-warning { @apply bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-900/30 dark:border-yellow-800 dark:text-yellow-200; }
+  .alert-variant-info { @apply bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-200; }
+
+  .alert-icon-success { @apply text-green-400 dark:text-green-300; }
+  .alert-icon-error { @apply text-red-400 dark:text-red-300; }
+  .alert-icon-warning { @apply text-yellow-400 dark:text-yellow-300; }
+  .alert-icon-info { @apply text-blue-400 dark:text-blue-300; }
+
+  .alert-dismiss-success { @apply bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800; }
+  .alert-dismiss-error { @apply bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800; }
+  .alert-dismiss-warning { @apply bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900 dark:hover:bg-yellow-800; }
+  .alert-dismiss-info { @apply bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800; }
+}
+
+/* Card component styles */
+@layer components {
+  .card-root { @apply bg-white dark:bg-gray-800 rounded-xl; }
+  .card-border { @apply border border-gray-200 dark:border-gray-700; }
+}
+
+/* FileCard component styles */
+@layer components {
+  .filecard-root { @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600; }
+  .filecard-icon { @apply mb-4; }
+  .filecard-icon-svg { @apply w-16 h-16; }
+  .filecard-text { @apply mb-4; }
+  .filecard-title { @apply text-lg font-semibold text-gray-900 dark:text-white; }
+  .filecard-subtitle { @apply text-sm text-gray-500 dark:text-gray-400 mt-1; }
+  .filecard-cta { @apply inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 shadow-sm; }
+}
+
+/* FormCheckbox component styles */
+@layer components {
+  .checkbox-root { @apply space-y-2; }
+  .checkbox-row { @apply flex items-center space-x-3; }
+  .checkbox-base { @apply w-5 h-5 rounded-[20%] border-2 transition-all duration-200 bg-white dark:bg-gray-700 accent-blue-600 dark:accent-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800; }
+  .checkbox-normal { @apply border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:ring-blue-500; }
+  .checkbox-error { @apply border-red-300 dark:border-red-600 focus:ring-red-500; }
+  .checkbox-label { @apply text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer; }
+  .checkbox-required { @apply text-red-500 dark:text-red-400; }
+  .checkbox-error-text { @apply text-sm text-red-600 dark:text-red-400 ml-8; }
+  .checkbox-help-text { @apply text-sm text-gray-500 dark:text-gray-400 ml-8; }
+}
+
+/* FormInput component styles */
+@layer components {
+  .forminput-base { @apply block w-full px-4 py-3 rounded-lg text-sm transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2; }
+  .forminput-error { @apply border border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500; }
+  .forminput-normal { @apply border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 focus:ring-blue-500 focus:border-transparent; }
+}
+
+/* FormRadio component styles */
+@layer components {
+  .formradio-root { @apply space-y-2; }
+  .formradio-list { @apply space-y-2; }
+  .formradio-row { @apply flex items-center space-x-3; }
+  .formradio-input-base { @apply w-5 h-5 text-blue-600 focus:ring-2 transition-all duration-200; }
+  .formradio-input-error { @apply border-red-300 dark:border-red-600 focus:ring-red-500; }
+  .formradio-input-normal { @apply border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:ring-blue-500; }
+  .formradio-label { @apply text-sm text-gray-700 dark:text-gray-300 cursor-pointer; }
+}
+
+/* FormSelect component styles */
+@layer components {
+  .formselect-base { @apply block w-full px-4 py-3 rounded-lg text-sm transition-all duration-200 text-gray-900 dark:text-white focus:outline-none focus:ring-2; }
+  .formselect-error { @apply border border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500; }
+  .formselect-normal { @apply border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 focus:border-transparent; }
+}
+
+/* FormSwitch component styles */
+@layer components {
+  .formswitch-root { @apply space-y-2; }
+  .formswitch-row { @apply flex items-center justify-between; }
+  .formswitch-button { @apply relative inline-flex h-6 w-11 items-center justify-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800; }
+  .formswitch-on { @apply bg-blue-600 dark:bg-blue-500; }
+  .formswitch-off { @apply bg-gray-200 dark:bg-gray-700; }
+  .formswitch-knob { @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out; }
+  .formswitch-knob-on { @apply translate-x-2.5; }
+  .formswitch-knob-off { @apply -translate-x-2.5; }
+}
+
+/* FormTextarea component styles */
+@layer components {
+  .formtextarea-base { @apply block w-full px-4 py-3 rounded-lg text-sm resize-none transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2; }
+  .formtextarea-error { @apply border border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500; }
+  .formtextarea-normal { @apply border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 focus:ring-blue-500 focus:border-transparent; }
+}
+
+/* FormUpload component styles */
+@layer components {
+  .formupload-root { @apply space-y-2; }
+  .formupload-label { @apply block text-sm font-medium text-gray-700 dark:text-gray-300; }
+  .formupload-required { @apply text-red-500 dark:text-red-400; }
+  .formupload-dropzone { @apply relative border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200; }
+  .formupload-dropzone-drag { @apply border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20; }
+  .formupload-dropzone-idle { @apply border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500; }
+  .formupload-iconwrap { @apply flex justify-center; }
+  .formupload-icon { @apply text-gray-400 dark:text-gray-500 w-8 h-8; }
+  .formupload-hint { @apply text-sm text-gray-600 dark:text-gray-400; }
+  .formupload-hint-action { @apply font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer; }
+  .formupload-subhint { @apply text-xs text-gray-500 dark:text-gray-400 mt-1; }
+  .formupload-error-text { @apply text-sm text-red-600 dark:text-red-400; }
+  .formupload-help-text { @apply text-sm text-gray-500 dark:text-gray-400; }
+}

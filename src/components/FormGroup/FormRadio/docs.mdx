@@ -1,5 +1,4 @@
 import FormRadio from '@/components/FormGroup/FormRadio/FormRadio'
-import { FormRadioBasicDemo, FormRadioStatesDemo, FormRadioCustomDemo } from './form-radio.demos'
 
 # FormRadio
 
@@ -36,13 +35,41 @@ Nhóm lựa chọn radio với nhãn, bắt buộc, lỗi và trợ giúp.
 />
 ```
 
-## Examples
+### Demos
 
-<FormRadioBasicDemo />
+```tsx
+import FormRadio from '@/components/FormGroup/FormRadio/FormRadio'
+```
 
-<FormRadioStatesDemo />
+#### Cơ bản
 
-<FormRadioCustomDemo />
+```tsx
+<FormRadio label="Giới tính" name="gender-basic" options={[{ value: 'male', label: 'Nam' }, { value: 'female', label: 'Nữ' }]} />
+```
+
+<FormRadio label="Giới tính" name="gender-basic" options={[{ value: 'male', label: 'Nam' }, { value: 'female', label: 'Nữ' }]} />
+
+#### Trạng thái
+
+```tsx
+<>
+  <FormRadio label="Tùy chọn có lỗi" name="with-error" error="Vui lòng chọn một giá trị" options={[{ value: 'a', label: 'Lựa chọn A' }, { value: 'b', label: 'Lựa chọn B' }]} />
+  <FormRadio label="Tùy chọn có trợ giúp" name="with-help" help="Bạn có thể thay đổi sau" options={[{ value: 'x', label: 'Lựa chọn X' }, { value: 'y', label: 'Lựa chọn Y' }]} />
+</>
+```
+
+<div className="grid gap-4">
+  <FormRadio label="Tùy chọn có lỗi" name="with-error" error="Vui lòng chọn một giá trị" options={[{ value: 'a', label: 'Lựa chọn A' }, { value: 'b', label: 'Lựa chọn B' }]} />
+  <FormRadio label="Tùy chọn có trợ giúp" name="with-help" help="Bạn có thể thay đổi sau" options={[{ value: 'x', label: 'Lựa chọn X' }, { value: 'y', label: 'Lựa chọn Y' }]} />
+</div>
+
+#### Tùy chỉnh kích thước
+
+```tsx
+<FormRadio label="Kích thước lớn" name="custom-size" inputClassName="w-6 h-6" options={[{ value: '1', label: 'Một' }, { value: '2', label: 'Hai' }]} />
+```
+
+<FormRadio label="Kích thước lớn" name="custom-size" inputClassName="w-6 h-6" options={[{ value: '1', label: 'Một' }, { value: '2', label: 'Hai' }]} />
 
 ## Lưu ý
 

@@ -1,5 +1,5 @@
+import React from 'react'
 import FormSwitch from '@/components/FormGroup/FormSwitch/FormSwitch'
-import { FormSwitchBasicDemo, FormSwitchControlledDemo } from './form-switch.demos'
 
 # FormSwitch
 
@@ -26,15 +26,47 @@ Nút gạt (switch). Label/help/error được cung cấp bởi `FormGroup`.
 </FormGroup>
 ```
 
-## Examples
+### Demos
 
-<FormSwitchBasicDemo />
+```tsx
+import FormSwitch from '@/components/FormGroup/FormSwitch/FormSwitch'
+```
 
-<FormSwitchControlledDemo />
+#### Cơ bản
+
+```tsx
+<>
+  <FormSwitch label="Nhận thông báo" help="Bạn có thể tắt mở bất kỳ lúc nào" />
+  <FormSwitch label="Mặc định bật" defaultChecked />
+</>
+```
+
+<div className="grid gap-4">
+  <FormSwitch label="Nhận thông báo" help="Bạn có thể tắt mở bất kỳ lúc nào" />
+  <FormSwitch label="Mặc định bật" defaultChecked />
+</div>
+
+#### Controlled
+
+```tsx
+{(() => {
+  const [on, setOn] = React.useState(false)
+  return (
+    <FormSwitch label={on ? 'Đang bật' : 'Đang tắt'} checked={on} onCheckedChange={setOn} help="Ví dụ controlled" />
+  )
+})()}
+```
+
+{(() => {
+  const [on, setOn] = React.useState(false)
+  return (
+    <div className="grid gap-4">
+      <FormSwitch label={on ? 'Đang bật' : 'Đang tắt'} checked={on} onCheckedChange={setOn} help="Ví dụ controlled" />
+    </div>
+  )
+})()}
 
 ## Lưu ý
 
 - Controlled: truyền `checked` + `onCheckedChange`. Uncontrolled: dùng `defaultChecked`.
 - `aria-pressed` phản ánh trạng thái để hỗ trợ a11y.
-
-

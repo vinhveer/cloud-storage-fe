@@ -1,5 +1,12 @@
-import FormGroup from '@/components/FormGroup/FormGroup/'
-import { FormGroupBasicDemo, FormGroupWithHelpDemo } from './form-group.demos'
+import React from 'react'
+import FormGroup from '@/components/FormGroup/FormGroup'
+import FormInput from '@/components/FormGroup/FormInput/FormInput'
+import FormSelect from '@/components/FormGroup/FormSelect/FormSelect'
+import FormCheckbox from '@/components/FormGroup/FormCheckbox/FormCheckbox'
+import FormRadio from '@/components/FormGroup/FormRadio/FormRadio'
+import FormSwitch from '@/components/FormGroup/FormSwitch/FormSwitch'
+import FormTextarea from '@/components/FormGroup/FormTextarea/FormTextarea'
+import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
 
 # FormGroup
 
@@ -27,11 +34,60 @@ Container nhóm trường form với nhãn, lỗi và trợ giúp.
 </FormGroup>
 ```
 
-## Examples
+### Demos
 
-<FormGroupBasicDemo />
+```tsx
+import FormGroup from '@/components/FormGroup/FormGroup'
+import FormInput from '@/components/FormGroup/FormInput/FormInput'
+```
 
-<FormGroupWithHelpDemo />
+#### Cơ bản với subcomponents
+
+- Mô tả: Gom nhóm input với nhãn chung, dùng `FormInput`.
+
+```tsx
+<FormGroup label="Thông tin cá nhân">
+  <FormInput placeholder="Họ tên" />
+  <FormInput type="email" placeholder="Email" />
+</FormGroup>
+```
+
+<FormGroup label="Thông tin cá nhân">
+  <FormInput placeholder="Họ tên" />
+  <FormInput type="email" placeholder="Email" />
+</FormGroup>
+
+#### Nâng cao: Select/Checkbox/Radio
+
+```tsx
+<FormGroup label="Tùy chọn">
+  <FormSelect options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }]} />
+  <FormCheckbox label="Đồng ý điều khoản" />
+  <FormRadio name="r1" options={[{ value: '1', label: 'Một' }, { value: '2', label: 'Hai' }]} />
+</FormGroup>
+```
+
+<FormGroup label="Tùy chọn">
+  <FormSelect options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }]} />
+  <FormCheckbox label="Đồng ý điều khoản" />
+  <FormRadio name="r1" options={[{ value: '1', label: 'Một' }, { value: '2', label: 'Hai' }]} />
+</FormGroup>
+
+#### Switch/Textarea/Upload
+
+```tsx
+<FormGroup label="Cài đặt">
+  <FormSwitch label="Nhận thông báo" />
+  <FormTextarea placeholder="Ghi chú..." />
+  <FormUpload label="Tải lên" accept="image/*" />
+</FormGroup>
+```
+
+<FormGroup label="Cài đặt">
+  <FormSwitch label="Nhận thông báo" />
+  <FormTextarea placeholder="Ghi chú..." />
+  <FormUpload label="Tải lên" accept="image/*" />
+</FormGroup>
 
 ## Lưu ý
 

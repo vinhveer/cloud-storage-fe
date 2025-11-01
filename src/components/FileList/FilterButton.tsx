@@ -1,3 +1,4 @@
+import { FunnelIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
 type FilterButtonProps = {
@@ -16,7 +17,7 @@ export default function FilterButton({ onClick, className }: FilterButtonProps) 
       )}
       aria-label="Filter"
     >
-      <i className="fas fa-filter" aria-hidden="true" />
+      <FunnelIcon className="w-4 h-4" aria-hidden="true" />
       <span>Filter</span>
     </button>
   )

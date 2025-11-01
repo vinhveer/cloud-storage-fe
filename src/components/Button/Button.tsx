@@ -1,18 +1,7 @@
-import React from "react"
 import clsx from "clsx"
 import Loading from "@/components/Loading/Loading"
 import { buttonToSpinnerSize } from "@/constants/sizing"
-
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "danger"
-  size?: "sm" | "md" | "lg" | "xl" | "2xl"
-  icon?: React.ReactNode
-  value?: string
-  isLoading?: boolean
-  loadingText?: string
-}
-
-type ButtonContentProps = Pick<ButtonProps, 'icon' | 'value' | 'children' | 'isLoading' | 'loadingText' | 'size'>
+import type { ButtonProps, ButtonContentProps } from "@/components/Button/types"
 
 function ButtonContent({ icon, value, children, isLoading, loadingText, size = 'md' }: ButtonContentProps) {
   if (isLoading) {
@@ -56,7 +45,6 @@ export const Button = ({
   const sizeClass = isIconOnly ? `btn-icon-${size}` : `btn-${size}`
   const variantClass = `btn-${variant}`
 
-  // Dev-only a11y guard: icon-only buttons must have aria-label
   try {
     const isDev = (typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) ?? false
     if (isDev && isIconOnly && !(rest as Record<string, unknown>)["aria-label"]) {

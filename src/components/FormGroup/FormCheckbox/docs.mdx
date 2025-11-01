@@ -1,5 +1,6 @@
+import React from 'react'
 import FormCheckbox, { useFormCheckbox } from '@/components/FormGroup/FormCheckbox/FormCheckbox'
-import { FormCheckboxBasicDemo, FormCheckboxStatesDemo, FormCheckboxControlledDemo, FormCheckboxFormDemo } from './form-checkbox.demos'
+import { Button } from '@/components/Button/Button'
 
 # FormCheckbox
 
@@ -29,17 +30,103 @@ Trả về `{ inputId, helpId, errorId, inputClasses, ariaDescribedBy, validateR
 <FormCheckbox label="Tôi đồng ý" required />
 ```
 
-## Examples
+### Demos
 
-<FormCheckboxBasicDemo />
+```tsx
+import FormCheckbox from '@/components/FormGroup/FormCheckbox/FormCheckbox'
+```
 
-<FormCheckboxStatesDemo />
+#### Cơ bản
 
-<FormCheckboxControlledDemo />
+```tsx
+<>
+  <FormCheckbox label="Tôi đồng ý với điều khoản" />
+  <FormCheckbox label="Nhận email khuyến mãi" />
+  <FormCheckbox label="Bắt buộc" required />
+</>
+```
 
-### Form submit với validate required
+<div className="grid gap-6 mt-2">
+  <FormCheckbox label="Tôi đồng ý với điều khoản" />
+  <FormCheckbox label="Nhận email khuyến mãi" />
+  <FormCheckbox label="Bắt buộc" required />
+</div>
 
-<FormCheckboxFormDemo />
+#### Trạng thái
+
+```tsx
+<>
+  <FormCheckbox label="Có lỗi" error="Bạn phải đồng ý" />
+  <FormCheckbox label="Có trợ giúp" help="Bạn có thể thay đổi cài đặt sau." />
+  <FormCheckbox label="Disabled" disabled />
+</>
+```
+
+<div className="grid gap-6 mt-2">
+  <FormCheckbox label="Có lỗi" error="Bạn phải đồng ý" />
+  <FormCheckbox label="Có trợ giúp" help="Bạn có thể thay đổi cài đặt sau." />
+  <FormCheckbox label="Disabled" disabled />
+</div>
+
+#### Controlled
+
+```tsx
+{(() => {
+  const [checked, setChecked] = React.useState(false)
+  return (
+    <FormCheckbox label={checked ? 'Đã bật' : 'Đã tắt'} checked={checked} onChange={(e) => setChecked(e.target.checked)} help="Ví dụ controlled với state" />
+  )
+})()}
+```
+
+{(() => {
+  const [checked, setChecked] = React.useState(false)
+  return (
+    <div className="grid gap-6 mt-2">
+      <FormCheckbox label={checked ? 'Đã bật' : 'Đã tắt'} checked={checked} onChange={(e) => setChecked(e.target.checked)} help="Ví dụ controlled với state" />
+    </div>
+  )
+})()}
+
+#### Form submit với validate required
+
+```tsx
+{(() => {
+  const [error, setError] = React.useState(null)
+  const [checked, setChecked] = React.useState(false)
+  const { validateRequired } = useFormCheckbox({ required: true })
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const msg = validateRequired(checked, 'Bạn phải đồng ý điều khoản trước khi gửi.')
+    setError(msg)
+    if (!msg) alert('Submitted!')
+  }
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <FormCheckbox label="Tôi đồng ý với điều khoản" required error={error} checked={checked} onChange={(e) => setChecked(e.target.checked)} />
+      <div className="pt-2"><Button type="submit" variant="primary">Gửi</Button></div>
+    </form>
+  )
+})()}
+```
+
+{(() => {
+  const [error, setError] = React.useState(null)
+  const [checked, setChecked] = React.useState(false)
+  const { validateRequired } = useFormCheckbox({ required: true })
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const msg = validateRequired(checked, 'Bạn phải đồng ý điều khoản trước khi gửi.')
+    setError(msg)
+    if (!msg) alert('Submitted!')
+  }
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <FormCheckbox label="Tôi đồng ý với điều khoản" required error={error} checked={checked} onChange={(e) => setChecked(e.target.checked)} />
+      <div className="pt-2"><Button type="submit" variant="primary">Gửi</Button></div>
+    </form>
+  )
+})()}
 
 ## Lưu ý
 

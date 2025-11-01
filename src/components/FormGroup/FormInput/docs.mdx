@@ -1,5 +1,5 @@
+import React from 'react'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
-import { FormInputBasicDemo, FormInputTypesDemo, FormInputStatesDemo } from './form-input.demos'
 
 # FormInput
 
@@ -25,13 +25,63 @@ Input văn bản. Label/help/error được cung cấp bởi `FormGroup`.
 </FormGroup>
 ```
 
-## Examples
+### Demos
 
-<FormInputBasicDemo />
+```tsx
+import FormInput from '@/components/FormGroup/FormInput/FormInput'
+```
 
-<FormInputTypesDemo />
+#### Cơ bản
 
-<FormInputStatesDemo />
+```tsx
+<>
+  <FormInput label="Họ tên" placeholder="Nguyễn Văn A" />
+  <FormInput label="Email" type="email" placeholder="you@example.com" required />
+</>
+```
+
+<div className="grid gap-4">
+  <FormInput label="Họ tên" placeholder="Nguyễn Văn A" />
+  <FormInput label="Email" type="email" placeholder="you@example.com" required />
+</div>
+
+#### Types
+
+```tsx
+<>
+  <FormInput label="Mật khẩu" type="password" placeholder="••••••••" />
+  <FormInput label="Số" type="number" placeholder="123" />
+</>
+```
+
+<div className="grid gap-4">
+  <FormInput label="Mật khẩu" type="password" placeholder="••••••••" />
+  <FormInput label="Số" type="number" placeholder="123" />
+</div>
+
+#### States
+
+```tsx
+{(() => {
+  const [value, setValue] = React.useState('')
+  return (
+    <>
+      <FormInput label="Controlled" placeholder="Nhập gì đó" value={value} onChange={(e) => setValue(e.target.value)} help="Ví dụ controlled" />
+      <FormInput label="Có lỗi" placeholder="Sai định dạng" error="Vui lòng nhập đúng định dạng" />
+    </>
+  )
+})()}
+```
+
+{(() => {
+  const [value, setValue] = React.useState('')
+  return (
+    <div className="grid gap-4">
+      <FormInput label="Controlled" placeholder="Nhập gì đó" value={value} onChange={(e) => setValue(e.target.value)} help="Ví dụ controlled" />
+      <FormInput label="Có lỗi" placeholder="Sai định dạng" error="Vui lòng nhập đúng định dạng" />
+    </div>
+  )
+})()}
 
 ## Lưu ý
 

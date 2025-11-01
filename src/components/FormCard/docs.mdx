@@ -1,5 +1,8 @@
+import React from 'react'
 import FormCard from '@/components/FormCard/FormCard'
-import { FormCardBasicDemo, FormCardWithFormDemo } from './form-card.demos'
+import FormInput from '@/components/FormGroup/FormInput/FormInput'
+import FormCheckbox from '@/components/FormGroup/FormCheckbox/FormCheckbox'
+import FormSelect from '@/components/FormGroup/FormSelect/FormSelect'
 
 # FormCard
 
@@ -36,11 +39,96 @@ Bố cục card cho form, căn giữa trang, hỗ trợ form nội bộ hoặc n
 </FormCard>
 ```
 
-## Examples
+### Demos
 
-<FormCardBasicDemo />
+```tsx
+import FormCard from '@/components/FormCard/FormCard'
+```
 
-<FormCardWithFormDemo />
+#### Nội dung thường (không phải form)
+
+- Mô tả: Hiển thị nội dung thông tin, liên kết.
+
+```tsx
+<FormCard title="Welcome" subtitle="This is a centered card">
+  <p>Nội dung thường không phải form, ví dụ hướng dẫn.</p>
+  <a href="#" className="btn btn-secondary btn-sm">Explore</a>
+</FormCard>
+```
+
+<FormCard title="Welcome" subtitle="This is a centered card">
+  <p>Nội dung thường không phải form, ví dụ hướng dẫn.</p>
+  <a href="#" className="btn btn-secondary btn-sm">Explore</a>
+</FormCard>
+
+#### Với form HTML
+
+- Mô tả: Render form khi có `action`/`method`; tự thêm hidden `_method`/`_token` khi cần.
+
+```tsx
+<FormCard title="Đăng nhập" subtitle="Chào mừng trở lại" action="/login" method="POST">
+  <div className="space-y-4">
+    <label className="block">
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
+      <input type="email" className="mt-1 block w-full border rounded-md px-3 py-2" placeholder="you@example.com" />
+    </label>
+    <label className="block">
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Mật khẩu</span>
+      <input type="password" className="mt-1 block w-full border rounded-md px-3 py-2" />
+    </label>
+  </div>
+  <button className="btn btn-primary btn-md w-full">Đăng nhập</button>
+</FormCard>
+
+#### Form đăng ký (kết hợp subcomponents)
+
+- Mô tả: Sử dụng `FormInput`, `FormSelect`, `FormCheckbox` trong `FormCard`.
+
+```tsx
+{(() => {
+  const [agree, setAgree] = React.useState(false)
+  return (
+    <FormCard title="Đăng ký" subtitle="Tạo tài khoản mới">
+      <div className="space-y-4">
+        <FormInput label="Họ tên" placeholder="Nguyễn Văn A" />
+        <FormInput label="Email" type="email" placeholder="you@example.com" />
+        <FormSelect label="Quốc gia" options={[{ value: 'vn', label: 'Việt Nam' }, { value: 'us', label: 'United States' }]} />
+        <FormCheckbox label="Tôi đồng ý điều khoản" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+      </div>
+      <button className="btn btn-primary btn-md w-full mt-4" disabled={!agree}>Tạo tài khoản</button>
+    </FormCard>
+  )
+})()}
+```
+
+{(() => {
+  const [agree, setAgree] = React.useState(false)
+  return (
+    <FormCard title="Đăng ký" subtitle="Tạo tài khoản mới">
+      <div className="space-y-4">
+        <FormInput label="Họ tên" placeholder="Nguyễn Văn A" />
+        <FormInput label="Email" type="email" placeholder="you@example.com" />
+        <FormSelect label="Quốc gia" options={[{ value: 'vn', label: 'Việt Nam' }, { value: 'us', label: 'United States' }]} />
+        <FormCheckbox label="Tôi đồng ý điều khoản" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+      </div>
+      <button className="btn btn-primary btn-md w-full mt-4" disabled={!agree}>Tạo tài khoản</button>
+    </FormCard>
+  )
+})()}
+
+<FormCard title="Đăng nhập" subtitle="Chào mừng trở lại" action="/login" method="POST">
+  <div className="space-y-4">
+    <label className="block">
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
+      <input type="email" className="mt-1 block w-full border rounded-md px-3 py-2" placeholder="you@example.com" />
+    </label>
+    <label className="block">
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Mật khẩu</span>
+      <input type="password" className="mt-1 block w-full border rounded-md px-3 py-2" />
+    </label>
+  </div>
+  <button className="btn btn-primary btn-md w-full">Đăng nhập</button>
+</FormCard>
 
 ## Lưu ý
 

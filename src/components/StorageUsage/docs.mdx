@@ -1,8 +1,4 @@
 import StorageUsage from "@/components/StorageUsage/StorageUsage";
-import {
-  StorageUsageBasicDemo,
-  StorageUsageVariantsDemo,
-} from "./storage-usage.demos";
 
 # StorageUsage
 
@@ -30,11 +26,45 @@ Thanh tiến trình thể hiện dung lượng đã sử dụng trên tổng dun
 <StorageUsage used={12.34} total={50} />
 ```
 
-## Examples
+### Demos
 
-<StorageUsageBasicDemo />
+```tsx
+import StorageUsage from '@/components/StorageUsage/StorageUsage'
+```
 
-<StorageUsageVariantsDemo />
+#### Cơ bản
+
+```tsx
+<>
+  <StorageUsage used={12.34} total={50} />
+  <StorageUsage used={50} total={50} />
+  <StorageUsage used={0} total={50} />
+</>
+```
+
+<div className="grid gap-4">
+  <StorageUsage used={12.34} total={50} />
+  <StorageUsage used={50} total={50} />
+  <StorageUsage used={0} total={50} />
+</div>
+
+#### Màu sắc
+
+```tsx
+<>
+  <StorageUsage used={32} total={100} colorClassName="bg-blue-600" />
+  <StorageUsage used={32} total={100} colorClassName="bg-emerald-600" />
+  <StorageUsage used={32} total={100} colorClassName="bg-amber-500" />
+  <StorageUsage used={85} total={100} colorClassName="bg-rose-600" />
+</>
+```
+
+<div className="grid gap-4">
+  <StorageUsage used={32} total={100} colorClassName="bg-blue-600" />
+  <StorageUsage used={32} total={100} colorClassName="bg-emerald-600" />
+  <StorageUsage used={32} total={100} colorClassName="bg-amber-500" />
+  <StorageUsage used={85} total={100} colorClassName="bg-rose-600" />
+</div>
 
 ## Lưu ý
 

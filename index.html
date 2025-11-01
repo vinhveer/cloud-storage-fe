@@ -5,22 +5,6 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>cloud-storage-fe</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <script>
-      (function() {
-        try {
-          var ls = localStorage.getItem('theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var nextIsDark = ls === 'dark' || (ls === null && prefersDark);
-          var root = document.documentElement;
-          if (nextIsDark) {
-            root.classList.add('dark');
-          } else {
-            root.classList.remove('dark');
-          }
-        } catch (e) {}
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>

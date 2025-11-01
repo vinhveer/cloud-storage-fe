@@ -1,5 +1,4 @@
 import Loading from '@/components/Loading/Loading'
-import { LoadingSizesDemo, LoadingUsageDemo } from '@/components/Loading/loading.demos'
 
 # Loading
 
@@ -24,10 +23,45 @@ Spinner hiển thị trạng thái đang xử lý. Hỗ trợ các size: `sm | m
 <Loading ariaLabel="Loading" />
 ```
 
-## Examples
+### Demos
 
-<LoadingUsageDemo />
-<LoadingSizesDemo />
+```tsx
+import Loading from '@/components/Loading/Loading'
+```
+
+#### Sử dụng cơ bản
+
+```tsx
+<div className="flex items-center gap-2">
+  <Loading />
+  <span className="text-sm text-gray-700">Loading data…</span>
+</div>
+```
+
+<div className="flex items-center gap-2">
+  <Loading />
+  <span className="text-sm text-gray-700">Loading data…</span>
+</div>
+
+#### Kích thước
+
+```tsx
+<>
+  <Loading size="sm" />
+  <Loading size="md" />
+  <Loading size="lg" />
+  <Loading size="xl" />
+  <Loading size="2xl" />
+</>
+```
+
+<div className="flex items-end gap-3">
+  <Loading size="sm" />
+  <Loading size="md" />
+  <Loading size="lg" />
+  <Loading size="xl" />
+  <Loading size="2xl" />
+</div>
 
 ## Lưu ý
 

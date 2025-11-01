@@ -1,14 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-
-export type FormCheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> & {
-  label?: string
-  required?: boolean
-  error?: string | null
-  help?: string | null
-}
-
-export type UseFormCheckboxParams = Pick<FormCheckboxProps, 'required' | 'error' | 'help' | 'className' | 'id'>
+import type { FormCheckboxProps, UseFormCheckboxParams } from '@/components/FormGroup/FormCheckbox/types'
 
 export function useFormCheckbox({ required, error, help, className, id }: UseFormCheckboxParams) {
   const reactId = React.useId()
@@ -16,9 +8,9 @@ export function useFormCheckbox({ required, error, help, className, id }: UseFor
   const helpId = `${inputId}-help`
   const errorId = `${inputId}-error`
 
-  const baseClasses = 'w-5 h-5 rounded-[20%] border-2 transition-all duration-200 bg-white dark:bg-gray-700 accent-blue-600 dark:accent-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800'
-  const normalClasses = 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:ring-blue-500'
-  const errorClasses = 'border-red-300 dark:border-red-600 focus:ring-red-500'
+  const baseClasses = 'checkbox-base'
+  const normalClasses = 'checkbox-normal'
+  const errorClasses = 'checkbox-error'
   const inputClasses = clsx(baseClasses, error ? errorClasses : normalClasses, className)
 
   const ariaDescribedBy = error ? errorId : help ? helpId : undefined
@@ -49,8 +41,8 @@ export default function FormCheckbox({
   })
 
   return (
-    <div className="not-prose space-y-2">
-      <div className="flex items-center space-x-3">
+    <div className="checkbox-root">
+      <div className="checkbox-row">
         <input
           id={inputId}
           type="checkbox"
@@ -62,19 +54,19 @@ export default function FormCheckbox({
         />
 
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label htmlFor={inputId} className="checkbox-label">
             {label}
-            {required && <span className="text-red-500 dark:text-red-400">*</span>}
+            {required && <span className="checkbox-required">*</span>}
           </label>
         )}
       </div>
 
       {error ? (
-        <p id={errorId} className="text-sm text-red-600 dark:text-red-400 ml-8">
+        <p id={errorId} className="checkbox-error-text">
           {error}
         </p>
       ) : help ? (
-        <p id={helpId} className="text-sm text-gray-500 dark:text-gray-400 ml-8">
+        <p id={helpId} className="checkbox-help-text">
           {help}
         </p>
       ) : null}

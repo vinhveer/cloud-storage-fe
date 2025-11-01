@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { useFileList } from '@/components/hooks/components/useFileList'
+import { useFileList } from './useFileList'
 import { SvgList, SvgGrid, SvgTiles, SvgDetails, ChevronDownIcon, CheckSquareIcon } from '@data/icons/icons'
 import ListView from '@/components/FileList/views/ListView'
 import GridView from '@/components/FileList/views/GridView'
@@ -26,6 +26,8 @@ export type FileListProps = {
   viewMode?: ViewMode
   onViewModeChange?: (mode: ViewMode) => void
   className?: string
+  /** Height as viewport percentage, e.g. 60 => 60dvh. If set, component fills this height */
+  heightVh?: number
 }
 
 const viewModes: Record<ViewMode, { label: string; icon: React.ReactNode }> = {
@@ -35,7 +37,7 @@ const viewModes: Record<ViewMode, { label: string; icon: React.ReactNode }> = {
   details: { label: 'Details View', icon: <SvgDetails className="w-4 h-4" /> },
 }
 
-export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className }: FileListProps) {
+export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: FileListProps) {
   const {
     dropdownOpen,
     setDropdownOpen,
@@ -64,7 +66,10 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
   const currentView = viewModes[currentViewMode]
 
   return (
-    <div className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden', className)}>
+    <div
+      className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
+      style={heightVh ? { height: `${heightVh}dvh` } : undefined}
+    >
       {/* Toolbar */}
       <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
@@ -140,7 +145,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
       </div>
 
       {/* Content */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-auto flex-1">
         {currentViewMode === 'list' && (
           <ListView
             files={files}
