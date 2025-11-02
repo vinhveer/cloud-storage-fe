@@ -19,7 +19,7 @@ const SidebarContext = createContext<SidebarContextValue | undefined>(undefined)
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const defaultItems: SidebarItemData[] = [
-    { key: 'home', title: 'Home', href: '/', icon: <HomeIcon className="w-5 h-5" /> },
+    { key: 'home', title: 'Home', href: '/app', icon: <HomeIcon className="w-5 h-5" /> },
     { key: 'files', title: 'My Files', href: '#', icon: <FolderIcon className="w-5 h-5" /> },
     { key: 'shared', title: 'Shared', href: '#', icon: <ShareIcon className="w-5 h-5" /> },
     { key: 'trash', title: 'Trash', href: '#', icon: <TrashIcon className="w-5 h-5" /> },

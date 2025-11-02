@@ -42,7 +42,7 @@ export default function FormCard({
     <div
       {...rest}
       className={clsx(
-        'not-prose min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8',
+        'not-prose min-h-dvh overflow-y-auto flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8',
         className
       )}
     >
@@ -62,11 +62,11 @@ export default function FormCard({
               )}
             </form>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-6"> 
               {children}
               {submitText && (
                 <div className="pt-2">
-                  <Button onClick={onSubmitClick} variant={submitVariant}>{submitText}</Button>
+                  <Button onClick={onSubmitClick} variant={submitVariant} size="lg">{submitText}</Button>
                 </div>
               )}
             </div>

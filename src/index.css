@@ -6,7 +6,7 @@
   :root { --navbar-h: 56px; }
   html { background-color: #ffffff; }
   html.dark { background-color: #0D1117; }
-  body { @apply text-gray-900 dark:text-gray-100; background-color: #ffffff; height: 100dvh; overflow: hidden; }
+  body { @apply text-gray-900 dark:text-gray-100; background-color: #ffffff; min-height: 100dvh; overflow-x: hidden; overflow-y: auto; }
   html.dark body { background-color: #0D1117; }
 }
 

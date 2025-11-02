@@ -1,13 +1,22 @@
-import { createRouter } from '@tanstack/react-router'
-import { rootRoute, indexRoute } from './root'
-import { getSamplesRoutes } from './segments/sample'
+import { createRouter, NotFoundRoute } from '@tanstack/react-router'
+import { rootRoute } from './root'
+import { getAppRoutes } from './segments/app'
+import { getAuthRoutes } from './segments/auth'
+import { getPublicRoutes } from './segments/public'
+import RedirectToHome from '@/pages/redirects/RedirectToHome'
 
 const routeTree = rootRoute.addChildren([
-  indexRoute,
-  getSamplesRoutes(),
+  getPublicRoutes(),
+  getAppRoutes(),
+  getAuthRoutes(),
 ])
 
-export const router = createRouter({ routeTree })
+const notFoundRoute = new NotFoundRoute({
+  getParentRoute: () => rootRoute,
+  component: RedirectToHome,
+})
+
+export const router = createRouter({ routeTree, notFoundRoute })
 
 declare module '@tanstack/react-router' {
   interface Register { router: typeof router }

@@ -3,10 +3,11 @@ import SamplesPage from '@/pages/samples'
 import SampleDynamicPage from '@/pages/samples/[slug]'
 import { rootRoute } from '../root'
 
-export function getSamplesRoutes() {
+export function getSamplesRoutes(parent?: ReturnType<typeof createRoute> | any) {
+  const parentRoute = parent ?? rootRoute
   const samplesRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/samples',
+    getParentRoute: () => parentRoute,
+    path: 'samples',
   })
 
   const samplesIndexRoute = createRoute({

@@ -1,5 +1,5 @@
 import { useParams, Link } from '@tanstack/react-router'
-import { MDXContent } from '@/components/MDXContent'
+import { MDXContent } from '@/components/MDX/MDXContent'
 
 export default function SampleDynamicPage() {
   const params = useParams({ strict: false }) as unknown as { slug?: string; parent?: string; child?: string }
