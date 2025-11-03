@@ -53,6 +53,8 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
     deselectAll,
   } = useFileList({ initialViewMode: viewMode, fileCount: files.length })
 
+  const dropdownRef = React.useRef<HTMLDivElement | null>(null)
+
   React.useEffect(() => {
     setViewMode(viewMode)
   }, [viewMode, setViewMode])
@@ -65,6 +67,25 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
 
   const currentView = viewModes[currentViewMode]
 
+  React.useEffect(() => {
+    if (!dropdownOpen) return
+    const handleClickOutside = (e: MouseEvent) => {
+      const node = dropdownRef.current
+      if (node && !node.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDropdownOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [dropdownOpen, setDropdownOpen])
+
   return (
     <div
       className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
@@ -75,7 +96,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             {/* View mode dropdown */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
                 onClick={() => setDropdownOpen((prev: boolean) => !prev)}
