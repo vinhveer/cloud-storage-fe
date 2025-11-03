@@ -1,4 +1,4 @@
-import { FileListUsageDemo } from './file-list.demos'
+import { FileListUsageDemo, FileListHeightDemo } from './file-list.demos'
 
 # FileList
 
@@ -8,6 +8,17 @@ Hiển thị danh sách tệp với 4 chế độ: list, grid, tiles, details. H
 
 <FileListUsageDemo />
 
+## Height (giới hạn và cuộn nội dung)
+
+- Truyền `heightVh` để đặt chiều cao theo viewport (dvh). Ví dụ `60` => `60dvh`.
+- Nội dung danh sách sẽ cuộn bên trong khung.
+
+<FileListHeightDemo />
+
+```tsx
+<FileList files={files} heightVh={60} />
+```
+
 ## API
 
 | Prop | Type | Default | Mô tả |
@@ -16,6 +27,7 @@ Hiển thị danh sách tệp với 4 chế độ: list, grid, tiles, details. H
 | `viewMode` | `'list' \| 'grid' \| 'tiles' \| 'details'` | `'list'` | Chế độ hiển thị |
 | `onViewModeChange` | `(mode) => void` | - | Callback khi đổi chế độ |
 | `className` | `string` | - | Bổ sung class Tailwind |
+| `heightVh` | `number` | - | Chiều cao theo dvh, ví dụ 60 => 60dvh |
 
 ### FileItem
 

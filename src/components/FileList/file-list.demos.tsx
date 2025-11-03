@@ -27,3 +27,19 @@ export function FileListUsageDemo() {
 }
 
 
+export function FileListHeightDemo() {
+  const [mode, setMode] = React.useState<ViewMode>('list')
+  const longFiles: FileItem[] = React.useMemo(() => (
+    Array.from({ length: 40 }, (_, i) => {
+      const base = sampleFiles[i % sampleFiles.length]
+      return { ...base, id: i, name: `${base.name} ${i + 1}` }
+    })
+  ), [])
+  return (
+    <div className="space-y-3">
+      <FileList files={longFiles} viewMode={mode} onViewModeChange={setMode} heightVh={60} />
+    </div>
+  )
+}
+
+
