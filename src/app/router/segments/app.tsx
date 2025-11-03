@@ -2,7 +2,6 @@ import { createAccessRoute } from '../route-factories'
 import { redirect } from '@tanstack/react-router'
 import AppLayout from '@/app/layout/AppLayout'
 import { rootRoute } from '../root'
-import { getSamplesRoutes } from './sample'
 import HomePage from '@/app/pages'
 
 export const appRoute = createAccessRoute({
@@ -25,6 +24,5 @@ const appIndexRoute = createAccessRoute({
 export function getAppRoutes() {
   return appRoute.addChildren([
     appIndexRoute,
-    getSamplesRoutes(appRoute),
   ])
 }

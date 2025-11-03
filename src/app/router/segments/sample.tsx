@@ -1,31 +1,37 @@
-import { createRoute } from '@tanstack/react-router'
+import { createAccessRoute } from '../route-factories'
 import SamplesPage from '@/app/pages/samples'
 import SampleDynamicPage from '@/app/pages/samples/[slug]'
 import { rootRoute } from '../root'
+import NoLayout from '@/app/layout/NoLayout'
 
-export function getSamplesRoutes(parent?: ReturnType<typeof createRoute> | any) {
+export function getSamplesRoutes(parent?: ReturnType<typeof createAccessRoute> | any) {
   const parentRoute = parent ?? rootRoute
-  const samplesRoute = createRoute({
+  const samplesRoute = createAccessRoute({
     getParentRoute: () => parentRoute,
     path: 'samples',
+    component: NoLayout,
+    access: 'public',
   })
 
-  const samplesIndexRoute = createRoute({
+  const samplesIndexRoute = createAccessRoute({
     getParentRoute: () => samplesRoute,
     path: '/',
     component: SamplesPage,
+    access: 'public',
   })
 
-  const dynamicMdxRoute = createRoute({
+  const dynamicMdxRoute = createAccessRoute({
     getParentRoute: () => samplesRoute,
     path: '$slug',
     component: SampleDynamicPage,
+    access: 'public',
   })
 
-  const nestedMdxRoute = createRoute({
+  const nestedMdxRoute = createAccessRoute({
     getParentRoute: () => samplesRoute,
     path: '$parent/$child',
     component: SampleDynamicPage,
+    access: 'public',
   })
 
   return samplesRoute.addChildren([
