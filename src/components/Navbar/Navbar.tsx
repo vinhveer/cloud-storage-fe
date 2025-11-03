@@ -1,4 +1,3 @@
- 
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
@@ -6,6 +5,10 @@ import { Button } from '@/components/Button/Button'
 import AccountDropdown from '@/components/Navbar/AccountDropdown/AccountDropdown'
 import Search from '@/components/Navbar/Search/Search'
 import { useTheme } from '@/app/providers/ThemeProvider'
+import { useLogout } from '@/api/features/auth/auth.mutations'
+import { useNavigate } from '@tanstack/react-router'
+import { AppError } from '@/api/core/error'
+import { useState } from 'react'
 
 export type NavbarSearchResult = {
   id: string
@@ -29,6 +32,20 @@ export default function Navbar({
   className,
 }: NavbarProps) {
   const { theme, cycleTheme } = useTheme()
+  const navigate = useNavigate()
+  const logoutMutation = useLogout()
+  const [logoutError, setLogoutError] = useState<string | null>(null)
+
+  async function handleLogout() {
+    setLogoutError(null)
+    try {
+      await logoutMutation.mutateAsync()
+      navigate({ to: '/auth/login' })
+    } catch (unknownError) {
+      const applicationError = unknownError as AppError
+      setLogoutError(applicationError.message || 'Đăng xuất thất bại.')
+    }
+  }
   return (
     <nav className={clsx('sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-2', className)}>
       <div className="flex items-center justify-between">
@@ -55,9 +72,12 @@ export default function Navbar({
             icon={<ArrowUpTrayIcon className="w-4 h-4" />}
             aria-label="Upload"
           />
-          <AccountDropdown />
+          <AccountDropdown onLogout={handleLogout} />
         </div>
       </div>
+      {logoutError && (
+        <p className="text-xs text-red-500 text-right mt-1" role="alert">{logoutError}</p>
+      )}
     </nav>
   )
 }

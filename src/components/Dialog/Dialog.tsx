@@ -2,6 +2,8 @@ import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { useDialogOpen, useDialogCloseActions, useDialogConfirm } from '@/components/Dialog/dialog.hook'
 import type { DialogProps } from '@/components/Dialog/types'
+import Button from '@/components/Button'
+import Loading from '@/components/Loading/Loading'
 
 
 export default function Dialog({
@@ -26,9 +28,7 @@ export default function Dialog({
 
   const { isOpen, setOpen } = useDialogOpen({ open, defaultOpen, onOpenChange })
 
-  const { onBackdropClick } = useDialogCloseActions({ isOpen, setOpen, closeOnEsc, closeOnBackdrop, onCancel })
-
-  const { onConfirmClick } = useDialogConfirm({ onConfirm, setOpen })
+  const { onConfirmClick, isLoading } = useDialogConfirm({ onConfirm, setOpen })
 
   if (!isOpen) return null
 
@@ -38,6 +38,16 @@ export default function Dialog({
       : confirmType === 'primary'
       ? 'btn-primary'
       : 'btn-secondary'
+
+  const effectiveCloseOnEsc = closeOnEsc && !isLoading
+  const effectiveCloseOnBackdrop = closeOnBackdrop && !isLoading
+  const { onBackdropClick } = useDialogCloseActions({
+    isOpen,
+    setOpen,
+    closeOnEsc: effectiveCloseOnEsc,
+    closeOnBackdrop: effectiveCloseOnBackdrop,
+    onCancel,
+  })
 
   return (
     <div
@@ -55,48 +65,55 @@ export default function Dialog({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="px-6 pt-5 pb-4">
-            <div className="mb-3">
-              <h3 id={`${modalId}-title`} className="text-xl font-semibold text-gray-900 dark:text-white leading-6">
-                {title}
-              </h3>
-            </div>
-            {confirmText && (
+            {!isLoading && (
+              <div className="mb-3">
+                <h3 id={`${modalId}-title`} className="text-xl font-semibold text-gray-900 dark:text-white leading-6">
+                  {title}
+                </h3>
+              </div>
+            )}
+            {!isLoading && confirmText && (
               <div className="mb-5">
                 <p id={`${modalId}-desc`} className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                   {confirmText}
                 </p>
               </div>
             )}
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className={clsx('btn btn-md btn-secondary flex-1')}
-                onClick={() => {
-                  setOpen(false)
-                  onCancel?.()
-                }}
-                aria-label={cancelButtonText}
-              >
-                {cancelButtonText}
-              </button>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loading size="2xl" />
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button
+                  variant="secondary"
+                  size="md"
+                  className="flex-1"
+                  onClick={() => {
+                    setOpen(false)
+                    onCancel?.()
+                  }}
+                  aria-label={cancelButtonText}
+                >
+                  {cancelButtonText}
+                </Button>
 
-              {onConfirm ? (
-                <a
-                  href={confirmHref}
-                  onClick={onConfirmClick}
-                  className={clsx('btn btn-md flex-1 text-center', confirmVariantClass)}
-                >
-                  {confirmButtonText}
-                </a>
-              ) : (
-                <a
-                  href={confirmHref}
-                  className={clsx('btn btn-md flex-1 text-center', confirmVariantClass)}
-                >
-                  {confirmButtonText}
-                </a>
-              )}
-            </div>
+                {onConfirm ? (
+                  <Button
+                    size="md"
+                    className="flex-1"
+                    variant={confirmVariantClass.replace('btn-','') as any}
+                    onClick={onConfirmClick}
+                  >
+                    {confirmButtonText}
+                  </Button>
+                ) : (
+                  <Button asChild size="md" className="flex-1" variant={confirmVariantClass.replace('btn-','') as any}>
+                    <a href={confirmHref}>{confirmButtonText}</a>
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

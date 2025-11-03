@@ -1,9 +1,9 @@
 import Navbar from '@/components/Navbar/Navbar'
-import { Outlet } from '@tanstack/react-router'
 import Sidebar from '@/components/Sidebar/Sidebar'
+import HomePage from '@/app/pages'
 import SidebarSync from '@/app/router/components/SidebarSync'
 
-export default function AppLayout() {
+export default function AppHomeShell() {
   return (
     <>
       <SidebarSync />
@@ -13,7 +13,7 @@ export default function AppLayout() {
           <Sidebar />
           <main className="flex-1 ml-64 h-[calc(100dvh-var(--navbar-h)-1px)] overflow-y-auto">
             <div className="container mx-auto p-4">
-              <Outlet />
+              <HomePage />
             </div>
           </main>
         </div>
@@ -21,3 +21,5 @@ export default function AppLayout() {
     </>
   )
 }
+
+

@@ -1,19 +1,25 @@
-import { createRoute } from '@tanstack/react-router'
+import { createAccessRoute } from '../route-factories'
+import { redirect } from '@tanstack/react-router'
 import AppLayout from '@/app/layout/AppLayout'
 import { rootRoute } from '../root'
 import { getSamplesRoutes } from './sample'
-import HomePage from '@/pages'
+import HomePage from '@/app/pages'
 
-export const appRoute = createRoute({
+export const appRoute = createAccessRoute({
   getParentRoute: () => rootRoute,
   path: '/app',
   component: AppLayout,
+  access: 'protected',
 })
 
-const appIndexRoute = createRoute({
+const appIndexRoute = createAccessRoute({
   getParentRoute: () => appRoute,
   path: '/',
   component: HomePage,
+  access: 'protected',
+  beforeLoad: () => {
+    throw redirect({ to: '/' })
+  },
 })
 
 export function getAppRoutes() {

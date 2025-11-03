@@ -56,14 +56,20 @@ export function useDialogConfirm({
   onConfirm?: () => void | Promise<void>
   setOpen: (open: boolean) => void
 }) {
+  const [isLoading, setIsLoading] = React.useState(false)
+
   const onConfirmClick = async (e: React.MouseEvent) => {
-    if (onConfirm) {
-      e.preventDefault()
+    if (!onConfirm) return
+    e.preventDefault()
+    try {
+      setIsLoading(true)
       await onConfirm()
       setOpen(false)
+    } finally {
+      setIsLoading(false)
     }
   }
-  return { onConfirmClick }
+  return { onConfirmClick, isLoading }
 }
 
 

@@ -1,5 +1,4 @@
 import { createContext, useContext, useMemo, useState, useCallback } from 'react'
-import { HomeIcon, FolderIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 export type SidebarItemData = {
   key: string
@@ -18,36 +17,15 @@ type SidebarContextValue = {
 const SidebarContext = createContext<SidebarContextValue | undefined>(undefined)
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
-  const defaultItems: SidebarItemData[] = [
-    { key: 'home', title: 'Home', href: '/app', icon: <HomeIcon className="w-5 h-5" /> },
-    { key: 'files', title: 'My Files', href: '#', icon: <FolderIcon className="w-5 h-5" /> },
-    { key: 'shared', title: 'Shared', href: '#', icon: <ShareIcon className="w-5 h-5" /> },
-    { key: 'trash', title: 'Trash', href: '#', icon: <TrashIcon className="w-5 h-5" /> },
-  ]
-
-  function sanitize(items: unknown): SidebarItemData[] | null {
-    if (!Array.isArray(items)) return null
-    return items
-      .map((it: any) =>
-        it && typeof it === 'object'
-          ? ({ key: String(it.key), title: String(it.title), href: typeof it.href === 'string' ? it.href : undefined } as SidebarItemData)
-          : null,
-      )
-      .filter(Boolean) as SidebarItemData[]
-  }
+  const STORAGE = { active: 'sidebar:activeKey' }
 
   function getInitial(): { items: SidebarItemData[]; activeKey?: string } {
-    if (typeof window === 'undefined') return { items: defaultItems, activeKey: undefined }
+    if (typeof window === 'undefined') return { items: [], activeKey: undefined }
     try {
-      const rawItems = localStorage.getItem('sidebar:items')
-      const rawActive = localStorage.getItem('sidebar:activeKey')
-      const parsed = rawItems ? JSON.parse(rawItems) : null
-      const cleaned = sanitize(parsed)
-      // Write back sanitized data to avoid future issues
-      if (cleaned) try { localStorage.setItem('sidebar:items', JSON.stringify(cleaned)) } catch {}
-      return { items: cleaned ?? defaultItems, activeKey: rawActive ?? undefined }
+      const rawActive = sessionStorage.getItem(STORAGE.active)
+      return { items: [], activeKey: rawActive ?? undefined }
     } catch {
-      return { items: defaultItems, activeKey: undefined }
+      return { items: [], activeKey: undefined }
     }
   }
 
@@ -57,16 +35,13 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 
   const setItems = useCallback((next: SidebarItemData[]) => {
     setItemsState(next)
-    // Persist only serializable fields (no React nodes)
-    const serializable = next.map(({ key, title, href }) => ({ key, title, href }))
-    try { localStorage.setItem('sidebar:items', JSON.stringify(serializable)) } catch {}
   }, [])
 
   const setActiveKey = useCallback((key?: string) => {
     setActiveKeyState(key)
     try {
-      if (key === undefined) localStorage.removeItem('sidebar:activeKey')
-      else localStorage.setItem('sidebar:activeKey', key)
+      if (key === undefined) sessionStorage.removeItem(STORAGE.active)
+      else sessionStorage.setItem(STORAGE.active, key)
     } catch {}
   }, [])
 

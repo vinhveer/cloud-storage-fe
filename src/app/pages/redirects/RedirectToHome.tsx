@@ -8,3 +8,4 @@ export default function RedirectToHome() {
   }, [router])
   return null
 }
+

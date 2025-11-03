@@ -1,6 +1,6 @@
 import { createRoute } from '@tanstack/react-router'
-import SamplesPage from '@/pages/samples'
-import SampleDynamicPage from '@/pages/samples/[slug]'
+import SamplesPage from '@/app/pages/samples'
+import SampleDynamicPage from '@/app/pages/samples/[slug]'
 import { rootRoute } from '../root'
 
 export function getSamplesRoutes(parent?: ReturnType<typeof createRoute> | any) {
