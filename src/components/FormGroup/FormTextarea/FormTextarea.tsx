@@ -35,7 +35,12 @@ export default function FormTextarea({
   const errorClasses = 'formtextarea-error'
   const normalClasses = 'formtextarea-normal'
 
-  const textareaClasses = clsx(baseClasses, field?.invalid ? errorClasses : normalClasses, className)
+  const textareaClasses = clsx(
+    baseClasses,
+    field?.invalid ? errorClasses : normalClasses,
+    rich && 'px-0 py-0',
+    className,
+  )
 
   if (rich) {
     const editorHeight = typeof height === 'number' ? height : Math.max(200, rows * 24 + 24)

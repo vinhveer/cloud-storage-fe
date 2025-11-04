@@ -21,7 +21,7 @@ export default function FormGroup({
   const describedById = error ? errorId : help ? helpId : undefined
 
   return (
-    <div {...rest} className={clsx('not-prose space-y-2', className)}>
+    <div {...rest} className={clsx('not-prose space-y-0', className)}>
       {label && (
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
@@ -29,7 +29,7 @@ export default function FormGroup({
       )}
 
       <FormFieldContext.Provider value={{ describedById, invalid: !!error }}>
-        <div className="space-y-2">
+        <div className="space-y-0">
           {children}
         </div>
       </FormFieldContext.Provider>
