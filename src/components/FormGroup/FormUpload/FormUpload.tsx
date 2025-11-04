@@ -49,7 +49,7 @@ export default function FormUpload({
       })
     }
   }, [])
-
+  //
   // Listen for global "form-upload-open" event so external buttons can trigger
   // this FormUpload's file dialog and bring the UI into view. Event is cancelable:
   // handler calls preventDefault() to indicate it handled the opening.
