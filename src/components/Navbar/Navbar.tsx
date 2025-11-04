@@ -2,7 +2,7 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/components/Button/Button'
+import { UploadButton } from '@/components/Button/UploadButton'
 import AccountDropdown from '@/components/Navbar/AccountDropdown/AccountDropdown'
 import Search from '@/components/Navbar/Search/Search'
 
@@ -40,11 +40,13 @@ export default function Navbar({
 
         {/* Right: Actions & Account */}
         <div className="flex items-center space-x-3">
-          <Button
+          <UploadButton
             variant="primary"
             size="md"
             icon={<ArrowUpTrayIcon className="w-4 h-4" />}
             aria-label="Upload"
+            targetId="page-upload"
+            targetHref="/samples/formgroup/formupload"
           />
           <AccountDropdown />
         </div>

@@ -5,7 +5,7 @@ export function FormUploadBasicDemo() {
   const [files, setFiles] = React.useState<File[]>([])
   return (
     <div className="grid gap-3">
-      <FormUpload label="Tải lên tệp" onFilesChange={setFiles} />
+  <FormUpload id="page-upload" label="Tải lên tệp" onFilesChange={setFiles} />
       <ul className="text-sm text-gray-600 list-disc pl-5">
         {files.map((f) => (
           <li key={f.name}>{f.name} ({Math.round(f.size / 1024)} KB)</li>

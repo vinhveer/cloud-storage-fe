@@ -1,5 +1,7 @@
+import React from 'react'
 import { Button } from '@/components/Button/Button'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline'
+import { UploadButton } from '@/components/Button/UploadButton'
 
 export function ButtonVariantsDemo() {
   return (
@@ -49,3 +51,81 @@ export function ButtonLoadingDemo() {
 }
 
 
+
+export function ButtonUploadDemo() {
+  const [files, setFiles] = React.useState<File[]>([])
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFiles(Array.from(e.target.files ?? []))
+    e.currentTarget.value = ''
+  }
+
+  const iconUpload = <ArrowUpTrayIcon className="w-4 h-4" />
+
+  return (
+    <div className="grid gap-3 mt-4">
+      <div className="flex items-center gap-2">
+        <div className="relative inline-block">
+          <Button icon={iconUpload} aria-label="Upload" />
+          <input
+            type="file"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            accept="*"
+            multiple
+            onChange={handleChange}
+            aria-label="Upload"
+          />
+        </div>
+
+        <div className="relative inline-block">
+          <Button variant="secondary">Upload files</Button>
+          <input
+            type="file"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            accept="*"
+            multiple
+            onChange={handleChange}
+            aria-label="Upload"
+          />
+        </div>
+      </div>
+      {files.length > 0 && (
+        <ul className="text-sm text-gray-600 list-disc pl-5">
+          {files.map((f) => (
+            <li key={f.name}>{f.name}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+export function UploadButtonWithComponentDemo() {
+  const [files, setFiles] = React.useState<File[]>([])
+  return (
+    <div className="grid gap-3 mt-4">
+      <div className="flex items-center gap-2">
+        <UploadButton
+          aria-label="Upload"
+          accept="image/*"
+          multiple
+          onFilesSelected={setFiles}
+          icon={<ArrowUpTrayIcon className="w-4 h-4" />}
+        />
+        <UploadButton
+          variant="secondary"
+          value="Upload images"
+          accept="image/*"
+          multiple
+          onFilesSelected={setFiles}
+        />
+      </div>
+      {files.length > 0 && (
+        <ul className="text-sm text-gray-600 list-disc pl-5">
+          {files.map((f) => (
+            <li key={f.name}>{f.name}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
