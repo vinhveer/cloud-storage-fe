@@ -1,5 +1,6 @@
 // import React from 'react'
 import FormGroup from '@/components/FormGroup/FormGroup'
+import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
 
 export function FormGroupBasicDemo() {
   return (
@@ -13,7 +14,7 @@ export function FormGroupBasicDemo() {
 export function FormGroupWithHelpDemo() {
   return (
     <FormGroup label="Tải lên" help="Chỉ nhận ảnh PNG/JPG">
-      <input type="file" className="block" />
+      <FormUpload accept="image/png,image/jpeg" />
     </FormGroup>
   )
 }

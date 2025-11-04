@@ -1,6 +1,7 @@
 import React from 'react'
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
+import { FormFieldContext } from '@/components/FormGroup/FormGroup'
 
 export type FormUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   label?: string
@@ -29,6 +30,7 @@ export default function FormUpload({
   const reactId = React.useId()
   const helpId = `${id ?? reactId}-help`
   const errorId = `${id ?? reactId}-error`
+  const field = React.useContext(FormFieldContext)
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -82,8 +84,8 @@ export default function FormUpload({
             inputRef.current?.click()
           }
         }}
-        aria-describedby={error ? errorId : help ? helpId : undefined}
-        aria-invalid={!!error}
+        aria-describedby={error ? errorId : help ? helpId : field?.describedById}
+        aria-invalid={field?.invalid || !!error}
       >
         <input
           ref={inputRef}
