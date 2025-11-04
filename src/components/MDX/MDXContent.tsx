@@ -93,5 +93,3 @@ export function MDXContent({ slug }: { slug: string }) {
     </MDXProvider>
   )
 }
-
-

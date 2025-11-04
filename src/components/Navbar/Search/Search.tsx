@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useEffect, useRef } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Loading from '@/components/Loading/Loading'
 import { useSearch } from '@/components/Navbar/Search/useSearch'
@@ -19,6 +20,20 @@ export type SearchProps = {
 
 export default function Search({ onSearch, placeholder = 'Search...', className }: SearchProps) {
   const { query, setQuery, isLoading, results, open, setOpen, containerRef } = useSearch<SearchResult>({ onSearch })
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const isK = e.key === 'k' || e.key === 'K'
+      if ((e.ctrlKey || e.metaKey) && isK) {
+        e.preventDefault()
+        inputRef.current?.focus()
+        setOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [setOpen])
 
   const showDropdown = open && (isLoading || results.length > 0 || query.length > 0)
 
@@ -36,10 +51,22 @@ export default function Search({ onSearch, placeholder = 'Search...', className 
             if (!open) setOpen(true)
           }}
           onFocus={() => setOpen(true)}
+          ref={inputRef}
           placeholder={placeholder}
-          className="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900 text-gray-900 dark:text-white transition-colors"
+          className="block w-full pl-10 pr-10 py-3 border border-gray-200 dark:border-gray-700 rounded-lg text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none shadow-sm focus:shadow-md focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900 text-gray-900 dark:text-white transition-colors"
           aria-label="Search"
         />
+
+        {query && (
+          <button
+            type="button"
+            aria-label="Clear search"
+            onClick={() => setQuery('')}
+            className="absolute inset-y-0 right-0 pr-3 flex text-align-center items-center text-gray-400 hover:text-gray-800 dark:text-gray-500 dark:hover:text-gray-100"
+          >
+            ✕
+          </button>
+        )}
 
         {showDropdown && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800 max-h-96 overflow-y-auto z-50">

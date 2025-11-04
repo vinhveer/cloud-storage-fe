@@ -55,7 +55,10 @@ export default function Navbar({
         </div>
 
         {/* Center: Search */}
-        <Search onSearch={onSearch} placeholder={searchPlaceholder} className="flex-1 max-w-md mx-8" />
+        {/* old: <Search onSearch={onSearch} placeholder={searchPlaceholder} className="flex-1 max-w-md mx-8" /> */}
+        <div className="flex-1 flex justify-center">
+          <Search onSearch={onSearch} placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
+        </div>
 
         {/* Right: Actions & Account */}
         <div className="flex items-center space-x-3">
