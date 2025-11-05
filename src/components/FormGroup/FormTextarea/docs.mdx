@@ -190,7 +190,7 @@ import FormTextarea from '@/components/FormGroup/FormTextarea/FormTextarea'
   const [content, setContent] = React.useState('')
   const invalid = content.replace(/<[^>]*>/g, '').trim().length < 10
   return (
-    <FormGroup label="Mô tả ngắn" error={invalid ? 'Tối thiểu 10 ký tự (không tính HTML)' : undefined} help="Bạn có thể dán HTML.">
+    <FormGroup  label="Mô tả ngắn" error={invalid ? 'Tối thiểu 10 ký tự (không tính HTML)' : undefined} help="Bạn có thể dán HTML.">
       <FormTextarea rich rows={8} value={content} onValueChange={setContent} />
     </FormGroup>
   )
