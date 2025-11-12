@@ -30,7 +30,7 @@ export default function Navbar({
   onSearch,
   searchPlaceholder = 'Search everything...',
   className,
-}: NavbarProps) {
+}: Readonly<NavbarProps>) {
   const { theme, cycleTheme } = useTheme()
   const navigate = useNavigate()
   const logoutMutation = useLogout()
@@ -62,13 +62,39 @@ export default function Navbar({
 
         {/* Right: Actions & Account */}
         <div className="flex items-center space-x-3">
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={cycleTheme}
-            aria-label="Toggle theme"
-            icon={theme === 'dark' ? <SunIcon className="w-4 h-4" /> : theme === 'light' ? <MoonIcon className="w-4 h-4" /> : <ComputerDesktopIcon className="w-4 h-4" />}
-          />
+          {(() => {
+            if (theme === 'dark') {
+              return (
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={cycleTheme}
+                  aria-label="Toggle theme"
+                  icon={<SunIcon className="w-4 h-4" />}
+                />
+              )
+            }
+            if (theme === 'light') {
+              return (
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={cycleTheme}
+                  aria-label="Toggle theme"
+                  icon={<MoonIcon className="w-4 h-4" />}
+                />
+              )
+            }
+            return (
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={cycleTheme}
+                aria-label="Toggle theme"
+                icon={<ComputerDesktopIcon className="w-4 h-4" />}
+              />
+            )
+          })()}
           <Button
             variant="primary"
             size="md"

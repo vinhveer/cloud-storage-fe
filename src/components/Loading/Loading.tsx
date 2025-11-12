@@ -6,15 +6,15 @@ type LoadingProps = {
   ariaLabel?: string
 }
 
-export default function Loading({ size = 'md', className, ariaLabel = 'Loading' }: LoadingProps) {
+export default function Loading({ size = 'md', className, ariaLabel = 'Loading' }: Readonly<LoadingProps>) {
   const px = loadingSizePixels[size]
   return (
-    <span role="status" aria-label={ariaLabel} className={clsx('not-prose', className)}>
+    <output aria-label={ariaLabel} className={clsx('not-prose', className)}>
       <span
         className="inline-block animate-spin rounded-full border-2 border-current border-t-transparent"
         style={{ width: px, height: px }}
       />
-    </span>
+    </output>
   )
 }
 

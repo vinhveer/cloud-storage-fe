@@ -33,7 +33,6 @@ export default function FormRadio({
                   const normalCls = 'formradio-input-normal'
                   return clsx(base, field?.invalid ? errorCls : normalCls)
                 })(), inputClassName)}
-                aria-invalid={field?.invalid}
               />
               <label htmlFor={id} className="formradio-label">
                 {opt.label}

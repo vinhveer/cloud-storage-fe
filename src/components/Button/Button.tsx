@@ -3,7 +3,7 @@ import Loading from "@/components/Loading/Loading"
 import { buttonToSpinnerSize } from "@/constants/sizing"
 import type { ButtonProps, ButtonContentProps } from "@/components/Button/types"
 
-function ButtonContent({ icon, value, children, isLoading, loadingText, size = 'md' }: ButtonContentProps) {
+function ButtonContent({ icon, value, children, isLoading, loadingText, size = 'md' }: Readonly<ButtonContentProps>) {
   if (isLoading) {
     return (
       <>
@@ -46,7 +46,7 @@ export const Button = ({
   const variantClass = `btn-${variant}`
 
   try {
-    const isDev = (typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) ?? false
+    const isDev = ((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) ?? false
     if (isDev && isIconOnly && !(rest as Record<string, unknown>)["aria-label"]) {
       console.warn('Button: icon-only button requires an aria-label for accessibility.')
     }

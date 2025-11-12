@@ -2,14 +2,14 @@ import clsx from 'clsx'
 import type { FileItem } from '@/components/FileList'
 import { CheckIcon, FileIcon, FolderOpenIconLarge } from '@data/icons/icons'
 
-type TilesViewProps = {
+type TilesViewProps = Readonly<{
   files: FileItem[]
   selectionMode: boolean
   isSelected: (index: number) => boolean
   toggleItem: (index: number) => void
-}
+}>
 
-export default function TilesView({ files, selectionMode, isSelected, toggleItem }: TilesViewProps) {
+export default function TilesView({ files, selectionMode, isSelected, toggleItem }: Readonly<TilesViewProps>) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -20,9 +20,10 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {files.map((file, index) => (
-            <div
+            <button
               key={file.id ?? index}
               onClick={() => selectionMode && toggleItem(index)}
+              aria-pressed={selectionMode ? isSelected(index) : undefined}
               className={clsx('relative flex items-center p-4 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-gray-50 dark:bg-gray-900 border-transparent')}
             >
               {selectionMode && (
@@ -38,7 +39,7 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                 <div className="text-xs text-gray-500 dark:text-gray-400">{file.type ?? 'File'}</div>
                 <div className="text-xs text-gray-400 dark:text-gray-500">{file.modified ?? 'Unknown'}</div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       )}

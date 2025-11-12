@@ -10,7 +10,7 @@ export type UseAccountDropdownOptions = {
 export function useAccountDropdown({ userName, open, defaultOpen = false, onOpenChange }: UseAccountDropdownOptions) {
   const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen)
   const isControlled = typeof open === 'boolean'
-  const isOpen = isControlled ? (open as boolean) : internalOpen
+  const isOpen = isControlled ? Boolean(open) : internalOpen
   const setOpen = (next: boolean) => {
     if (!isControlled) setInternalOpen(next)
     onOpenChange?.(next)
@@ -39,11 +39,11 @@ export function useAccountDropdown({ userName, open, defaultOpen = false, onOpen
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close()
     }
-    window.addEventListener('pointerdown', handlePointerDown)
-    window.addEventListener('keydown', handleKeyDown)
+    globalThis.addEventListener('pointerdown', handlePointerDown as EventListener)
+    globalThis.addEventListener('keydown', handleKeyDown as EventListener)
     return () => {
-      window.removeEventListener('pointerdown', handlePointerDown)
-      window.removeEventListener('keydown', handleKeyDown)
+      globalThis.removeEventListener('pointerdown', handlePointerDown as EventListener)
+      globalThis.removeEventListener('keydown', handleKeyDown as EventListener)
     }
   }, [close])
 

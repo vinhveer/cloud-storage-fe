@@ -22,22 +22,21 @@ export default function Dialog({
   closeOnEsc = true,
   closeOnBackdrop = true,
   className,
-}: DialogProps) {
+}: Readonly<DialogProps>) {
   const reactId = React.useId()
   const modalId = useMemo(() => id ?? `modal-${reactId}`, [id, reactId])
 
   const { isOpen, setOpen } = useDialogOpen({ open, defaultOpen, onOpenChange })
 
   const { onConfirmClick, isLoading } = useDialogConfirm({ onConfirm, setOpen })
-
-  if (!isOpen) return null
-
-  const confirmVariantClass =
-    confirmType === 'danger'
-      ? 'btn-danger'
-      : confirmType === 'primary'
-      ? 'btn-primary'
-      : 'btn-secondary'
+  let confirmVariant: 'primary' | 'secondary' | 'danger'
+  if (confirmType === 'danger') {
+    confirmVariant = 'danger'
+  } else if (confirmType === 'primary') {
+    confirmVariant = 'primary'
+  } else {
+    confirmVariant = 'secondary'
+  }
 
   const effectiveCloseOnEsc = closeOnEsc && !isLoading
   const effectiveCloseOnBackdrop = closeOnBackdrop && !isLoading
@@ -49,20 +48,26 @@ export default function Dialog({
     onCancel,
   })
 
+  if (!isOpen) return null
+
   return (
     <div
       id={modalId}
       className={clsx('not-prose fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm z-50 opacity-0 animate-[fadeIn_150ms_ease-out_forwards]', className)}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={`${modalId}-title`}
-      aria-describedby={confirmText ? `${modalId}-desc` : undefined}
-      onClick={onBackdropClick}
+      tabIndex={-1}
     >
-      <div className="flex items-center justify-center min-h-dvh p-6">
+      <div className="relative flex items-center justify-center min-h-dvh p-6">
+        <button
+          type="button"
+          aria-label="Close dialog"
+          className="absolute inset-0 w-full h-full"
+          onClick={onBackdropClick}
+          disabled={!effectiveCloseOnBackdrop}
+        />
         <div
-          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-transparent dark:border-gray-800 opacity-0 scale-95 animate-[scaleIn_180ms_ease-out_forwards]"
-          onClick={(e) => e.stopPropagation()}
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-transparent dark:border-gray-800 opacity-0 scale-95 animate-[scaleIn_180ms_ease-out_forwards] z-10"
+          aria-labelledby={`${modalId}-title`}
+          aria-describedby={confirmText ? `${modalId}-desc` : undefined}
         >
           <div className="px-6 pt-5 pb-4">
             {!isLoading && (
@@ -102,15 +107,15 @@ export default function Dialog({
                   <Button
                     size="md"
                     className="flex-1"
-                    variant={confirmVariantClass.replace('btn-','') as any}
+                    variant={confirmVariant}
                     onClick={onConfirmClick}
                   >
                     {confirmButtonText}
                   </Button>
                 ) : (
-                  <Button asChild size="md" className="flex-1" variant={confirmVariantClass.replace('btn-','') as any}>
-                    <a href={confirmHref}>{confirmButtonText}</a>
-                  </Button>
+                  <a href={confirmHref} className={clsx('not-prose btn', `btn-${confirmVariant}`, 'btn-md', 'flex-1')}>
+                    {confirmButtonText}
+                  </a>
                 )}
               </div>
             )}

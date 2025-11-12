@@ -9,7 +9,7 @@ type Params = {
 export function useFormSwitch({ checked, defaultChecked, onCheckedChange }: Params) {
   const isControlled = typeof checked === 'boolean'
   const [internalChecked, setInternalChecked] = React.useState<boolean>(defaultChecked ?? false)
-  const isOn = isControlled ? (checked as boolean) : internalChecked
+  const isOn = isControlled ? Boolean(checked) : internalChecked
 
   const setOn = (next: boolean) => {
     if (!isControlled) setInternalChecked(next)

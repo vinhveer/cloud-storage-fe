@@ -22,9 +22,15 @@ export default function FormUpload({
   const errorId = `${id ?? reactId}-error`
 
   const borderStateClass = isDragging ? 'formupload-dropzone-drag' : 'formupload-dropzone-idle'
+  let describedById: string | undefined
+  if (error) {
+    describedById = errorId
+  } else if (help) {
+    describedById = helpId
+  }
 
   return (
-    <div className={clsx('formupload-root', className)}>
+    <div className={clsx('formupload-root w-full', className)}>
       {label && (
         <label className="formupload-label">
           {label}
@@ -32,22 +38,14 @@ export default function FormUpload({
         </label>
       )}
 
-      <div
-        className={clsx('formupload-dropzone', borderStateClass)}
+      <button
+        type="button"
+        className={clsx('formupload-dropzone w-full', borderStateClass)}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onClick={openPicker}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            openPicker()
-          }
-        }}
-        aria-describedby={error ? errorId : help ? helpId : undefined}
-        aria-invalid={!!error}
+        aria-describedby={describedById}
       >
         <input
           ref={inputRef}
@@ -66,23 +64,24 @@ export default function FormUpload({
             <ArrowUpTrayIcon className="formupload-icon" aria-hidden="true" />
           </div>
           <div>
-            <p className="formupload-hint">
+              <p className="formupload-hint">
               <span className="formupload-hint-action">Click to upload</span>
               {' '}or drag and drop
             </p>
             <p className="formupload-subhint">
-              {accept !== '*' ? accept.replace('*', 'any') : 'Any file type'}
+              {accept === '*' ? 'Any file type' : accept.replace('*', 'any')}
               {multiple && ' (multiple files allowed)'}
             </p>
           </div>
         </div>
-      </div>
+      </button>
 
-      {error ? (
+      {error && (
         <p id={errorId} className="formupload-error-text">{error}</p>
-      ) : help ? (
+      )}
+      {!error && help && (
         <p id={helpId} className="formupload-help-text">{help}</p>
-      ) : null}
+      )}
     </div>
   )
 }

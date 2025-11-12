@@ -2,14 +2,14 @@ import clsx from 'clsx'
 import type { FileItem } from '@/components/FileList'
 import { CheckIcon, FileIcon, FolderOpenIconLarge } from '@data/icons/icons'
 
-type DetailsViewProps = {
+type DetailsViewProps = Readonly<{
   files: FileItem[]
   selectionMode: boolean
   isSelected: (index: number) => boolean
   toggleItem: (index: number) => void
-}
+}>
 
-export default function DetailsView({ files, selectionMode, isSelected, toggleItem }: DetailsViewProps) {
+export default function DetailsView({ files, selectionMode, isSelected, toggleItem }: Readonly<DetailsViewProps>) {
   return (
     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0">
       <thead className="bg-gray-0 dark:bg-gray-800">

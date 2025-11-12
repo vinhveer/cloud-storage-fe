@@ -18,7 +18,7 @@ export type SearchProps = {
   className?: string
 }
 
-export default function Search({ onSearch, placeholder = 'Search...', className }: SearchProps) {
+export default function Search({ onSearch, placeholder = 'Search...', className }: Readonly<SearchProps>) {
   const { query, setQuery, isLoading, results, open, setOpen, containerRef } = useSearch<SearchResult>({ onSearch })
   const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -31,8 +31,8 @@ export default function Search({ onSearch, placeholder = 'Search...', className 
         setOpen(true)
       }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    globalThis.addEventListener('keydown', onKey as unknown as EventListener)
+    return () => globalThis.removeEventListener('keydown', onKey as unknown as EventListener)
   }, [setOpen])
 
   const showDropdown = open && (isLoading || results.length > 0 || query.length > 0)

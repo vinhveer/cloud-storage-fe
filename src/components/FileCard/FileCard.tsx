@@ -50,7 +50,7 @@ export const FileCard = ({
         <Button
           variant="primary"
           size="md"
-          onClick={() => { try { window.location.href = detailsHref } catch {} }}
+          onClick={() => { try { globalThis.location.href = detailsHref } catch {} }}
           aria-label="View details"
           className="filecard-cta"
         >

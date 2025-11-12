@@ -59,13 +59,13 @@ export default function Offcanvas({
   className,
   children,
   closeButton,
-}: OffcanvasProps) {
+}: Readonly<OffcanvasProps>) {
   const reactId = React.useId()
   const domId = useMemo(() => id ?? `offcanvas-${reactId}`, [id, reactId])
 
   const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen)
   const isControlled = typeof open === 'boolean'
-  const isOpen = isControlled ? (open as boolean) : internalOpen
+  const isOpen = isControlled ? Boolean(open) : internalOpen
   const setOpen = (next: boolean) => {
     if (!isControlled) setInternalOpen(next)
     onOpenChange?.(next)
@@ -85,17 +85,21 @@ export default function Offcanvas({
   const positionClass = alignmentToPosition[alignment] ?? alignmentToPosition['right']
 
   const hasTitle = Boolean(title ?? heading)
-  const closeBtnConfig: OffcanvasCloseButton | null =
-    closeButton === false || closeButton === undefined
-      ? null
-      : typeof closeButton === 'boolean'
-      ? { position: 'right' }
-      : { position: closeButton.position ?? 'right' }
+  let closeBtnConfig: OffcanvasCloseButton | null
+  if (closeButton === false || closeButton === undefined) {
+    closeBtnConfig = null
+  } else if (typeof closeButton === 'boolean') {
+    closeBtnConfig = { position: 'right' }
+  } else {
+    closeBtnConfig = { position: closeButton.position ?? 'right' }
+  }
 
   return (
-    <div id={domId} className={clsx('not-prose fixed inset-0 z-50 overflow-hidden', className)} role="dialog" aria-modal="true">
-      {/* Backdrop */}
-      <div
+    <dialog id={domId} open className={clsx('not-prose fixed inset-0 z-50 overflow-hidden', className)}>
+      {/* Backdrop as button for accessibility */}
+      <button
+        type="button"
+        aria-label="Close offcanvas"
         className="fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 animate-[fadeIn_150ms_ease-out_forwards]"
         onClick={() => setOpen(false)}
       />
@@ -140,7 +144,7 @@ export default function Offcanvas({
           {children}
         </div>
       </div>
-    </div>
+    </dialog>
   )
 }
 

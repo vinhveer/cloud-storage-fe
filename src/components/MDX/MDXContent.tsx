@@ -4,15 +4,15 @@ import React from 'react'
 const mdxMap = import.meta.glob<{ default: React.ComponentType }>('/src/components/**/docs.mdx', { eager: true })
 
 function normalizeSegment(segment: string) {
-  return segment.toLowerCase().replace(/[^a-z0-9]/g, '')
+  return segment.toLowerCase().replaceAll(/[^a-z0-9]/g, '')
 }
 
 function pathToSlug(path: string) {
   // e.g. /src/components/FormGroup/FormInput/docs.mdx -> formgroup/forminput
   const parts = path.split('/').map((p) => p.trim()).filter(Boolean)
-  const compIdx = parts.findIndex((p) => p === 'components')
+  const compIdx = parts.indexOf('components')
   const after = compIdx >= 0 ? parts.slice(compIdx + 1) : []
-  const noFile = after.slice(0, Math.max(0, after.length - 1))
+  const noFile = after.slice(0, -1)
   return noFile.map((p) => p.toLowerCase()).join('/')
 }
 
@@ -38,7 +38,7 @@ function findDocBySlug(slug: string) {
   return best ?? null
 }
 
-export function MDXContent({ slug }: { slug: string }) {
+export function MDXContent({ slug }: Readonly<{ slug: string }>) {
   const best = findDocBySlug(slug)
 
   if (!best) {
@@ -57,7 +57,7 @@ export function MDXContent({ slug }: { slug: string }) {
 
   // If the slug points to a parent folder (e.g., formgroup) and there are children
   // expose quick links to child docs underneath.
-  const parentSlug = best.parts.slice(0, best.parts.length - 1).join('/')
+  const parentSlug = best.parts.slice(0, -1).join('/')
   const requestedSlug = slug.split('/').filter(Boolean).join('/').toLowerCase()
   const currentSlug = best.parts.join('/').toLowerCase()
   const isParent = requestedSlug === parentSlug.toLowerCase()
@@ -68,7 +68,7 @@ export function MDXContent({ slug }: { slug: string }) {
       return s.startsWith(`${requestedSlug}/`)
     })
     .map((p) => pathToSlug(p))
-    .sort()
+    .sort((a, b) => a.localeCompare(b))
 
   return (
     <MDXProvider>
@@ -80,7 +80,7 @@ export function MDXContent({ slug }: { slug: string }) {
             <ul>
               {childLinks.map((s) => (
                 <li key={s}>
-                  <a className="text-blue-600 hover:underline" href={`/samples/${s}`}>{s.split('/').slice(-1)[0]}</a>
+                  <a className="text-blue-600 hover:underline" href={`/samples/${s}`}>{s.split('/').at(-1)}</a>
                 </li>
               ))}
             </ul>

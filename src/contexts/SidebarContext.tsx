@@ -16,13 +16,13 @@ type SidebarContextValue = {
 
 const SidebarContext = createContext<SidebarContextValue | undefined>(undefined)
 
-export function SidebarProvider({ children }: { children: React.ReactNode }) {
+export function SidebarProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const STORAGE = { active: 'sidebar:activeKey' }
 
   function getInitial(): { items: SidebarItemData[]; activeKey?: string } {
-    if (typeof window === 'undefined') return { items: [], activeKey: undefined }
+    if (globalThis.window === undefined) return { items: [], activeKey: undefined }
     try {
-      const rawActive = sessionStorage.getItem(STORAGE.active)
+      const rawActive = globalThis.sessionStorage?.getItem(STORAGE.active) ?? null
       return { items: [], activeKey: rawActive ?? undefined }
     } catch {
       return { items: [], activeKey: undefined }
@@ -30,22 +30,21 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   }
 
   const initial = getInitial()
-  const [items, setItemsState] = useState<SidebarItemData[]>(initial.items)
-  const [activeKey, setActiveKeyState] = useState<string | undefined>(initial.activeKey)
+  const [items, setItems] = useState<SidebarItemData[]>(initial.items)
+  const [activeKey, setActiveKey] = useState<string | undefined>(initial.activeKey)
 
-  const setItems = useCallback((next: SidebarItemData[]) => {
-    setItemsState(next)
-  }, [])
-
-  const setActiveKey = useCallback((key?: string) => {
-    setActiveKeyState(key)
+  const setActiveKeyWithPersist = useCallback((key?: string) => {
+    setActiveKey(key)
     try {
-      if (key === undefined) sessionStorage.removeItem(STORAGE.active)
-      else sessionStorage.setItem(STORAGE.active, key)
+      if (key === undefined) globalThis.sessionStorage?.removeItem(STORAGE.active)
+      else globalThis.sessionStorage?.setItem(STORAGE.active, key)
     } catch {}
   }, [])
 
-  const value = useMemo(() => ({ items, setItems, activeKey, setActiveKey }), [items, activeKey, setItems, setActiveKey])
+  const value = useMemo(
+    () => ({ items, setItems, activeKey, setActiveKey: setActiveKeyWithPersist }),
+    [items, activeKey, setItems, setActiveKeyWithPersist]
+  )
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
 }
 

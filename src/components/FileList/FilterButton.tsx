@@ -6,7 +6,7 @@ type FilterButtonProps = {
   className?: string
 }
 
-export default function FilterButton({ onClick, className }: FilterButtonProps) {
+export default function FilterButton({ onClick, className }: Readonly<FilterButtonProps>) {
   return (
     <button
       type="button"

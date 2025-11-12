@@ -6,7 +6,7 @@ type SortButtonProps = {
   className?: string
 }
 
-export default function SortButton({ onClick, className }: SortButtonProps) {
+export default function SortButton({ onClick, className }: Readonly<SortButtonProps>) {
   return (
     <button
       type="button"

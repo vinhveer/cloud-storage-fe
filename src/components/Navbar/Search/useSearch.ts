@@ -29,7 +29,9 @@ export function useSearch<T>({ onSearch, debounceMs = 250 }: UseSearchOptions<T>
     if (!canSearch) return
     setIsLoading(true)
     try {
-      const data = await onSearch!(q)
+      const searchFn = onSearch
+      if (!searchFn) return
+      const data = await searchFn(q)
       setResults(Array.isArray(data) ? data : [])
     } finally {
       setIsLoading(false)

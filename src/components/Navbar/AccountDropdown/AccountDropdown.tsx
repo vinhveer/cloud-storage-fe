@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import clsx from 'clsx'
-import { Cog6ToothIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/20/solid'
+import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import Dialog from '@/components/Dialog/Dialog'
 import { useAccountDropdown } from '@/components/Navbar/AccountDropdown/useAccountDropdown'
 
@@ -24,7 +24,7 @@ export function AccountDropdown({
   open,
   defaultOpen = false,
   onOpenChange,
-}: AccountDropdownProps) {
+}: Readonly<AccountDropdownProps>) {
   const { isOpen, toggle, containerRef, initials } = useAccountDropdown({ userName, open, defaultOpen, onOpenChange })
   const [logoutOpen, setLogoutOpen] = useState(false)
 
@@ -88,7 +88,7 @@ export function AccountDropdown({
               className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               role="menuitem"
             >
-              <ArrowRightOnRectangleIcon className="mr-3 w-4 h-4" aria-hidden="true" />
+              <ArrowRightStartOnRectangleIcon className="mr-3 w-4 h-4" aria-hidden="true" />
               Logout
             </button>
           </div>

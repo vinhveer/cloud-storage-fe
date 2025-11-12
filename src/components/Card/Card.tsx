@@ -1,6 +1,23 @@
 import clsx from 'clsx'
 import type { CardProps } from '@/components/Card/types'
 
+const paddingClassMap: Record<NonNullable<CardProps['padding']>, string> = {
+  none: 'p-0',
+  sm: 'p-4',
+  md: 'p-6',
+  lg: 'p-8',
+  xl: 'p-10',
+}
+
+const shadowClassMap: Record<NonNullable<CardProps['shadow']>, string> = {
+  none: '',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+  xl: 'shadow-xl',
+  '2xl': 'shadow-2xl',
+}
+
 export const Card = ({
   title,
   subtitle,
@@ -10,34 +27,9 @@ export const Card = ({
   className,
   children,
   ...rest
-}: CardProps) => {
-  const paddingClass =
-    padding === 'none'
-      ? 'p-0'
-      : padding === 'sm'
-      ? 'p-4'
-      : padding === 'md'
-      ? 'p-6'
-      : padding === 'lg'
-      ? 'p-8'
-      : padding === 'xl'
-      ? 'p-10'
-      : 'p-8'
-
-  const shadowClass =
-    shadow === 'none'
-      ? ''
-      : shadow === 'sm'
-      ? 'shadow-sm'
-      : shadow === 'md'
-      ? 'shadow-md'
-      : shadow === 'lg'
-      ? 'shadow-lg'
-      : shadow === 'xl'
-      ? 'shadow-xl'
-      : shadow === '2xl'
-      ? 'shadow-2xl'
-      : 'shadow-lg'
+}: Readonly<CardProps>) => {
+  const paddingClass = paddingClassMap[padding] ?? 'p-8'
+  const shadowClass = shadowClassMap[shadow] ?? 'shadow-lg'
 
   const borderClass = border ? 'card-border' : ''
 

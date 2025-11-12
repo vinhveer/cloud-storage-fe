@@ -1,15 +1,15 @@
-                import clsx from 'clsx'
+import clsx from 'clsx'
 import type { FileItem } from '@/components/FileList'
 import { CheckIcon, FileIcon, FolderOpenIconLarge } from '@data/icons/icons'
 
-type GridViewProps = {
+type GridViewProps = Readonly<{
   files: FileItem[]
   selectionMode: boolean
   isSelected: (index: number) => boolean
   toggleItem: (index: number) => void
-}
+}>
 
-export default function GridView({ files, selectionMode, isSelected, toggleItem }: GridViewProps) {
+export default function GridView({ files, selectionMode, isSelected, toggleItem }: Readonly<GridViewProps>) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -20,9 +20,11 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem 
       ) : (
         <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
           {files.map((file, index) => (
-            <div
+            <button
               key={file.id ?? index}
               onClick={() => selectionMode && toggleItem(index)}
+              type="button"
+              aria-pressed={selectionMode ? isSelected(index) : undefined}
               className={clsx('relative flex flex-col items-center p-3 rounded-lg border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-white dark:bg-gray-900 border-transparent')}
             >
               {selectionMode && (
@@ -39,7 +41,7 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem 
                   {file.name ?? 'Unknown'}
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       )}

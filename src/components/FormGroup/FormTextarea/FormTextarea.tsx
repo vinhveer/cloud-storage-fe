@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import { FormFieldContext } from '@/components/FormGroup/FormGroup'
 import type { FormTextareaProps } from '@/components/FormGroup/FormTextarea/types'
 import { Editor } from '@tinymce/tinymce-react'
-// Self-host TinyMCE (no CDN): import core, theme, model, icons, and plugins
 import 'tinymce/tinymce'
 import 'tinymce/icons/default'
 import 'tinymce/themes/silver'
@@ -34,16 +33,27 @@ export default function FormTextarea({
   const baseClasses = 'formtextarea-base'
   const errorClasses = 'formtextarea-error'
   const normalClasses = 'formtextarea-normal'
-
-  const textareaClasses = clsx(
-    baseClasses,
-    field?.invalid ? errorClasses : normalClasses,
-    rich && 'px-0 py-0',
-    className,
-  )
+ 
+  const stateClass = field?.invalid ? errorClasses : normalClasses
+  const textareaClasses = rich
+    ? clsx(
+        // Remove borders and spacing entirely when using rich editor
+        'p-0 border-0',
+        className,
+      )
+    : clsx(
+        baseClasses,
+        stateClass,
+        className,
+      )
 
   if (rich) {
-    const editorHeight = typeof height === 'number' ? height : Math.max(200, rows * 24 + 24)
+    let editorHeight: number
+    if (typeof height === 'number') {
+      editorHeight = height
+    } else {
+      editorHeight = Math.max(200, rows * 24 + 24)
+    }
     const defaultInit = {
       menubar: false,
       branding: false,
@@ -76,7 +86,7 @@ export default function FormTextarea({
               onChange({ target: { value: content } } as unknown as React.ChangeEvent<HTMLTextAreaElement>)
             }
           }}
-          init={{ ...defaultInit, ...(editorInit ?? {}) }}
+          init={editorInit ? { ...defaultInit, ...editorInit } : defaultInit}
         />
       </div>
     )

@@ -31,13 +31,11 @@ export default function StorageUsage({
         {percentage}% - Use {usedFormatted}GB of {totalFormatted}GB
       </div>
       <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 overflow-hidden" aria-label="storage-usage">
+        <progress value={percentage} max={100} className="sr-only">{percentage}%</progress>
         <div
           className={clsx(colorClassName, 'h-full rounded-full transition-all duration-300')}
           style={widthStyle}
-          role="progressbar"
-          aria-valuenow={percentage}
-          aria-valuemin={0}
-          aria-valuemax={100}
+          aria-hidden="true"
         />
       </div>
     </div>

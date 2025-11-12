@@ -37,7 +37,7 @@ const viewModes: Record<ViewMode, { label: string; icon: React.ReactNode }> = {
   details: { label: 'Details View', icon: <SvgDetails className="w-4 h-4" /> },
 }
 
-export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: FileListProps) {
+export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: Readonly<FileListProps>) {
   const {
     dropdownOpen,
     setDropdownOpen,
@@ -120,7 +120,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
                         setDropdownOpen(false)
                       }}
                       className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                      role="option"
+                      aria-pressed={currentViewMode === (modeKey as ViewMode)}
                     >
                       <span className="text-sm">{cfg.icon}</span>
                       <span>{cfg.label}</span>

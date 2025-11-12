@@ -13,7 +13,12 @@ export function useFormCheckbox({ required, error, help, className, id }: UseFor
   const errorClasses = 'checkbox-error'
   const inputClasses = clsx(baseClasses, error ? errorClasses : normalClasses, className)
 
-  const ariaDescribedBy = error ? errorId : help ? helpId : undefined
+  let ariaDescribedBy: string | undefined
+  if (error) {
+    ariaDescribedBy = errorId
+  } else if (help) {
+    ariaDescribedBy = helpId
+  }
 
   const validateRequired = (checked: boolean, message = 'Trường này là bắt buộc'): string | null => {
     if (required && !checked) return message
@@ -61,15 +66,16 @@ export default function FormCheckbox({
         )}
       </div>
 
-      {error ? (
+      {error && (
         <p id={errorId} className="checkbox-error-text">
           {error}
         </p>
-      ) : help ? (
+      )}
+      {!error && help && (
         <p id={helpId} className="checkbox-help-text">
           {help}
         </p>
-      ) : null}
+      )}
     </div>
   )
 }
