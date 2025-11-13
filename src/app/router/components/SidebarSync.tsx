@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouterState } from '@tanstack/react-router'
-import { useSidebar } from '@/contexts/SidebarContext'
+import { useSidebar } from '@/components/Sidebar/SidebarContext'
 import { getItemsForPath, pickActiveKey } from '../sidebar'
 
 function areSame(

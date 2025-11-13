@@ -1,5 +1,5 @@
 import SidebarItem from './SidebarItem'
-import { useSidebar } from '@/contexts/SidebarContext'
+import { useSidebar } from '@/components/Sidebar/SidebarContext'
 
 export default function Sidebar() {
   const { items, activeKey } = useSidebar()

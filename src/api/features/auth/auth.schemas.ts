@@ -1,8 +1,16 @@
 import { z } from 'zod'
 
+const emailSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .refine(value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), {
+    message: 'Invalid email address',
+  })
+
 export const RegisterRequestSchema = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
+  email: emailSchema,
   password: z.string().min(8),
   passwordConfirmation: z.string().min(8),
   deviceName: z.string().min(1),
@@ -12,7 +20,7 @@ export const RegisterRequestSchema = z.object({
 })
 
 export const LoginRequestSchema = z.object({
-  email: z.string().email(),
+  email: emailSchema,
   password: z.string().min(1),
   deviceName: z.string().min(1),
 })
@@ -20,7 +28,7 @@ export const LoginRequestSchema = z.object({
 export const AuthenticatedUserSchema = z.object({
   id: z.number(),
   name: z.string().min(1),
-  email: z.string().email(),
+  email: emailSchema,
 })
 
 export const AuthSuccessSchema = z.object({

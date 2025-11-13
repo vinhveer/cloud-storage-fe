@@ -1,4 +1,4 @@
-import { loadingSizePixels } from '@/constants/sizing'
+import { loadingSizePixels } from './sizing'
 import clsx from 'clsx'
 type LoadingProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import type { FileItem } from '@/components/FileList'
-import { CheckIcon, FileIcon, FolderOpenIconLarge } from '@data/icons/icons'
+import { CheckIcon, DocumentIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 
 type ListViewProps = Readonly<{
   files: FileItem[]
@@ -23,7 +23,7 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem 
         {files.length === 0 && (
           <tr>
             <td colSpan={3} className="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
-              <FolderOpenIconLarge />
+              <FolderOpenIcon />
               <p>No files found</p>
             </td>
           </tr>
@@ -45,7 +45,7 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem 
                 )}
 
                 <div className="flex-shrink-0 mr-5">
-                  {file.icon ?? <FileIcon className="text-blue-600 w-8 h-8" />}
+                  {file.icon ?? <DocumentIcon className="text-blue-600 w-8 h-8" />}
                 </div>
                 <div>
                   <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{file.name ?? 'Unknown'}</div>

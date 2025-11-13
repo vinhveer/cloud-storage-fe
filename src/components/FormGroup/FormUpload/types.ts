@@ -6,6 +6,7 @@ export type FormUploadProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   help?: string | null
   accept?: string
   multiple?: boolean
+  files?: File[]
   onFilesChange?: (files: File[]) => void
 }
 

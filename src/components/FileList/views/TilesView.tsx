@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import type { FileItem } from '@/components/FileList'
-import { CheckIcon, FileIcon, FolderOpenIconLarge } from '@data/icons/icons'
+import { CheckIcon, DocumentIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 
 type TilesViewProps = Readonly<{
   files: FileItem[]
@@ -14,7 +14,7 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
     <div className="p-6">
       {files.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-500 dark:text-gray-400">
-          <FolderOpenIconLarge />
+          <FolderOpenIcon />
           <p>No files found</p>
         </div>
       ) : (
@@ -33,7 +33,7 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                   </div>
                 </div>
               )}
-              <div className="flex-shrink-0 mr-4">{file.icon ?? <FileIcon className="text-blue-600 w-7 h-7" />}</div>
+              <div className="flex-shrink-0 mr-4">{file.icon ?? <DocumentIcon className="text-blue-600 w-7 h-7" />}</div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{file.name ?? 'Unknown'}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">{file.type ?? 'File'}</div>

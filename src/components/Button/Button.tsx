@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import Loading from "@/components/Loading/Loading"
-import { buttonToSpinnerSize } from "@/constants/sizing"
+import { buttonToSpinnerSize } from "./sizing"
 import type { ButtonProps, ButtonContentProps } from "@/components/Button/types"
 
 function ButtonContent({ icon, value, children, isLoading, loadingText, size = 'md' }: Readonly<ButtonContentProps>) {

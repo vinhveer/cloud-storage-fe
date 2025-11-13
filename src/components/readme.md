@@ -44,7 +44,7 @@ Tuyệt — mình gom thành **01 file Markdown** gọn, rõ, kéo thả vào Cu
 * **Loading/Disabled**:
 
   * Nếu có `isLoading`, **tự disable** và hiển thị spinner.
-  * Dùng `Loading` + map kích cỡ từ `src/constants/sizing.ts`.
+* Dùng `Loading` + map kích cỡ từ `@/components/Loading/sizing` (và Button dùng `@/components/Button/sizing`).
 * **A11y**:
 
   * Icon-only **bắt buộc** có `aria-label` (có dev-guard cảnh báo trong DEV).
@@ -121,7 +121,7 @@ export function warnIfIconOnlyWithoutLabel(
 ```tsx
 import clsx from 'clsx'
 import Loading from '@/components/Loading/Loading'
-import { buttonToSpinnerSize } from '@/constants/sizing'
+import { buttonToSpinnerSize } from '@/components/Button/sizing'
 import { warnIfIconOnlyWithoutLabel } from '@/utils/devGuard'
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger'
@@ -361,7 +361,7 @@ import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 
 **Samples index & navigation**
 
-- Trang `/samples` lấy dữ liệu từ `@data/sample-data.mock.ts`.  
+- Trang `/samples` lấy dữ liệu từ `@/components/MDX/sample-data.mock.ts`.  
   Thêm/bớt item tại đây để đổi danh sách hiển thị. (Routing docs vẫn tự động)
 
 **Demos**

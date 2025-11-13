@@ -1,6 +1,6 @@
 import { HomeIcon, FolderIcon, ShareIcon, TrashIcon, Squares2X2Icon } from '@heroicons/react/24/outline'
-import type { SidebarItemData } from '@/contexts/SidebarContext'
-import { sampleMenuItems } from '@/data/sample-data.mock'
+import type { SidebarItemData } from '@/components/Sidebar/SidebarContext'
+import { sampleMenuItems } from '@/components/MDX/sample-data.mock'
 
 type SidebarConfig = {
   id: string

@@ -1,7 +1,14 @@
 import React from 'react'
 import clsx from 'clsx'
 import { useFileList } from './useFileList'
-import { SvgList, SvgGrid, SvgTiles, SvgDetails, ChevronDownIcon, CheckSquareIcon } from '@data/icons/icons'
+import {
+  ListBulletIcon,
+  Squares2X2Icon,
+  RectangleGroupIcon,
+  Bars3BottomLeftIcon,
+  ChevronDownIcon,
+  CheckCircleIcon,
+} from '@heroicons/react/24/outline'
 import ListView from '@/components/FileList/views/ListView'
 import GridView from '@/components/FileList/views/GridView'
 import TilesView from '@/components/FileList/views/TilesView'
@@ -31,10 +38,10 @@ export type FileListProps = {
 }
 
 const viewModes: Record<ViewMode, { label: string; icon: React.ReactNode }> = {
-  list: { label: 'List View', icon: <SvgList className="w-4 h-4" /> },
-  grid: { label: 'Grid View', icon: <SvgGrid className="w-4 h-4" /> },
-  tiles: { label: 'Tiles View', icon: <SvgTiles className="w-4 h-4" /> },
-  details: { label: 'Details View', icon: <SvgDetails className="w-4 h-4" /> },
+  list: { label: 'List View', icon: <ListBulletIcon className="w-4 h-4" /> },
+  grid: { label: 'Grid View', icon: <Squares2X2Icon className="w-4 h-4" /> },
+  tiles: { label: 'Tiles View', icon: <RectangleGroupIcon className="w-4 h-4" /> },
+  details: { label: 'Details View', icon: <Bars3BottomLeftIcon className="w-4 h-4" /> },
 }
 
 export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: Readonly<FileListProps>) {
@@ -142,7 +149,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
               )}
               aria-pressed={selectionMode}
             >
-              <CheckSquareIcon className="w-3.5 h-3.5" />
+              <CheckCircleIcon className="w-3.5 h-3.5" />
               <span>{selectionMode ? 'Cancel' : 'Select'}</span>
             </button>
 

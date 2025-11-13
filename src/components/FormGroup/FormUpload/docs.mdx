@@ -8,6 +8,7 @@ Khu vực upload hỗ trợ drag-and-drop và click để chọn file.
 ## Mục đích & trường hợp xử lý
 
 - Cho phép người dùng tải lên file nhanh chóng, hỗ trợ nhiều định dạng và nhiều file.
+- Sau khi chọn/kéo-thả, hiển thị “thẻ tệp” với tile extension tương tự Moodle; có thể xóa từng tệp.
 
 ## Props
 
@@ -37,19 +38,7 @@ import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
 #### Cơ bản
 
 ```tsx
-{(() => {
-  const [files, setFiles] = React.useState([])
-  return (
-    <div className="grid gap-3">
-      <FormUpload label="Tải lên tệp" onFilesChange={setFiles} />
-      <ul className="text-sm text-gray-600 list-disc pl-5">
-        {files.map((f) => (
-          <li key={f.name}>{f.name} ({Math.round(f.size / 1024)} KB)</li>
-        ))}
-      </ul>
-    </div>
-  )
-})()}
+<FormUpload label="Tải lên tệp" onFilesChange={() => {}} />
 ```
 
 {(() => {
@@ -57,11 +46,7 @@ import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
   return (
     <div className="grid gap-3">
       <FormUpload label="Tải lên tệp" onFilesChange={setFiles} />
-      <ul className="text-sm text-gray-600 list-disc pl-5">
-        {files.map((f) => (
-          <li key={f.name}>{f.name} ({Math.round(f.size / 1024)} KB)</li>
-        ))}
-      </ul>
+      <div className="text-xs text-gray-500">Các thẻ tệp sẽ hiển thị ngay bên dưới khu vực kéo-thả.</div>
     </div>
   )
 })()}
@@ -86,11 +71,6 @@ import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
     <div className="grid gap-3">
       <FormUpload label="Nhiều tệp" multiple onFilesChange={setFiles} />
       <div className="text-xs text-gray-500">Có thể kéo thả nhiều tệp cùng lúc.</div>
-      <ul className="text-sm text-gray-600 list-disc pl-5">
-        {files.map((f) => (
-          <li key={f.name}>{f.name}</li>
-        ))}
-      </ul>
     </div>
   )
 })()}
@@ -102,11 +82,6 @@ import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
     <div className="grid gap-3">
       <FormUpload label="Nhiều tệp" multiple onFilesChange={setFiles} />
       <div className="text-xs text-gray-500">Có thể kéo thả nhiều tệp cùng lúc.</div>
-      <ul className="text-sm text-gray-600 list-disc pl-5">
-        {files.map((f) => (
-          <li key={f.name}>{f.name}</li>
-        ))}
-      </ul>
     </div>
   )
 })()}
@@ -115,5 +90,6 @@ import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
 
 - Kéo-thả và click đều kích hoạt chọn file; khu vực đổi màu khi kéo vào.
 - `onFilesChange` nhận danh sách `File[]` đã chọn/thả.
+- Có thể truyền `files` để điều khiển danh sách từ bên ngoài (controlled).
 
 

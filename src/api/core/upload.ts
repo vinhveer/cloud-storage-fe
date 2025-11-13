@@ -1,19 +1,23 @@
+// Chuyển một object bất kỳ thành FormData, hỗ trợ object lồng nhau và mảng.
 export function toFormData(record: Record<string, unknown>): FormData {
   const formData = new FormData()
 
-  Object.entries(record).forEach(([key, value]) => {
+  // Duyệt key-value và append vào FormData
+  for (const [key, value] of Object.entries(record)) {
     appendToFormData(formData, key, value)
-  })
+  }
 
   return formData
 }
 
+// Thêm danh sách file vào FormData theo field name (mặc định 'files[]').
 export function appendFiles(formData: FormData, files: File[], fieldName = 'files[]'): void {
-  files.forEach(file => {
+  for (const file of files) {
     formData.append(fieldName, file)
-  })
+  }
 }
 
+// Hàm đệ quy, xử lý nhiều kiểu dữ liệu và append vào FormData theo đúng format.
 function appendToFormData(formData: FormData, key: string, value: unknown): void {
   if (value === null || value === undefined) {
     return
@@ -30,20 +34,26 @@ function appendToFormData(formData: FormData, key: string, value: unknown): void
   }
 
   if (Array.isArray(value)) {
-    value.forEach((item, index) => {
+    for (const [index, item] of value.entries()) {
       appendToFormData(formData, `${key}[${index}]`, item)
-    })
+    }
     return
   }
 
   if (typeof value === 'object') {
-    Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+    // Duyệt từng key con của object để append dạng key[subKey]
+    for (const [nestedKey, nestedValue] of Object.entries(value as Record<string, unknown>)) {
       appendToFormData(formData, `${key}[${nestedKey}]`, nestedValue)
-    })
+    }
     return
   }
 
-  formData.append(key, String(value))
+  if (typeof value === 'string') {
+    formData.append(key, value)
+    return
+  }
+
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    formData.append(key, String(value))
+  }
 }
-
-

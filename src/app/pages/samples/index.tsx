@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { sampleMenuItems, samplesTitle, samplesIntro } from '@data/sample-data.mock'
+import { sampleMenuItems, samplesTitle, samplesIntro } from '@/components/MDX/sample-data.mock'
 
 export default function SamplesPage() {
   return (
