@@ -16,7 +16,7 @@ function buildSection(path: string, Page: React.ComponentType) {
   const sectionIndex = createAccessRoute({
     getParentRoute: () => sectionRoute,
     path: '/',
-    component: Page,
+    component: () => <Page />,
     access: 'protected',
   })
 

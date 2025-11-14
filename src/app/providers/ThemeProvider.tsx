@@ -11,7 +11,7 @@ type ThemeContextValue = {
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 
 function prefersDark(): boolean {
-  return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  return !!globalThis.matchMedia && globalThis.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
 function isDark(theme: Theme): boolean {
@@ -25,7 +25,7 @@ function applyTheme(theme: Theme) {
 }
 
 function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'light'
+  if (globalThis.window === undefined) return 'light'
   try {
     const saved = localStorage.getItem('theme') as Theme | null
     if (saved === 'light' || saved === 'dark' || saved === 'system') return saved
@@ -33,26 +33,29 @@ function getInitialTheme(): Theme {
   return 'light'
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(getInitialTheme)
+export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
   // Apply initial theme on mount
   useEffect(() => {
     applyTheme(theme)
   }, [])
 
-  const setTheme = useCallback((next: Theme) => {
-    setThemeState(next)
+  const setThemeCallback = useCallback((next: Theme) => {
+    setTheme(next)
     applyTheme(next)
     try { localStorage.setItem('theme', next) } catch {}
   }, [])
 
   const cycleTheme = useCallback(() => {
-    const next: Theme = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light'
-    setTheme(next)
-  }, [theme, setTheme])
+    let next: Theme
+    if (theme === 'light') next = 'dark'
+    else if (theme === 'dark') next = 'system'
+    else next = 'light'
+    setThemeCallback(next)
+  }, [theme, setThemeCallback])
 
-  const value = useMemo(() => ({ theme, setTheme, cycleTheme }), [theme, setTheme, cycleTheme])
+  const value = useMemo(() => ({ theme, setTheme: setThemeCallback, cycleTheme }), [theme, setThemeCallback, cycleTheme])
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 

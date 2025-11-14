@@ -6,7 +6,7 @@ type QueryProviderProps = {
   children: ReactNode
 }
 
-export default function QueryProvider({ children }: QueryProviderProps) {
+export default function QueryProvider({ children }: Readonly<QueryProviderProps>) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
