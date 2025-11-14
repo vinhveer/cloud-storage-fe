@@ -3,6 +3,7 @@ import { redirect } from '@tanstack/react-router'
 import AppLayout from '@/app/layout/AppLayout'
 import { rootRoute } from '../root'
 import HomePage from '@/app/pages'
+import AccountSettingsPage from '@/app/pages/account-settings'
 
 export const appRoute = createAccessRoute({
   getParentRoute: () => rootRoute,
@@ -21,8 +22,16 @@ const appIndexRoute = createAccessRoute({
   },
 })
 
+const accountSettingsRoute = createAccessRoute({
+  getParentRoute: () => appRoute,
+  path: '/account-settings',
+  component: AccountSettingsPage,
+  access: 'protected',
+})
+
 export function getAppRoutes() {
   return appRoute.addChildren([
     appIndexRoute,
+    accountSettingsRoute,
   ])
 }
