@@ -1,7 +1,5 @@
-import React from 'react'
-import clsx from 'clsx'
-import { FormFieldContext } from '@/components/FormGroup/FormGroup'
 import type { FormInputProps } from '@/components/FormGroup/FormInput/types'
+import { useFormInput } from '@/components/FormGroup/FormInput/form-input.hook'
 
 export default function FormInput({
   type = 'text',
@@ -10,15 +8,7 @@ export default function FormInput({
   id,
   ...rest
 }: FormInputProps) {
-  const reactId = React.useId()
-  const inputId = id ?? `inp-${reactId}`
-  const field = React.useContext(FormFieldContext)
-
-  const baseClasses = 'forminput-base'
-  const errorClasses = 'forminput-error'
-  const normalClasses = 'forminput-normal'
-
-  const inputClasses = clsx(baseClasses, field?.invalid ? errorClasses : normalClasses, className)
+  const { inputId, inputClasses, ariaInvalid, ariaDescribedBy } = useFormInput({ className, id })
 
   return (
     <input
@@ -26,8 +16,8 @@ export default function FormInput({
       type={type}
       placeholder={placeholder}
       className={inputClasses}
-      aria-invalid={field?.invalid}
-      aria-describedby={field?.describedById}
+      aria-invalid={ariaInvalid}
+      aria-describedby={ariaDescribedBy}
       {...rest}
     />
   )

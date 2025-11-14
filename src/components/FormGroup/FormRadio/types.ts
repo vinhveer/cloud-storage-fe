@@ -6,3 +6,5 @@ export type FormRadioProps = React.HTMLAttributes<HTMLDivElement> & {
   name?: string
   inputClassName?: string
 }
+
+export type UseFormRadioParams = Pick<FormRadioProps, 'className' | 'inputClassName' | 'name'>

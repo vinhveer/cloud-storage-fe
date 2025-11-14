@@ -1,10 +1,6 @@
 import { ArrowsUpDownIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-
-type SortButtonProps = {
-  onClick?: () => void
-  className?: string
-}
+import type { SortButtonProps } from '@/components/FileList/SortButton.types'
 
 export default function SortButton({ onClick, className }: Readonly<SortButtonProps>) {
   return (

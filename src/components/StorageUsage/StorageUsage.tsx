@@ -1,12 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-
-export type StorageUsageProps = React.HTMLAttributes<HTMLDivElement> & {
-  used: number
-  total: number
-  precision?: number
-  colorClassName?: string
-}
+import type { StorageUsageProps } from '@/components/StorageUsage/types'
 
 export default function StorageUsage({
   used,

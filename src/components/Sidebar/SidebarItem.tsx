@@ -1,14 +1,7 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
 import { Squares2X2Icon } from '@heroicons/react/24/outline'
-
-export type SidebarItemProps = {
-  title: string
-  href?: string
-  to?: string
-  isActive?: boolean
-  icon?: React.ReactNode
-}
+import type { SidebarItemProps } from '@/components/Sidebar/types'
 
 export default function SidebarItem({ title, href, to, isActive = false, icon }: SidebarItemProps) {
   const internalTo = to ?? href

@@ -1,51 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
-
-type Alignment = 'left' | 'right' | 'top' | 'bottom'
-type Width = '25' | '50' | '75' | '100'
-
-export type OffcanvasCloseButton = {
-  position?: 'left' | 'right'
-}
-
-export type OffcanvasProps = {
-  id?: string
-  width?: Width
-  /**
-   * Deprecated: use `title` instead. Kept for backward compatibility.
-   */
-  heading?: string
-  /**
-   * Title text displayed in header when provided.
-   */
-  title?: string
-  alignment?: Alignment
-  open?: boolean
-  defaultOpen?: boolean
-  onOpenChange?: (open: boolean) => void
-  className?: string
-  children?: React.ReactNode
-  /**
-   * Show a close button in header when provided. Default position is 'right'.
-   */
-  closeButton?: OffcanvasCloseButton | boolean
-}
-
-const widthToClass: Record<Width, string> = {
-  '25': 'w-1/4',
-  '50': 'w-1/2',
-  '75': 'w-3/4',
-  '100': 'w-full h-full',
-}
-
-const alignmentToPosition: Record<Alignment, string> = {
-  left: 'left-0 top-0 h-full',
-  right: 'right-0 top-0 h-full',
-  top: 'top-0 left-0 w-full',
-  bottom: 'bottom-0 left-0 w-full',
-}
-
+import type { OffcanvasProps, OffcanvasCloseButton } from '@/components/Offcanvas/types'
+import { widthToClass, alignmentToPosition } from '@/components/Offcanvas/constants'
+import { useOffcanvasState } from '@/components/Offcanvas/offcanvas.hook'
 
 export default function Offcanvas({
   id,
@@ -60,24 +17,7 @@ export default function Offcanvas({
   children,
   closeButton,
 }: Readonly<OffcanvasProps>) {
-  const reactId = React.useId()
-  const domId = useMemo(() => id ?? `offcanvas-${reactId}`, [id, reactId])
-
-  const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen)
-  const isControlled = typeof open === 'boolean'
-  const isOpen = isControlled ? Boolean(open) : internalOpen
-  const setOpen = (next: boolean) => {
-    if (!isControlled) setInternalOpen(next)
-    onOpenChange?.(next)
-  }
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    if (isOpen) document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen])
+  const { domId, isOpen, setOpen } = useOffcanvasState({ id, open, defaultOpen, onOpenChange })
 
   if (!isOpen) return null
 

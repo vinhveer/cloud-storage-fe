@@ -1,7 +1,6 @@
-import React from 'react'
-import clsx from 'clsx'
-import { FormFieldContext } from '@/components/FormGroup/FormGroup'
+import type React from 'react'
 import type { FormTextareaProps } from '@/components/FormGroup/FormTextarea/types'
+import { useFormTextarea } from '@/components/FormGroup/FormTextarea/form-textarea.hook'
 import { Editor } from '@tinymce/tinymce-react'
 import 'tinymce/tinymce'
 import 'tinymce/icons/default'
@@ -26,26 +25,11 @@ export default function FormTextarea({
   editorInit,
   ...rest
 }: FormTextareaProps) {
-  const reactId = React.useId()
-  const textareaId = id ?? `txt-${reactId}`
-  const field = React.useContext(FormFieldContext)
-
-  const baseClasses = 'formtextarea-base'
-  const errorClasses = 'formtextarea-error'
-  const normalClasses = 'formtextarea-normal'
- 
-  const stateClass = field?.invalid ? errorClasses : normalClasses
-  const textareaClasses = rich
-    ? clsx(
-        // Remove borders and spacing entirely when using rich editor
-        'p-0 border-0',
-        className,
-      )
-    : clsx(
-        baseClasses,
-        stateClass,
-        className,
-      )
+  const { textareaId, textareaClasses, ariaInvalid, ariaDescribedBy } = useFormTextarea({
+    id,
+    className,
+    rich,
+  })
 
   if (rich) {
     let editorHeight: number
@@ -75,7 +59,7 @@ export default function FormTextarea({
     const onChange = (rest as unknown as { onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void }).onChange
 
     return (
-      <div className={textareaClasses} aria-invalid={field?.invalid} aria-describedby={field?.describedById}>
+      <div className={textareaClasses} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy}>
         <Editor
           id={textareaId}
           value={value}
@@ -98,8 +82,8 @@ export default function FormTextarea({
       rows={rows}
       placeholder={placeholder}
       className={textareaClasses}
-      aria-invalid={field?.invalid}
-      aria-describedby={field?.describedById}
+      aria-invalid={ariaInvalid}
+      aria-describedby={ariaDescribedBy}
       {...rest}
     >{children}</textarea>
   )

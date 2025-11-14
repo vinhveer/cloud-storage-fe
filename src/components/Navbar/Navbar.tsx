@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/Button/Button'
@@ -9,21 +8,7 @@ import { useLogout } from '@/api/features/auth/auth.mutations'
 import { useNavigate } from '@tanstack/react-router'
 import { AppError } from '@/api/core/error'
 import { useState } from 'react'
-
-export type NavbarSearchResult = {
-  id: string
-  url: string
-  title: string
-  description?: string
-  icon?: ReactNode
-}
-
-export type NavbarProps = {
-  title?: string
-  onSearch?: (query: string) => Promise<NavbarSearchResult[]>
-  searchPlaceholder?: string
-  className?: string
-}
+import type { NavbarProps } from '@/components/Navbar/types'
 
 export default function Navbar({
   title = 'CloudStorage',

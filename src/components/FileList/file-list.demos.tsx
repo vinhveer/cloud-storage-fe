@@ -1,7 +1,7 @@
 import React from 'react'
 import FileList from './FileList'
-import type { FileItem, ViewMode } from './FileList'
-import { Button } from '@/components/Button'
+import type { FileItem, ViewMode } from '@/components/FileList/types'
+import { Button } from '@/components/Button/Button'
 
 const sampleFiles: FileItem[] = [
   { name: 'Report Q1.pdf', type: 'PDF', modified: '2025-09-01', size: '1.2 MB' },

@@ -1,21 +1,7 @@
-import React from 'react'
 import clsx from 'clsx'
 import Card from '@/components/Card/Card'
 import { Button } from '@/components/Button/Button'
-
-export type FormCardProps = React.HTMLAttributes<HTMLDivElement> & {
-  title?: string
-  subtitle?: string
-  action?: string
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  csrfToken?: string
-  formProps?: React.FormHTMLAttributes<HTMLFormElement>
-  footer?: React.ReactNode
-  cardClassName?: string
-  submitText?: string
-  onSubmitClick?: () => void
-  submitVariant?: 'primary' | 'secondary' | 'danger'
-}
+import type { FormCardProps } from '@/components/FormCard/types'
 
 export default function FormCard({
   title,

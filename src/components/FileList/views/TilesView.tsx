@@ -1,15 +1,8 @@
 import clsx from 'clsx'
-import type { FileItem } from '@/components/FileList'
 import { CheckIcon, DocumentIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
+import type { FileListViewProps } from '@/components/FileList/views/types'
 
-type TilesViewProps = Readonly<{
-  files: FileItem[]
-  selectionMode: boolean
-  isSelected: (index: number) => boolean
-  toggleItem: (index: number) => void
-}>
-
-export default function TilesView({ files, selectionMode, isSelected, toggleItem }: Readonly<TilesViewProps>) {
+export default function TilesView({ files, selectionMode, isSelected, toggleItem }: FileListViewProps) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
