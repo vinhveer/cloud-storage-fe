@@ -9,7 +9,7 @@ import DetailsView from '@/components/FileList/views/DetailsView'
 import FilterButton from '@/components/FileList/FilterButton'
 import SortButton from '@/components/FileList/SortButton'
 import type { FileListProps, ViewMode } from '@/components/FileList/types'
-import { viewModes } from '@/components/FileList/file-list.constants'
+import { viewModeConfigs } from '@/components/FileList/file-list.constants'
 
 export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: Readonly<FileListProps>) {
   const {
@@ -39,7 +39,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentViewMode])
 
-  const currentView = viewModes[currentViewMode]
+  const currentView = viewModeConfigs[currentViewMode]
 
   React.useEffect(() => {
     if (!dropdownOpen) return
@@ -78,14 +78,16 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
                 aria-haspopup="listbox"
                 aria-expanded={dropdownOpen}
               >
-                <span className="text-sm">{currentView.icon}</span>
+                <span className="text-sm">
+                  <currentView.icon className="w-4 h-4" />
+                </span>
                 <span>{currentView.label}</span>
                 <ChevronDownIcon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
               </button>
 
               {dropdownOpen && (
                 <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-                  {Object.entries(viewModes).map(([modeKey, cfg]) => (
+                  {Object.entries(viewModeConfigs).map(([modeKey, cfg]) => (
                     <button
                       key={modeKey}
                       type="button"
@@ -96,7 +98,9 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
                       className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                       aria-pressed={currentViewMode === (modeKey as ViewMode)}
                     >
-                      <span className="text-sm">{cfg.icon}</span>
+                      <span className="text-sm">
+                        <cfg.icon className="w-4 h-4" />
+                      </span>
                       <span>{cfg.label}</span>
                     </button>
                   ))}

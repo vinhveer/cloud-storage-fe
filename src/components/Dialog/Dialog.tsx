@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useDialogOpen, useDialogCloseActions, useDialogConfirm } from '@/components/Dialog/dialog.hook'
 import type { DialogProps } from '@/components/Dialog/types'
 import { confirmVariantMap } from '@/components/Dialog/constants'
-import Button from '@/components/Button'
+import { Button } from '@/components/Button/Button'
 import Loading from '@/components/Loading/Loading'
 
 
