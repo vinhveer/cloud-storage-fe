@@ -86,7 +86,7 @@ export default function Navbar({
             icon={<ArrowUpTrayIcon className="w-4 h-4" />}
             aria-label="Upload"
           />
-          <AccountDropdown onLogout={handleLogout} />
+          <AccountDropdown onLogout={handleLogout} settingsHref="/app/account-settings" />
         </div>
       </div>
       {logoutError && (
