@@ -3,17 +3,7 @@ import clsx from 'clsx'
 import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import Dialog from '@/components/Dialog/Dialog'
 import { useAccountDropdown } from '@/components/Navbar/AccountDropdown/useAccountDropdown'
-
-export type AccountDropdownProps = {
-  userName?: string
-  userEmail?: string
-  userAvatar?: string | null
-  settingsHref?: string
-  onLogout?: () => Promise<void> | void
-  open?: boolean
-  defaultOpen?: boolean
-  onOpenChange?: (open: boolean) => void
-}
+import type { AccountDropdownProps } from '@/components/Navbar/AccountDropdown/types'
 
 export function AccountDropdown({
   userName = 'User',

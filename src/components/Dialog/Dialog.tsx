@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { useDialogOpen, useDialogCloseActions, useDialogConfirm } from '@/components/Dialog/dialog.hook'
 import type { DialogProps } from '@/components/Dialog/types'
+import { confirmVariantMap } from '@/components/Dialog/constants'
 import Button from '@/components/Button'
 import Loading from '@/components/Loading/Loading'
 
@@ -29,14 +30,7 @@ export default function Dialog({
   const { isOpen, setOpen } = useDialogOpen({ open, defaultOpen, onOpenChange })
 
   const { onConfirmClick, isLoading } = useDialogConfirm({ onConfirm, setOpen })
-  let confirmVariant: 'primary' | 'secondary' | 'danger'
-  if (confirmType === 'danger') {
-    confirmVariant = 'danger'
-  } else if (confirmType === 'primary') {
-    confirmVariant = 'primary'
-  } else {
-    confirmVariant = 'secondary'
-  }
+  const confirmVariant = confirmVariantMap[confirmType] ?? 'secondary'
 
   const effectiveCloseOnEsc = closeOnEsc && !isLoading
   const effectiveCloseOnBackdrop = closeOnBackdrop && !isLoading

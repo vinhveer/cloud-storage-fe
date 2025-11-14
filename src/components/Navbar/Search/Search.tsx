@@ -1,22 +1,8 @@
-import type { ReactNode } from 'react'
 import { useEffect, useRef } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Loading from '@/components/Loading/Loading'
 import { useSearch } from '@/components/Navbar/Search/useSearch'
-
-export type SearchResult = {
-  id: string
-  url: string
-  title: string
-  description?: string
-  icon?: ReactNode
-}
-
-export type SearchProps = {
-  onSearch?: (query: string) => Promise<SearchResult[]>
-  placeholder?: string
-  className?: string
-}
+import type { SearchProps, SearchResult } from '@/components/Navbar/Search/types'
 
 export default function Search({ onSearch, placeholder = 'Search...', className }: Readonly<SearchProps>) {
   const { query, setQuery, isLoading, results, open, setOpen, containerRef } = useSearch<SearchResult>({ onSearch })

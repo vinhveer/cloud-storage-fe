@@ -1,48 +1,15 @@
 import React from 'react'
 import clsx from 'clsx'
 import { useFileList } from './useFileList'
-import {
-  ListBulletIcon,
-  Squares2X2Icon,
-  RectangleGroupIcon,
-  Bars3BottomLeftIcon,
-  ChevronDownIcon,
-  CheckCircleIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import ListView from '@/components/FileList/views/ListView'
 import GridView from '@/components/FileList/views/GridView'
 import TilesView from '@/components/FileList/views/TilesView'
 import DetailsView from '@/components/FileList/views/DetailsView'
 import FilterButton from '@/components/FileList/FilterButton'
 import SortButton from '@/components/FileList/SortButton'
-
-export type ViewMode = 'list' | 'grid' | 'tiles' | 'details'
-
-export type FileItem = {
-  id?: string | number
-  name: string
-  type?: string
-  modified?: string
-  size?: string
-  icon?: React.ReactNode
-  height?: string
-}
-
-export type FileListProps = {
-  files?: FileItem[]
-  viewMode?: ViewMode
-  onViewModeChange?: (mode: ViewMode) => void
-  className?: string
-  /** Height as viewport percentage, e.g. 60 => 60dvh. If set, component fills this height */
-  heightVh?: number
-}
-
-const viewModes: Record<ViewMode, { label: string; icon: React.ReactNode }> = {
-  list: { label: 'List View', icon: <ListBulletIcon className="w-4 h-4" /> },
-  grid: { label: 'Grid View', icon: <Squares2X2Icon className="w-4 h-4" /> },
-  tiles: { label: 'Tiles View', icon: <RectangleGroupIcon className="w-4 h-4" /> },
-  details: { label: 'Details View', icon: <Bars3BottomLeftIcon className="w-4 h-4" /> },
-}
+import type { FileListProps, ViewMode } from '@/components/FileList/types'
+import { viewModes } from '@/components/FileList/file-list.constants'
 
 export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: Readonly<FileListProps>) {
   const {

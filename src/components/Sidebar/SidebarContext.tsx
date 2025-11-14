@@ -1,22 +1,9 @@
 import { createContext, useContext, useMemo, useState, useCallback } from 'react'
-
-export type SidebarItemData = {
-  key: string
-  title: string
-  href?: string
-  icon?: React.ReactNode
-}
-
-type SidebarContextValue = {
-  items: SidebarItemData[]
-  setItems: (items: SidebarItemData[]) => void
-  activeKey?: string
-  setActiveKey: (key?: string) => void
-}
+import type { SidebarContextValue, SidebarItemData, SidebarProviderProps } from '@/components/Sidebar/types'
 
 const SidebarContext = createContext<SidebarContextValue | undefined>(undefined)
 
-export function SidebarProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export function SidebarProvider({ children }: SidebarProviderProps) {
   const STORAGE = { active: 'sidebar:activeKey' }
 
   function getInitial(): { items: SidebarItemData[]; activeKey?: string } {

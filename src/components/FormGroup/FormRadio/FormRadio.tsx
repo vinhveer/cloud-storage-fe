@@ -1,7 +1,5 @@
-import React from 'react'
-import clsx from 'clsx'
-import { FormFieldContext } from '@/components/FormGroup/FormGroup'
 import type { FormRadioProps } from '@/components/FormGroup/FormRadio/types'
+import { useFormRadio } from '@/components/FormGroup/FormRadio/form-radio.hook'
 
 export default function FormRadio({
   options = [],
@@ -11,14 +9,17 @@ export default function FormRadio({
   children,
   ...rest
 }: FormRadioProps) {
-  const reactId = React.useId()
-  const field = React.useContext(FormFieldContext)
+  const { rootClassName, listAriaDescribedBy, inputBaseClass, getOptionId } = useFormRadio({
+    className,
+    inputClassName,
+    name,
+  })
 
   return (
-    <div {...rest} className={clsx('formradio-root', className)}>
-      <div className="formradio-list" aria-describedby={field?.describedById}>
+    <div {...rest} className={rootClassName}>
+      <div className="formradio-list" aria-describedby={listAriaDescribedBy}>
         {options.map((opt, idx) => {
-          const id = `${name}-${reactId}-${idx}`
+          const id = getOptionId(idx)
           return (
             <div key={id} className="formradio-row">
               <input
@@ -27,12 +28,7 @@ export default function FormRadio({
                 name={name}
                 value={opt.value}
                 disabled={opt.disabled}
-                className={clsx((() => {
-                  const base = 'formradio-input-base'
-                  const errorCls = 'formradio-input-error'
-                  const normalCls = 'formradio-input-normal'
-                  return clsx(base, field?.invalid ? errorCls : normalCls)
-                })(), inputClassName)}
+                className={inputBaseClass}
               />
               <label htmlFor={id} className="formradio-label">
                 {opt.label}

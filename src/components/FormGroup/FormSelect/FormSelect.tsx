@@ -1,7 +1,5 @@
-import React from 'react'
-import clsx from 'clsx'
-import { FormFieldContext } from '@/components/FormGroup/FormGroup'
 import type { FormSelectProps } from '@/components/FormGroup/FormSelect/types'
+import { useFormSelect } from '@/components/FormGroup/FormSelect/form-select.hook'
 
 export default function FormSelect({
   options = [],
@@ -10,22 +8,14 @@ export default function FormSelect({
   children,
   ...rest
 }: FormSelectProps) {
-  const reactId = React.useId()
-  const selectId = id ?? `sel-${reactId}`
-  const field = React.useContext(FormFieldContext)
-
-  const baseClasses = 'formselect-base'
-  const errorClasses = 'formselect-error'
-  const normalClasses = 'formselect-normal'
-
-  const selectClasses = clsx(baseClasses, field?.invalid ? errorClasses : normalClasses, className)
+  const { selectId, selectClasses, ariaInvalid, ariaDescribedBy } = useFormSelect({ className, id })
 
   return (
     <select
       id={selectId}
       className={selectClasses}
-      aria-invalid={field?.invalid}
-      aria-describedby={field?.describedById}
+      aria-invalid={ariaInvalid}
+      aria-describedby={ariaDescribedBy}
       {...rest}
     >
       {options.map((opt) => (

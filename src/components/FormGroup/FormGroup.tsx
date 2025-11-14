@@ -1,11 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-
-export type FormGroupProps = React.HTMLAttributes<HTMLDivElement> & {
-  label?: string
-  error?: string | null
-  help?: string | null
-}
+import type { FormGroupProps, FormFieldContextValue } from '@/components/FormGroup/types'
 
 export default function FormGroup({
   label,
@@ -54,5 +49,4 @@ export default function FormGroup({
   )
 }
 
-export type FormFieldContextValue = { describedById?: string; invalid?: boolean }
 export const FormFieldContext = React.createContext<FormFieldContextValue | null>(null)

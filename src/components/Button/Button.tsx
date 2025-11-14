@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import Loading from "@/components/Loading/Loading"
-import { buttonToSpinnerSize } from "./sizing"
+import { buttonToSpinnerSize } from "./types"
 import type { ButtonProps, ButtonContentProps } from "@/components/Button/types"
 
 function ButtonContent({ icon, value, children, isLoading, loadingText, size = 'md' }: Readonly<ButtonContentProps>) {
@@ -50,7 +50,9 @@ export const Button = ({
     if (isDev && isIconOnly && !(rest as Record<string, unknown>)["aria-label"]) {
       console.warn('Button: icon-only button requires an aria-label for accessibility.')
     }
-  } catch {}
+  } catch {
+    // Ignore errors in non-Vite environments
+  }
 
   return (
     <button

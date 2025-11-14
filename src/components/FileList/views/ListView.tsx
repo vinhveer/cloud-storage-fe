@@ -1,15 +1,8 @@
 import clsx from 'clsx'
-import type { FileItem } from '@/components/FileList'
 import { CheckIcon, DocumentIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
+import type { FileListViewProps } from '@/components/FileList/views/types'
 
-type ListViewProps = Readonly<{
-  files: FileItem[]
-  selectionMode: boolean
-  isSelected: (index: number) => boolean
-  toggleItem: (index: number) => void
-}>
-
-export default function ListView({ files, selectionMode, isSelected, toggleItem }: Readonly<ListViewProps>) {
+export default function ListView({ files, selectionMode, isSelected, toggleItem }: FileListViewProps) {
   return (
     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0 ">
       <thead className="bg-gray-0 dark:bg-gray-800">

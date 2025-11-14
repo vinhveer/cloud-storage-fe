@@ -8,3 +8,5 @@ export type FormTextareaProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaEl
   onValueChange?: (value: string) => void
   editorInit?: Record<string, unknown>
 }
+
+export type UseFormTextareaParams = Pick<FormTextareaProps, 'id' | 'className' | 'rich'>

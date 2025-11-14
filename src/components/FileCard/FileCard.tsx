@@ -1,20 +1,8 @@
 import React from 'react'
 import clsx from 'clsx'
-import { DocumentIcon, DocumentTextIcon, PhotoIcon, FolderIcon, TableCellsIcon } from '@heroicons/react/24/solid'
-import type { IconName, FileCardProps } from '@/components/FileCard/types'
+import type { FileCardProps } from '@/components/FileCard/types'
+import { iconMap } from '@/components/FileCard/constants'
 import { Button } from '@/components/Button/Button'
-
-const iconMap: Record<IconName, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-  'file': DocumentIcon,
-  'file-alt': DocumentTextIcon,
-  'file-csv': TableCellsIcon,
-  'file-image': PhotoIcon,
-  'file-word': DocumentTextIcon,
-  'file-excel': TableCellsIcon,
-  'file-pdf': DocumentIcon,
-  'file-lines': DocumentTextIcon,
-  'folder': FolderIcon,
-}
 
 export const FileCard = ({
   icon = 'file',
@@ -50,7 +38,13 @@ export const FileCard = ({
         <Button
           variant="primary"
           size="md"
-          onClick={() => { try { globalThis.location.href = detailsHref } catch {} }}
+          onClick={() => {
+            try {
+              globalThis.location.href = detailsHref
+            } catch {
+              // ignore navigation errors
+            }
+          }}
           aria-label="View details"
           className="filecard-cta"
         >

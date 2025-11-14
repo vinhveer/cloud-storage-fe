@@ -17,6 +17,8 @@ export type FileListProps = {
   viewMode?: ViewMode
   onViewModeChange?: (mode: ViewMode) => void
   className?: string
+  /** Height as viewport percentage, e.g. 60 => 60dvh. If set, component fills this height */
+  heightVh?: number
 }
 
 

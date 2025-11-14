@@ -1,10 +1,6 @@
 import { loadingSizePixels } from './sizing'
 import clsx from 'clsx'
-type LoadingProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-  className?: string
-  ariaLabel?: string
-}
+import type { LoadingProps } from '@/components/Loading/types'
 
 export default function Loading({ size = 'md', className, ariaLabel = 'Loading' }: Readonly<LoadingProps>) {
   const px = loadingSizePixels[size]
