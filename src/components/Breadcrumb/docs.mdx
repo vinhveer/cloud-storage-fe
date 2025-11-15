@@ -1,0 +1,37 @@
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
+import { BasicBreadcrumbDemo } from '@/components/Breadcrumb/breadcrumb.demos'
+
+# Breadcrumb
+
+Component hiển thị đường dẫn điều hướng (navigation trail) giúp người dùng biết mình đang ở đâu trong cấu trúc app.
+
+## Usage
+
+```tsx
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
+
+const items = [
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'files', label: 'My files', href: '/app/my-files' },
+  { id: 'current', label: 'Current folder' },
+]
+
+export function Example() {
+  return <Breadcrumb items={items} />
+}
+```
+
+## Demo
+
+<BasicBreadcrumbDemo />
+
+## Props (tóm tắt)
+
+| Tên        | Kiểu                                        | Mô tả                               |
+|-----------|---------------------------------------------|-------------------------------------|
+| `items`   | `BreadcrumbItem[]`                          | Danh sách các bước trong breadcrumb |
+| `className` | `string`                                  | Bổ sung Tailwind class cho wrapper  |
+| `separatorIconClassName` | `string`                     | Class tùy chỉnh cho icon phân tách  |
+| `onItemClick` | `(item, index) => void`                | Callback khi click vào item có link |
+
+
