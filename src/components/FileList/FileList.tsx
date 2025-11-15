@@ -11,7 +11,14 @@ import SortButton from '@/components/FileList/SortButton'
 import type { FileListProps, ViewMode } from '@/components/FileList/types'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
 
-export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: Readonly<FileListProps>) {
+export default function FileList({
+  files = [],
+  viewMode = 'list',
+  onViewModeChange,
+  className,
+  heightVh,
+  onItemOpen,
+}: Readonly<FileListProps>) {
   const {
     dropdownOpen,
     setDropdownOpen,
@@ -151,6 +158,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
 
@@ -160,6 +168,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
 
@@ -169,6 +178,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
 
@@ -178,6 +188,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
       </div>
