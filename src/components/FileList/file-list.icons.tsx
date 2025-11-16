@@ -1,4 +1,5 @@
 import type React from 'react'
+import clsx from 'clsx'
 import { iconMap } from '@/components/FileCard/constants'
 import type { IconName } from '@/components/FileCard/types'
 import type { FileItem } from '@/components/FileList/types'
@@ -21,8 +22,16 @@ export function getDefaultFileIcon(file: FileItem, className: string): React.Rea
     iconName = 'file-lines'
   }
 
+  let colorClass = 'text-blue-500'
+  if (iconName === 'folder') colorClass = 'text-yellow-400'
+  else if (iconName === 'file-word') colorClass = 'text-blue-500'
+  else if (iconName === 'file-excel') colorClass = 'text-green-500'
+  else if (iconName === 'file-pdf') colorClass = 'text-red-500'
+  else if (iconName === 'file-image') colorClass = 'text-pink-500'
+  else if (iconName === 'file-lines') colorClass = 'text-gray-500'
+
   const IconComponent = iconMap[iconName]
-  return <IconComponent className={className} />
+  return <IconComponent className={clsx(colorClass, className)} />
 }
 
 

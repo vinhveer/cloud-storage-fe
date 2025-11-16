@@ -23,6 +23,8 @@ export type FileListProps = {
   heightVh?: number
   /** Callback khi user click vào item (khi không ở selection mode) */
   onItemOpen?: (file: FileItem, index: number) => void
+  /** Custom nội dung bên phải toolbar; nếu không truyền sẽ hiện số lượng + Filter/Sort */
+  toolbarRight?: React.ReactNode
 }
 
 

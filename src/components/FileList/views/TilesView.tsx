@@ -34,7 +34,7 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                 </div>
               )}
               <div className="flex-shrink-0 mr-4">
-                {file.icon ?? getDefaultFileIcon(file, 'text-blue-600 w-7 h-7')}
+                {file.icon ?? getDefaultFileIcon(file, 'w-7 h-7')}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{file.name ?? 'Unknown'}</div>

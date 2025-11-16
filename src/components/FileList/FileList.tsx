@@ -18,6 +18,7 @@ export default function FileList({
   className,
   heightVh,
   onItemOpen,
+  toolbarRight,
 }: Readonly<FileListProps>) {
   const {
     dropdownOpen,
@@ -143,9 +144,15 @@ export default function FileList({
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">{files.length} items</div>
-            <FilterButton />
-            <SortButton />
+            {toolbarRight ?? (
+              <>
+                <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">
+                  {files.length} items
+                </div>
+                <FilterButton />
+                <SortButton />
+              </>
+            )}
           </div>
         </div>
       </div>

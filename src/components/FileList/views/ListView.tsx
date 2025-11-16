@@ -45,7 +45,7 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
                 )}
 
                 <div className="flex-shrink-0 mr-5">
-                  {file.icon ?? getDefaultFileIcon(file, 'text-blue-600 w-8 h-8')}
+                  {file.icon ?? getDefaultFileIcon(file, 'w-8 h-8')}
                 </div>
                 <div>
                   <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{file.name ?? 'Unknown'}</div>

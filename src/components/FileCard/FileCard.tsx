@@ -17,6 +17,15 @@ export const FileCard = ({
 }: FileCardProps) => {
   const computedStyle: React.CSSProperties = { width: `${width}%`, ...style }
   const IconComponent = iconMap[icon]
+  let defaultColor = 'text-blue-500'
+  if (icon === 'folder') defaultColor = 'text-yellow-400'
+  else if (icon === 'file-word' || icon === 'file' || icon === 'file-alt' || icon === 'file-lines')
+    defaultColor = 'text-blue-500'
+  else if (icon === 'file-excel' || icon === 'file-csv') defaultColor = 'text-green-500'
+  else if (icon === 'file-pdf') defaultColor = 'text-red-500'
+  else if (icon === 'file-image') defaultColor = 'text-pink-500'
+
+  const effectiveIconColor = iconColor === 'text-blue-600' ? defaultColor : iconColor
 
   return (
     <div
@@ -28,7 +37,7 @@ export const FileCard = ({
       )}
     >
       <div className="filecard-icon">
-        <IconComponent className={clsx(iconColor, 'filecard-icon-svg')} />
+        <IconComponent className={clsx(effectiveIconColor, 'filecard-icon-svg')} />
       </div>
       <div className="filecard-text">
         <h3 className="filecard-title">{title}</h3>
