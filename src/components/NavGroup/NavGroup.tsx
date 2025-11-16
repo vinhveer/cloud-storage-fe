@@ -7,6 +7,7 @@ export const NavGroup = ({
   activeItem = null,
   orientation = 'horizontal',
   className,
+  onItemClick,
   ...rest
 }: NavGroupProps) => {
   const orientationClasses =
@@ -41,6 +42,12 @@ export const NavGroup = ({
                 : // Inactive + hover styles
                   'text-gray-600 hover:text-gray-900 hover:bg-white/50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700/40',
             )}
+            onClick={(event) => {
+              if (onItemClick) {
+                event.preventDefault()
+                onItemClick(item)
+              }
+            }}
           >
             {item.icon && <i className={clsx(item.icon, 'mr-2 text-base')} aria-hidden />}
             <span>{item.label}</span>

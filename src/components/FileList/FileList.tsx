@@ -11,7 +11,15 @@ import SortButton from '@/components/FileList/SortButton'
 import type { FileListProps, ViewMode } from '@/components/FileList/types'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
 
-export default function FileList({ files = [], viewMode = 'list', onViewModeChange, className, heightVh }: Readonly<FileListProps>) {
+export default function FileList({
+  files = [],
+  viewMode = 'list',
+  onViewModeChange,
+  className,
+  heightVh,
+  onItemOpen,
+  toolbarRight,
+}: Readonly<FileListProps>) {
   const {
     dropdownOpen,
     setDropdownOpen,
@@ -136,9 +144,15 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">{files.length} items</div>
-            <FilterButton />
-            <SortButton />
+            {toolbarRight ?? (
+              <>
+                <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">
+                  {files.length} items
+                </div>
+                <FilterButton />
+                <SortButton />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -151,6 +165,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
 
@@ -160,6 +175,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
 
@@ -169,6 +185,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
 
@@ -178,6 +195,7 @@ export default function FileList({ files = [], viewMode = 'list', onViewModeChan
             selectionMode={selectionMode}
             isSelected={isSelected}
             toggleItem={toggleItem}
+            onItemOpen={onItemOpen}
           />
         )}
       </div>

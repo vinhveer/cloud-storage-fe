@@ -25,23 +25,38 @@ export default function Breadcrumb({ items, className, separatorIconClassName, o
                 aria-hidden="true"
               />
             )}
-            {segment.href && !segment.isCurrent ? (
-              <a
-                href={segment.href}
-                className="inline-flex items-center rounded-md px-2 py-1 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                onClick={(event) => {
-                  onItemClick?.(segment, segment.index)
-                  // allow normal navigation
-                  return event
-                }}
-              >
-                {segment.iconLeft && (
-                  <span className="mr-1 inline-flex h-4 w-4 items-center justify-center text-gray-400 dark:text-gray-500">
-                    {segment.iconLeft}
-                  </span>
-                )}
-                <span className="truncate max-w-[10rem]">{segment.label}</span>
-              </a>
+            {!segment.isCurrent && (segment.href || onItemClick) ? (
+              segment.href ? (
+                <a
+                  href={segment.href}
+                  className="inline-flex items-center rounded-md px-2 py-1 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  onClick={(event) => {
+                    onItemClick?.(segment, segment.index)
+                    // allow normal navigation
+                    return event
+                  }}
+                >
+                  {segment.iconLeft && (
+                    <span className="mr-1 inline-flex h-4 w-4 items-center justify-center text-gray-400 dark:text-gray-500">
+                      {segment.iconLeft}
+                    </span>
+                  )}
+                  <span className="truncate max-w-[10rem]">{segment.label}</span>
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  className="inline-flex items-center rounded-md px-2 py-1 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  onClick={() => onItemClick?.(segment, segment.index)}
+                >
+                  {segment.iconLeft && (
+                    <span className="mr-1 inline-flex h-4 w-4 items-center justify-center text-gray-400 dark:text-gray-500">
+                      {segment.iconLeft}
+                    </span>
+                  )}
+                  <span className="truncate max-w-[10rem]">{segment.label}</span>
+                </button>
+              )
             ) : (
               <span
                 aria-current={segment.isCurrent ? 'page' : undefined}

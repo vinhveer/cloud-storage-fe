@@ -1,8 +1,9 @@
 import clsx from 'clsx'
-import { CheckIcon, DocumentIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
+import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function ListView({ files, selectionMode, isSelected, toggleItem }: FileListViewProps) {
+export default function ListView({ files, selectionMode, isSelected, toggleItem, onItemOpen }: FileListViewProps) {
   return (
     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0 ">
       <thead className="bg-gray-0 dark:bg-gray-800">
@@ -24,7 +25,13 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem 
         {files.map((file, index) => (
           <tr
             key={file.id ?? index}
-            onClick={() => selectionMode && toggleItem(index)}
+            onClick={() => {
+              if (selectionMode) {
+                toggleItem(index)
+              } else {
+                onItemOpen?.(file, index)
+              }
+            }}
             className={clsx('hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer', selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30')}
           >
             <td className="px-6 py-4 whitespace-nowrap">
@@ -38,7 +45,7 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem 
                 )}
 
                 <div className="flex-shrink-0 mr-5">
-                  {file.icon ?? <DocumentIcon className="text-blue-600 w-8 h-8" />}
+                  {file.icon ?? getDefaultFileIcon(file, 'w-8 h-8')}
                 </div>
                 <div>
                   <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{file.name ?? 'Unknown'}</div>

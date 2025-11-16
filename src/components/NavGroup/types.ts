@@ -12,6 +12,7 @@ export type NavGroupProps = React.HTMLAttributes<HTMLElement> & {
   items?: NavItem[]
   activeItem?: string | null
   orientation?: 'horizontal' | 'vertical'
+  onItemClick?: (item: NavItem) => void
 }
 
 

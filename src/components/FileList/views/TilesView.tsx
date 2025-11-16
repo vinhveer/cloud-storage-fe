@@ -1,8 +1,9 @@
 import clsx from 'clsx'
-import { CheckIcon, DocumentIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
+import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function TilesView({ files, selectionMode, isSelected, toggleItem }: FileListViewProps) {
+export default function TilesView({ files, selectionMode, isSelected, toggleItem, onItemOpen }: FileListViewProps) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -15,7 +16,13 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
           {files.map((file, index) => (
             <button
               key={file.id ?? index}
-              onClick={() => selectionMode && toggleItem(index)}
+              onClick={() => {
+                if (selectionMode) {
+                  toggleItem(index)
+                } else {
+                  onItemOpen?.(file, index)
+                }
+              }}
               aria-pressed={selectionMode ? isSelected(index) : undefined}
               className={clsx('relative flex items-center p-4 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-gray-50 dark:bg-gray-900 border-transparent')}
             >
@@ -26,7 +33,9 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                   </div>
                 </div>
               )}
-              <div className="flex-shrink-0 mr-4">{file.icon ?? <DocumentIcon className="text-blue-600 w-7 h-7" />}</div>
+              <div className="flex-shrink-0 mr-4">
+                {file.icon ?? getDefaultFileIcon(file, 'w-7 h-7')}
+              </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{file.name ?? 'Unknown'}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">{file.type ?? 'File'}</div>

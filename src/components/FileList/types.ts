@@ -8,6 +8,8 @@ export type FileItem = {
   type?: string
   modified?: string
   size?: string
+  /** Số item con trong folder (dùng cho hiển thị "X items") */
+  itemsCount?: number
   icon?: React.ReactNode
   height?: string
 }
@@ -19,6 +21,10 @@ export type FileListProps = {
   className?: string
   /** Height as viewport percentage, e.g. 60 => 60dvh. If set, component fills this height */
   heightVh?: number
+  /** Callback khi user click vào item (khi không ở selection mode) */
+  onItemOpen?: (file: FileItem, index: number) => void
+  /** Custom nội dung bên phải toolbar; nếu không truyền sẽ hiện số lượng + Filter/Sort */
+  toolbarRight?: React.ReactNode
 }
 
 
