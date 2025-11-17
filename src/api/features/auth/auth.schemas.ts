@@ -14,6 +14,7 @@ export const RegisterRequestSchema = z
     email: emailSchema,
     password: z.string().min(8),
     passwordConfirmation: z.string().min(8),
+    deviceName: z.string().min(1).optional(),
   })
   .refine(values => values.password === values.passwordConfirmation, {
     message: 'Password confirmation must match password',
@@ -30,6 +31,10 @@ export const AuthenticatedUserSchema = z.object({
   id: z.number(),
   name: z.string().min(1),
   email: emailSchema,
+})
+
+export const UserPayloadSchema = z.object({
+  user: AuthenticatedUserSchema,
 })
 
 export const RegisterSuccessSchema = z.object({

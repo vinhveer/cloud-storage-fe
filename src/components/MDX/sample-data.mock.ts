@@ -29,6 +29,16 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'NavGroup', href: '/samples/navgroup' },
   { title: 'Subnav', href: '/samples/subnav' },
   { title: 'Breadcrumb', href: '/samples/breadcrumb' },
+  { title: 'File upload test', href: '/samples/file-upload-test' },
+  { title: 'Move file test', href: '/samples/move-file-test' },
+  { title: 'List files test', href: '/samples/list-files-test' },
+  { title: 'File detail test', href: '/samples/file-detail-test' },
+  { title: 'File download test', href: '/samples/file-download-test' },
+  { title: 'File update test', href: '/samples/file-update-test' },
+  { title: 'File delete test', href: '/samples/file-delete-test' },
+  { title: 'File copy test', href: '/samples/file-copy-test' },
+  { title: 'Recent files test', href: '/samples/recent-files-test' },
+  { title: 'File preview test', href: '/samples/file-preview-test' },
 ]
 
 

@@ -25,7 +25,7 @@ export default function Breadcrumb({ items, className, separatorIconClassName, o
                 aria-hidden="true"
               />
             )}
-            {!segment.isCurrent && (segment.href || onItemClick) ? (
+             {!segment.isCurrent && (segment.href || onItemClick) ? (
               segment.href ? (
                 <a
                   href={segment.href}
