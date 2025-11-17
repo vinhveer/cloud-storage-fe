@@ -1,6 +1,23 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { login, logout, register } from './auth.api'
-import type { AuthSuccess, LoginRequest, LogoutSuccess, RegisterRequest } from './auth.types'
+import {
+  forgotPassword,
+  login,
+  logout,
+  register,
+  resendVerificationEmail,
+  resetPassword,
+} from './auth.api'
+import type {
+  AuthSuccess,
+  ForgotPasswordRequest,
+  LoginRequest,
+  LogoutSuccess,
+  MessageOnlySuccess,
+  RegisterRequest,
+  RegisterSuccess,
+  ResendVerificationRequest,
+  ResetPasswordRequest,
+} from './auth.types'
 import { qk } from '../../query/keys'
 import { AppError } from '../../core/error'
 
@@ -28,14 +45,25 @@ export function useLogout() {
 }
 
 export function useRegister() {
-  const queryClient = useQueryClient()
-
-  return useMutation<AuthSuccess, AppError, RegisterRequest>({
+  return useMutation<RegisterSuccess, AppError, RegisterRequest>({
     mutationFn: register,
-    onSuccess: response => {
-      queryClient.setQueryData(qk.auth.profile(), response.user)
-    },
   })
 }
 
+export function useResendVerificationEmail() {
+  return useMutation<MessageOnlySuccess, AppError, ResendVerificationRequest>({
+    mutationFn: resendVerificationEmail,
+  })
+}
 
+export function useForgotPassword() {
+  return useMutation<MessageOnlySuccess, AppError, ForgotPasswordRequest>({
+    mutationFn: forgotPassword,
+  })
+}
+
+export function useResetPassword() {
+  return useMutation<MessageOnlySuccess, AppError, ResetPasswordRequest>({
+    mutationFn: resetPassword,
+  })
+}

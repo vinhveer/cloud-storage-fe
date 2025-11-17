@@ -51,7 +51,8 @@ export function toAppError(error: unknown): AppError {
     const status = error.response?.status
     const responseData = error.response?.data as ErrorLike | undefined
 
-    const code = error.code ?? responseData?.error?.code
+    // Ưu tiên mã lỗi từ backend (responseData.error.code) hơn mã lỗi của Axios
+    const code = responseData?.error?.code ?? error.code
     const fallbackMessage = error.message || 'Request failed'
 
     // Lấy message theo thứ tự ưu tiên hợp lý

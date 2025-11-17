@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import FormCard from '@/components/FormCard/FormCard'
-import FormGroup from '@/components/FormGroup/FormGroup'
+import FormGroup from '@/components/FormGroup/FormInput/FormInput'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
 import { Button } from '@/components/Button/Button'
-import { useRegister } from '@/api/features/auth/auth.mutations'
+import { useRegister, useResendVerificationEmail } from '@/api/features/auth/auth.mutations'
 import { AppError } from '@/api/core/error'
 
 export default function RegisterPage() {
@@ -13,10 +13,10 @@ export default function RegisterPage() {
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
-  const navigate = useNavigate()
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
+  const [resendMessage, setResendMessage] = React.useState<string | null>(null)
   const registerMutation = useRegister()
-
-  const deviceName = 'web-client'
+  const resendVerificationMutation = useResendVerificationEmail()
 
   function passwordsMatch() {
     return password === confirmPassword
@@ -33,19 +33,36 @@ export default function RegisterPage() {
     }
 
     setErrorMessage(null)
+    setSuccessMessage(null)
+    setResendMessage(null)
 
     try {
-      await registerMutation.mutateAsync({
+      const response = await registerMutation.mutateAsync({
         name,
         email,
         password,
         passwordConfirmation: confirmPassword,
-        deviceName,
       })
-      navigate({ to: '/app' })
+      setSuccessMessage(response.message || 'Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.')
     } catch (unknownError) {
       const applicationError = unknownError as AppError
       setErrorMessage(applicationError.message || 'Đăng ký thất bại, vui lòng thử lại.')
+    }
+  }
+
+  async function handleResendVerification() {
+    if (!email || resendVerificationMutation.isPending) {
+      return
+    }
+
+    setResendMessage(null)
+
+    try {
+      const response = await resendVerificationMutation.mutateAsync({ email })
+      setResendMessage(response.message || 'Đã gửi lại email xác thực, vui lòng kiểm tra hộp thư.')
+    } catch (unknownError) {
+      const applicationError = unknownError as AppError
+      setResendMessage(applicationError.message || 'Gửi lại email xác thực thất bại, vui lòng thử lại.')
     }
   }
 
@@ -63,6 +80,33 @@ export default function RegisterPage() {
       <div className="space-y-4">
         {errorMessage && (
           <p className="text-sm text-red-500" role="alert">{errorMessage}</p>
+        )}
+        {successMessage && (
+          <div className="rounded-md border border-green-300 bg-green-50 p-3 text-sm text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-100">
+            <p className="mb-2">
+              {successMessage}
+            </p>
+            <p className="mb-2">
+              Nếu bạn chưa nhận được email, hãy kiểm tra hộp thư rác hoặc nhấn nút bên dưới để gửi lại liên kết xác thực.
+            </p>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleResendVerification}
+                isLoading={resendVerificationMutation.isPending}
+                loadingText="Đang gửi lại..."
+                disabled={!email}
+              >
+                Gửi lại email xác thực
+              </Button>
+              {resendMessage && (
+                <span className="text-xs">
+                  {resendMessage}
+                </span>
+              )}
+            </div>
+          </div>
         )}
         <FormGroup label="Họ tên">
           <FormInput

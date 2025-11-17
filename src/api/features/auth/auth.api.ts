@@ -3,17 +3,35 @@ import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
 import {
   AuthSuccessSchema,
+  AuthenticatedUserSchema,
   LoginRequestSchema,
   LogoutSuccessSchema,
+  MessageOnlySuccessSchema,
   RegisterRequestSchema,
-  UserPayloadSchema,
+  RegisterSuccessSchema,
+  ResetPasswordRequestSchema,
+  ResendVerificationRequestSchema,
+  ForgotPasswordRequestSchema,
 } from './auth.schemas'
-import type { AuthSuccess, AuthenticatedUser, LoginRequest, LogoutSuccess, RegisterRequest } from './auth.types'
+import type {
+  AuthSuccess,
+  AuthenticatedUser,
+  ForgotPasswordRequest,
+  LoginRequest,
+  LogoutSuccess,
+  MessageOnlySuccess,
+  RegisterRequest,
+  RegisterSuccess,
+  ResetPasswordRequest,
+  ResendVerificationRequest,
+} from './auth.types'
 
 const authSuccessEnvelope = createApiResponseSchema(AuthSuccessSchema)
-const userEnvelope = createApiResponseSchema(UserPayloadSchema)
+const registerSuccessEnvelope = createApiResponseSchema(RegisterSuccessSchema)
+const profileEnvelope = createApiResponseSchema(AuthenticatedUserSchema)
 const logoutEnvelope = createApiResponseSchema(LogoutSuccessSchema)
 const optionalLogoutEnvelope = createNullableApiResponseSchema(LogoutSuccessSchema)
+const messageOnlyEnvelope = createApiResponseSchema(MessageOnlySuccessSchema)
 
 function toRegisterPayload(payload: RegisterRequest) {
   return {
@@ -21,7 +39,6 @@ function toRegisterPayload(payload: RegisterRequest) {
     email: payload.email,
     password: payload.password,
     password_confirmation: payload.passwordConfirmation,
-    device_name: payload.deviceName,
   }
 }
 
@@ -38,16 +55,18 @@ function handleAuthSuccess(data: AuthSuccess): AuthSuccess {
   return data
 }
 
-export async function register(payload: RegisterRequest): Promise<AuthSuccess> {
+export async function register(payload: RegisterRequest): Promise<RegisterSuccess> {
   const validPayload = parseWithZod(RegisterRequestSchema, payload)
-  const response = await post<unknown, ReturnType<typeof toRegisterPayload>>('/api/auth/register', toRegisterPayload(validPayload))
-  const parsed = parseWithZod(authSuccessEnvelope, response)
-  return handleAuthSuccess(parsed.data)
+  const response = await post<unknown, ReturnType<typeof toRegisterPayload>>('/api/register', toRegisterPayload(validPayload), {
+    skipAuth: true,
+  })
+  const parsed = parseWithZod(registerSuccessEnvelope, response)
+  return parsed.data
 }
 
 export async function login(payload: LoginRequest): Promise<AuthSuccess> {
   const validPayload = parseWithZod(LoginRequestSchema, payload)
-  const response = await post<unknown, ReturnType<typeof toLoginPayload>>('/api/auth/login', toLoginPayload(validPayload), {
+  const response = await post<unknown, ReturnType<typeof toLoginPayload>>('/api/login', toLoginPayload(validPayload), {
     skipAuth: true,
   })
   const parsed = parseWithZod(authSuccessEnvelope, response)
@@ -55,9 +74,9 @@ export async function login(payload: LoginRequest): Promise<AuthSuccess> {
 }
 
 export async function getProfile(): Promise<AuthenticatedUser> {
-  const response = await get<unknown>('/api/auth/me')
-  const parsed = parseWithZod(userEnvelope, response)
-  return parsed.data.user
+  const response = await get<unknown>('/api/user')
+  const parsed = parseWithZod(profileEnvelope, response)
+  return parsed.data
 }
 
 export async function logout(): Promise<LogoutSuccess> {
@@ -71,4 +90,39 @@ export async function logoutAll(): Promise<LogoutSuccess | null> {
   const response = await post<unknown, Record<string, never>>('/api/auth/logout-all', {})
   const parsed = parseWithZod(optionalLogoutEnvelope, response)
   return parsed.data ?? null
+}
+
+export async function resendVerificationEmail(
+  payload: ResendVerificationRequest,
+): Promise<MessageOnlySuccess> {
+  const validPayload = parseWithZod(ResendVerificationRequestSchema, payload)
+  const response = await post<unknown, ResendVerificationRequest>('/api/email/resend', validPayload, {
+    skipAuth: true,
+  })
+  const parsed = parseWithZod(messageOnlyEnvelope, response)
+  return parsed.data
+}
+
+export async function forgotPassword(payload: ForgotPasswordRequest): Promise<MessageOnlySuccess> {
+  const validPayload = parseWithZod(ForgotPasswordRequestSchema, payload)
+  const response = await post<unknown, ForgotPasswordRequest>('/api/forgot-password', validPayload, {
+    skipAuth: true,
+  })
+  const parsed = parseWithZod(messageOnlyEnvelope, response)
+  return parsed.data
+}
+
+export async function resetPassword(payload: ResetPasswordRequest): Promise<MessageOnlySuccess> {
+  const validPayload = parseWithZod(ResetPasswordRequestSchema, payload)
+  const requestBody = {
+    email: validPayload.email,
+    token: validPayload.token,
+    password: validPayload.password,
+    password_confirmation: validPayload.passwordConfirmation,
+  }
+  const response = await post<unknown, typeof requestBody>('/api/reset-password', requestBody, {
+    skipAuth: true,
+  })
+  const parsed = parseWithZod(messageOnlyEnvelope, response)
+  return parsed.data
 }

@@ -32,7 +32,20 @@ export default function LoginPage() {
       navigate({ to: '/app' })
     } catch (unknownError) {
       const applicationError = unknownError as AppError
-      setErrorMessage(applicationError.message || 'Đăng nhập thất bại, vui lòng thử lại.')
+      if (applicationError.code === 'EMAIL_NOT_VERIFIED') {
+        if (globalThis.window) {
+          try {
+            globalThis.window.sessionStorage.setItem('cloud-storage.lastLoginEmail', email)
+          } catch {
+            // ignore storage errors
+          }
+        }
+        navigate({
+          to: '/auth/verify-email',
+        })
+      } else {
+        setErrorMessage(applicationError.message || 'Đăng nhập thất bại, vui lòng thử lại.')
+      }
     }
   }
 

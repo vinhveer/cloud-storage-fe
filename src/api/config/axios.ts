@@ -26,6 +26,7 @@ const httpClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 })
 
 /**
@@ -33,7 +34,7 @@ const httpClient = axios.create({
  * Chức năng:
  * - Tự động lấy access token đang lưu trữ và gắn vào Authorization header.
  * - Nếu request có đặt skipAuth là true thì interceptor sẽ không gắn token.
- * Mục đích: giúp toàn bộ API private tự động gửi token mà không cần lặp lại logic trong từng request.
+ * - Log toàn bộ request trước khi gửi.
  */
 httpClient.interceptors.request.use(config => {
   if (!config.skipAuth) {
@@ -43,12 +44,22 @@ httpClient.interceptors.request.use(config => {
       config.headers.Authorization = `Bearer ${accessToken}`
     }
   }
+
+  const method = (config.method ?? 'get').toUpperCase()
+  // eslint-disable-next-line no-console
+  console.log('[HTTP REQUEST]', method, config.url, {
+    params: config.params,
+    data: config.data,
+    headers: config.headers,
+  })
+
   return config
 })
 
 /**
  * Response Interceptor.
  * Chức năng:
+ * - Log response thành công.
  * - Kiểm tra lỗi trả về từ API.
  * - Nếu status code là 401 (Unauthorized):
  *   - Xoá token trong storage.
@@ -58,10 +69,17 @@ httpClient.interceptors.request.use(config => {
  * Mục đích: đảm bảo toàn bộ lỗi API trong ứng dụng có cấu trúc đồng nhất và dễ xử lý.
  */
 httpClient.interceptors.response.use(
-  response => response,  // Trả về phản hồi gốc khi không có lỗi
+  response => {
+    // eslint-disable-next-line no-console
+    console.log('[HTTP RESPONSE]', response.status, response.config.url, response.data)
+    return response
+  },
 
   async error => {
-    const status = (error as AxiosError).response?.status
+    const axiosError = error as AxiosError
+    const status = axiosError.response?.status
+    // eslint-disable-next-line no-console
+    console.log('[HTTP ERROR]', status, axiosError.config?.url, axiosError.response?.data ?? axiosError.message)
 
     if (status === 401) {
       clearTokens()

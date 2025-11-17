@@ -2,6 +2,7 @@ import { createAccessRoute } from '../route-factories'
 import AuthLayout from '@/app/layout/AuthLayout'
 import LoginPage from '@/app/pages/auth/login'
 import RegisterPage from '@/app/pages/auth/register'
+import VerifyEmailPage from '@/app/pages/auth/verify-email'
 import { rootRoute } from '../root'
 
 export function getAuthRoutes() {
@@ -26,8 +27,16 @@ export function getAuthRoutes() {
     access: 'guestOnly',
   })
 
+  const verifyEmailRoute = createAccessRoute({
+    getParentRoute: () => authRoute,
+    path: 'verify-email',
+    component: VerifyEmailPage,
+    access: 'guestOnly',
+  })
+
   return authRoute.addChildren([
     loginRoute,
     registerRoute,
+    verifyEmailRoute,
   ])
 }
