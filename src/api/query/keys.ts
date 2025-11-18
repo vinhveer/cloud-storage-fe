@@ -14,6 +14,10 @@ export const qk = {
       ['admin', 'stats', 'storage', params ?? {}] as const,
     storageOverview: () => ['admin', 'storage', 'overview'] as const,
     storageUsers: (params?: ListParams) => ['admin', 'storage', 'users', params ?? {}] as const,
+    users: (params?: ListParams) => ['admin', 'users', params ?? {}] as const,
+    userById: (userId: string) => ['admin', 'user', userId] as const,
+    userDelete: (userId: string) => ['admin', 'user', userId, 'delete'] as const,
+    userStorageUsage: (userId: string) => ['admin', 'user', userId, 'storage-usage'] as const,
   },
   config: {
     root: () => ['config'] as const,

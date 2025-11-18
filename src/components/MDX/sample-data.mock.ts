@@ -49,6 +49,13 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'Admin storage stats test', href: '/samples/admin-stats-storage-test' },
   { title: 'Admin storage overview test', href: '/samples/admin-storage-overview-test' },
   { title: 'Admin storage users test', href: '/samples/admin-storage-users-test' },
+  { title: 'Admin users test', href: '/samples/admin-users-test' },
+  { title: 'Admin user detail test', href: '/samples/admin-user-detail-test' },
+  { title: 'Admin user create test', href: '/samples/admin-user-create-test' },
+  { title: 'Admin user delete test', href: '/samples/admin-user-delete-test' },
+  { title: 'Admin user update test', href: '/samples/admin-user-update-test' },
+  { title: 'Admin user storage usage test', href: '/samples/admin-user-storage-usage-test' },
+  { title: 'Admin user role update test', href: '/samples/admin-user-role-update-test' },
 ]
 
 
