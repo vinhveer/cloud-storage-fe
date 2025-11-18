@@ -2,9 +2,9 @@ import React from 'react'
 import { useBulkMove } from '@/api/features/bulk/bulk.mutations'
 
 export default function BulkMoveTestPage() {
-  const [fileIds, setFileIds] = React.useState<string>('52,53')
-  const [folderIds, setFolderIds] = React.useState<string>('35')
-  const [destinationFolderId, setDestinationFolderId] = React.useState<string>('34')
+  const [fileIds, setFileIds] = React.useState<string>('')
+  const [folderIds, setFolderIds] = React.useState<string>('')
+  const [destinationFolderId, setDestinationFolderId] = React.useState<string>('')
   const bulkMoveMutation = useBulkMove()
 
   const parseIds = (value: string) =>

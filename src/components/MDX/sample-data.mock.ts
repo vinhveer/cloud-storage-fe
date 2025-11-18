@@ -42,6 +42,8 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'Bulk copy test', href: '/samples/bulk-copy-test' },
   { title: 'Bulk delete test', href: '/samples/bulk-delete-test' },
   { title: 'Bulk move test', href: '/samples/bulk-move-test' },
+  { title: 'Dashboard overview test', href: '/samples/dashboard-test' },
+  { title: 'Dashboard stats test', href: '/samples/dashboard-stats-test' },
 ]
 
 

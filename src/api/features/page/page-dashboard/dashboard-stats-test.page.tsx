@@ -1,58 +1,55 @@
 import React from 'react'
-import { useBulkDelete } from '@/api/features/bulk/bulk.mutations'
+import { useDashboardStats } from '@/api/features/dashboard/dashboard.queries'
 
-export default function BulkDeleteTestPage() {
-  const [fileIds, setFileIds] = React.useState<string>('')
-  const [folderIds, setFolderIds] = React.useState<string>('')
-  const bulkDeleteMutation = useBulkDelete()
+export default function DashboardStatsTestPage() {
+  const [startDate, setStartDate] = React.useState<string>('2025-11-01')
+  const [endDate, setEndDate] = React.useState<string>('2025-11-10')
 
-  const parseIds = (value: string) =>
-    value
-      .split(',')
-      .map(v => v.trim())
-      .filter(Boolean)
-      .map(v => Number.parseInt(v, 10))
-      .filter(v => !Number.isNaN(v))
+  const params = React.useMemo(
+    () => ({
+      start_date: startDate === '' ? undefined : startDate,
+      end_date: endDate === '' ? undefined : endDate,
+    }),
+    [startDate, endDate],
+  )
+
+  const query = useDashboardStats(params)
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()
-
-    const files = parseIds(fileIds)
-    const folders = parseIds(folderIds)
-
-    bulkDeleteMutation.mutate({
-      file_ids: files.length ? files : undefined,
-      folder_ids: folders.length ? folders : undefined,
-    })
+    query.refetch()
   }
 
-  const runQuick = (mode: 'happy' | 'no-payload' | 'unauth') => {
-    if (mode === 'happy') {
-      setFileIds('53')
-      setFolderIds('34')
+  const runQuick = (mode: 'range' | 'only-start' | 'only-end' | 'invalid') => {
+    if (mode === 'range') {
+      setStartDate('2025-11-01')
+      setEndDate('2025-11-10')
       return
     }
-
-    if (mode === 'no-payload') {
-      setFileIds('')
-      setFolderIds('')
+    if (mode === 'only-start') {
+      setStartDate('2025-11-10')
+      setEndDate('')
       return
     }
-
-    setFileIds('1')
-    setFolderIds('')
+    if (mode === 'only-end') {
+      setStartDate('')
+      setEndDate('2025-11-10')
+      return
+    }
+    setStartDate('10-11-2025')
+    setEndDate('')
   }
 
   return (
     <div style={{ padding: 24, fontFamily: 'sans-serif' }}>
-      <h1>Bulk Delete Test</h1>
+      <h1>Dashboard Stats Test</h1>
       <form
         onSubmit={handleSubmit}
         style={{
           display: 'flex',
           flexDirection: 'column',
           gap: 12,
-          maxWidth: 480,
+          maxWidth: 420,
           padding: 16,
           borderRadius: 8,
           border: '1px solid #e5e7eb',
@@ -60,42 +57,42 @@ export default function BulkDeleteTestPage() {
         }}
       >
         <label>
-          File IDs (comma separated):
+          Start date (Y-m-d, optional):
           <input
             type="text"
-            value={fileIds}
-            onChange={event => setFileIds(event.target.value)}
+            value={startDate}
+            onChange={event => setStartDate(event.target.value)}
           />
         </label>
         <label>
-          Folder IDs (comma separated):
+          End date (Y-m-d, optional):
           <input
             type="text"
-            value={folderIds}
-            onChange={event => setFolderIds(event.target.value)}
+            value={endDate}
+            onChange={event => setEndDate(event.target.value)}
           />
         </label>
         <button
           type="submit"
-          disabled={bulkDeleteMutation.isPending}
+          disabled={query.isFetching}
           style={{
             padding: '8px 12px',
             borderRadius: 6,
             border: 'none',
-            cursor: bulkDeleteMutation.isPending ? 'not-allowed' : 'pointer',
-            backgroundColor: bulkDeleteMutation.isPending ? '#9ca3af' : '#dc2626',
+            cursor: query.isFetching ? 'not-allowed' : 'pointer',
+            backgroundColor: query.isFetching ? '#9ca3af' : '#2563eb',
             color: '#ffffff',
             fontWeight: 600,
           }}
         >
-          {bulkDeleteMutation.isPending ? 'Deleting...' : 'Run bulk delete'}
+          {query.isFetching ? 'Loading...' : 'Fetch stats'}
         </button>
       </form>
 
       <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <button
           type="button"
-          onClick={() => runQuick('happy')}
+          onClick={() => runQuick('range')}
           style={{
             padding: '6px 10px',
             borderRadius: 6,
@@ -107,27 +104,43 @@ export default function BulkDeleteTestPage() {
             cursor: 'pointer',
           }}
         >
-          Quick: happy path (200)
+          Quick: range 2025-11-01 → 2025-11-10
         </button>
         <button
           type="button"
-          onClick={() => runQuick('no-payload')}
+          onClick={() => runQuick('only-start')}
           style={{
             padding: '6px 10px',
             borderRadius: 6,
             border: 'none',
-            backgroundColor: '#facc15',
-            color: '#1f2937',
+            backgroundColor: '#0ea5e9',
+            color: '#ffffff',
             fontSize: 12,
             fontWeight: 600,
             cursor: 'pointer',
           }}
         >
-          Quick: no payload (422)
+          Quick: only start_date
         </button>
         <button
           type="button"
-          onClick={() => runQuick('unauth')}
+          onClick={() => runQuick('only-end')}
+          style={{
+            padding: '6px 10px',
+            borderRadius: 6,
+            border: 'none',
+            backgroundColor: '#6366f1',
+            color: '#ffffff',
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Quick: only end_date
+        </button>
+        <button
+          type="button"
+          onClick={() => runQuick('invalid')}
           style={{
             padding: '6px 10px',
             borderRadius: 6,
@@ -139,13 +152,13 @@ export default function BulkDeleteTestPage() {
             cursor: 'pointer',
           }}
         >
-          Quick: unauth (401)
+          Quick: invalid date (500 INTERNAL_ERROR)
         </button>
       </div>
 
       <div style={{ marginTop: 24 }}>
         <h2>Result</h2>
-        {bulkDeleteMutation.isError && (
+        {query.isError && (
           <pre
             style={{
               marginTop: 8,
@@ -157,10 +170,10 @@ export default function BulkDeleteTestPage() {
               overflowX: 'auto',
             }}
           >
-            {JSON.stringify(bulkDeleteMutation.error, null, 2)}
+            {JSON.stringify(query.error, null, 2)}
           </pre>
         )}
-        {bulkDeleteMutation.isSuccess && (
+        {query.isSuccess && (
           <pre
             style={{
               marginTop: 8,
@@ -172,7 +185,7 @@ export default function BulkDeleteTestPage() {
               overflowX: 'auto',
             }}
           >
-            {JSON.stringify(bulkDeleteMutation.data, null, 2)}
+            {JSON.stringify(query.data, null, 2)}
           </pre>
         )}
       </div>

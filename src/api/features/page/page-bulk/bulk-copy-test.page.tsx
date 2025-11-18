@@ -2,8 +2,8 @@ import React from 'react'
 import { useBulkCopy } from '@/api/features/bulk/bulk.mutations'
 
 export default function BulkCopyTestPage() {
-  const [fileIds, setFileIds] = React.useState<string>('49,50')
-  const [folderIds, setFolderIds] = React.useState<string>('34')
+  const [fileIds, setFileIds] = React.useState<string>('')
+  const [folderIds, setFolderIds] = React.useState<string>('')
   const [destinationFolderId, setDestinationFolderId] = React.useState<string>('') // empty = null
   const bulkCopyMutation = useBulkCopy()
 
@@ -30,8 +30,8 @@ export default function BulkCopyTestPage() {
 
   const runQuick = (mode: 'happy' | 'unauth' | 'copy-failed') => {
     if (mode === 'happy') {
-      setFileIds('49,50')
-      setFolderIds('34')
+      setFileIds('')
+      setFolderIds('')
       setDestinationFolderId('')
       return
     }
@@ -39,7 +39,7 @@ export default function BulkCopyTestPage() {
     if (mode === 'unauth') {
       setFileIds('5')
       setFolderIds('')
-      setDestinationFolderId('10')
+      setDestinationFolderId('')
       return
     }
 
