@@ -5,6 +5,10 @@ export const qk = {
     root: () => ['auth'] as const,
     profile: () => ['auth', 'profile'] as const,
   },
+  config: {
+    root: () => ['config'] as const,
+    list: (params?: ListParams) => ['configs', params ?? {}] as const,
+  },
   user: {
     root: () => ['user'] as const,
     byId: (userId: string) => ['user', userId] as const,
