@@ -1,0 +1,16 @@
+import AdminStorageOverviewTestPage from '@/api/features/page/admin-storage-overview-test.page'
+
+## Admin storage overview test
+
+Trang này dùng để test API tổng quan dung lượng hệ thống (`GET /api/admin/storage/overview`).
+
+- Không yêu cầu nhập tham số.
+- Nhấn **Fetch overview** để lấy dữ liệu.
+- Nút Quick có hướng dẫn test 401 (chưa đăng nhập) và unauthorized 500 (đăng nhập user thường).
+
+> Yêu cầu quyền admin để nhận kết quả 200.
+
+<AdminStorageOverviewTestPage />
+
+
+

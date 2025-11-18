@@ -47,6 +47,8 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'Admin user stats test', href: '/samples/admin-stats-users-test' },
   { title: 'Admin file stats test', href: '/samples/admin-stats-files-test' },
   { title: 'Admin storage stats test', href: '/samples/admin-stats-storage-test' },
+  { title: 'Admin storage overview test', href: '/samples/admin-storage-overview-test' },
+  { title: 'Admin storage users test', href: '/samples/admin-storage-users-test' },
 ]
 
 

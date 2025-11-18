@@ -12,6 +12,8 @@ export const qk = {
     statsFiles: () => ['admin', 'stats', 'files'] as const,
     statsStorage: (params?: { start_date?: string; end_date?: string }) =>
       ['admin', 'stats', 'storage', params ?? {}] as const,
+    storageOverview: () => ['admin', 'storage', 'overview'] as const,
+    storageUsers: (params?: ListParams) => ['admin', 'storage', 'users', params ?? {}] as const,
   },
   config: {
     root: () => ['config'] as const,
