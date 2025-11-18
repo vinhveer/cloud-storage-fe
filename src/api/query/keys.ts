@@ -5,6 +5,14 @@ export const qk = {
     root: () => ['auth'] as const,
     profile: () => ['auth', 'profile'] as const,
   },
+  admin: {
+    root: () => ['admin'] as const,
+    dashboard: () => ['admin', 'dashboard'] as const,
+    statsUsers: () => ['admin', 'stats', 'users'] as const,
+    statsFiles: () => ['admin', 'stats', 'files'] as const,
+    statsStorage: (params?: { start_date?: string; end_date?: string }) =>
+      ['admin', 'stats', 'storage', params ?? {}] as const,
+  },
   config: {
     root: () => ['config'] as const,
     list: (params?: ListParams) => ['configs', params ?? {}] as const,
