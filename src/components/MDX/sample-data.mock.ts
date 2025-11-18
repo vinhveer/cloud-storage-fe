@@ -39,6 +39,9 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'File copy test', href: '/samples/file-copy-test' },
   { title: 'Recent files test', href: '/samples/recent-files-test' },
   { title: 'File preview test', href: '/samples/file-preview-test' },
+  { title: 'Bulk copy test', href: '/samples/bulk-copy-test' },
+  { title: 'Bulk delete test', href: '/samples/bulk-delete-test' },
+  { title: 'Bulk move test', href: '/samples/bulk-move-test' },
 ]
 
 
