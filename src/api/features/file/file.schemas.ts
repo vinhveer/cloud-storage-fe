@@ -137,4 +137,10 @@ export const FilePreviewSuccessSchema = z.object({
 
 export const FilePreviewEnvelopeSchema = createApiResponseSchema(FilePreviewSuccessSchema)
 
+export const DeleteFileVersionSuccessSchema = z.object({
+  message: z.string(),
+})
+
+export const DeleteFileVersionEnvelopeSchema = createApiResponseSchema(DeleteFileVersionSuccessSchema)
+
 

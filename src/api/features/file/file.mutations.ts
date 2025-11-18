@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { copyFile, deleteFile, downloadFile, moveFile, updateFile, uploadFile } from './file.api'
+import { copyFile, deleteFile, deleteFileVersion, downloadFile, moveFile, updateFile, uploadFile } from './file.api'
 import type {
   CopyFileSuccess,
   DeleteFileSuccess,
@@ -7,6 +7,7 @@ import type {
   UploadFileRequest,
   UploadFileSuccess,
   UpdateFileSuccess,
+  DeleteFileVersionSuccess,
 } from './file.types'
 import type { AppError } from '../../core/error'
 
@@ -71,6 +72,17 @@ export function useCopyFile() {
         destination_folder_id: variables.destinationFolderId ?? null,
         only_latest: variables.onlyLatest,
       }),
+  })
+}
+
+export type DeleteFileVersionVariables = {
+  fileId: number
+  versionId: number
+}
+
+export function useDeleteFileVersion() {
+  return useMutation<DeleteFileVersionSuccess, AppError, DeleteFileVersionVariables>({
+    mutationFn: variables => deleteFileVersion(variables.fileId, variables.versionId),
   })
 }
 

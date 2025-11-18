@@ -37,6 +37,7 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'File update test', href: '/samples/file-update-test' },
   { title: 'File delete test', href: '/samples/file-delete-test' },
   { title: 'File copy test', href: '/samples/file-copy-test' },
+  { title: 'Admin file version delete test', href: '/samples/file-version-delete-test' },
   { title: 'Recent files test', href: '/samples/recent-files-test' },
   { title: 'File preview test', href: '/samples/file-preview-test' },
   { title: 'Admin configs test', href: '/samples/admin-configs-test' },
