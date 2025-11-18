@@ -200,7 +200,28 @@ export default function AdminUserDeleteTestPage() {
               overflowX: 'auto',
             }}
           >
-            {JSON.stringify(mutation.error, null, 2)}
+            {(() => {
+              const err = mutation.error as any
+              // Ưu tiên hiển thị đúng raw backend shape nếu có thể.
+              // Các pattern có thể:
+              // 1) { success:false, data:null, error:{...}, meta:null }
+              // 2) { success:false, message:"..." }
+              // 3) { message:"User not found." }
+              // 4) AppError wrapper với details chứa raw body.
+              const details = err?.details
+              if (details && typeof details === 'object') {
+                // Nếu details là envelope chuẩn hoặc raw message obj thì in thẳng.
+                if ('success' in details || 'message' in details || 'error' in details) {
+                  return JSON.stringify(details, null, 2)
+                }
+              }
+              // Nếu details.error.errors tồn tại -> in details.error
+              if (details?.error) {
+                return JSON.stringify(details.error, null, 2)
+              }
+              // Fallback: in toàn bộ mutation.error
+              return JSON.stringify(err, null, 2)
+            })()}
           </pre>
         )}
         {mutation.isSuccess && (
