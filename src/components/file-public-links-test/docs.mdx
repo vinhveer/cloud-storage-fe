@@ -1,0 +1,16 @@
+import FilePublicLinksTestPage from '@/api/features/page/page-public-link/file-public-links-test.page'
+
+## File public links test
+
+Trang này dùng để test API **GET /api/files/\{id\}/public-links** (lấy danh sách tất cả public link đã tạo cho một file cụ thể).
+
+- Nhập `File ID` rồi bấm **Fetch file public links**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: thành công (200), unauthenticated (401), file không tồn tại (404), file không thuộc user hiện tại (403).
+
+> Nhớ đăng nhập trước khi test các case 200/404/403. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<FilePublicLinksTestPage />
+
+
+
+

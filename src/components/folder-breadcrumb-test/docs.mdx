@@ -1,0 +1,13 @@
+import FolderBreadcrumbTestPage from '@/api/features/page/page-folder/folder-breadcrumb-test.page'
+
+## Folder breadcrumb test
+
+Trang này dùng để test API **GET /api/folders/\{id\}/breadcrumb** (lấy đường dẫn breadcrumb từ root đến folder hiện tại).
+
+- Điền `Folder ID` rồi bấm **Fetch breadcrumb** để xem mảng breadcrumb.
+- Các nút **Quick** giúp test nhanh: happy path (200), unauthenticated (401), not found (404), forbidden (403).
+
+<FolderBreadcrumbTestPage />
+
+
+

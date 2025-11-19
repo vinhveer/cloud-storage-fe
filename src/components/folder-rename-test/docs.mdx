@@ -1,0 +1,13 @@
+import FolderRenameTestPage from '@/api/features/page/page-folder/folder-rename-test.page'
+
+## Folder rename test
+
+Trang này dùng để test API **PUT /api/folders/\{id\}** (đổi tên folder).
+
+- Nhập `Folder ID` và `New folder name`, sau đó bấm **Rename folder**.
+- Các nút **Quick**: happy path (200), missing name (422), not found (404), unauthenticated (401).
+
+<FolderRenameTestPage />
+
+
+

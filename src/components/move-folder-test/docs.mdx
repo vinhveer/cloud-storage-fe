@@ -1,0 +1,13 @@
+import MoveFolderTestPage from '@/api/features/page/page-folder/move-folder-test.page'
+
+## Move folder test
+
+Trang này dùng để test API **POST /api/folders/\{id\}/move** (di chuyển folder sang thư mục đích).
+
+- Điền `Folder ID` và `Target folder ID` (để trống để move ra root), sau đó bấm **Move folder**.
+- Các nút **Quick** giúp test nhanh các case: move 29 to root (200), unauthenticated (401), invalid target (422), target not found (404), move into descendant (400).
+
+<MoveFolderTestPage />
+
+
+

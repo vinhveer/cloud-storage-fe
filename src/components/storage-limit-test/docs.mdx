@@ -1,0 +1,16 @@
+import StorageLimitTestPage from '@/api/features/page/page-storage/storage-limit-test.page'
+
+## Storage limit test
+
+Trang này dùng để test API **GET /api/storage/limit** (lấy quota và dung lượng còn trống của user hiện tại).
+
+- Bấm **Fetch storage limit** để gọi API.
+- Hoặc dùng các nút **Quick**: unauthenticated (401) và authenticated (200) để gợi ý cách test (mở tab chưa đăng nhập hoặc đã đăng nhập).
+
+> Nhớ đăng nhập trước để test case 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<StorageLimitTestPage />
+
+
+
+

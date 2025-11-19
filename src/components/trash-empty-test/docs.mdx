@@ -1,0 +1,15 @@
+import TrashEmptyTestPage from '@/api/features/page/page-trash/trash-empty-test.page'
+
+## Trash empty test
+
+Trang này dùng để test API **DELETE /api/trash/empty** (dọn sạch toàn bộ thùng rác của người dùng, xóa vĩnh viễn tất cả file & folder đã bị xóa).
+
+- Bấm **Empty trash permanently** để xóa vĩnh viễn tất cả items trong thùng rác.
+- Hoặc dùng các nút **Quick** để test nhanh: empty trash (200), unauth (401).
+
+> ⚠️ **CẢNH BÁO:** Hành động này xóa vĩnh viễn TẤT CẢ file và folder trong thùng rác và không thể khôi phục! Hãy cực kỳ cẩn thận khi test.
+> 
+> Nhớ đăng nhập trước để test 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<TrashEmptyTestPage />
+

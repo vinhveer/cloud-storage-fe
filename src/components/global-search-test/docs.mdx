@@ -1,0 +1,16 @@
+import GlobalSearchTestPage from '@/api/features/page/page-search/global-search-test.page'
+
+## Global search test
+
+Trang này dùng để test API **GET /api/search** (tìm kiếm toàn cục file + folder với nhiều filter).
+
+- Nhập các tham số `q`, `type`, `extension`, `size_min`, `size_max`, `date_from`, `date_to`, `page`, `per_page` rồi bấm **Run search**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: unauthenticated (401), basic search (200), chỉ file + filter extension/size (200), chỉ folder (200), filter theo date range (200), và pagination (200).
+
+> Nhớ đăng nhập trước để test các case 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<GlobalSearchTestPage />
+
+
+
+

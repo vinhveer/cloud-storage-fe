@@ -1,0 +1,13 @@
+import FileVersionListTestPage from '@/api/features/page/page-file-version/file-version-list-test.page'
+
+## File version list test
+
+Trang này dùng để test API **GET /api/files/\{id\}/versions** (danh sách tất cả version của một file).
+
+- Điền `File ID`, `Page`, `Per page`, sau đó bấm **Fetch versions**.
+- Các nút **Quick** giúp test nhanh các case: happy path (200), unauthenticated (401), file not found (404), forbidden (403).
+
+<FileVersionListTestPage />
+
+
+

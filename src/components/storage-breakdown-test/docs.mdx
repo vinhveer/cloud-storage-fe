@@ -1,0 +1,16 @@
+import StorageBreakdownTestPage from '@/api/features/page/page-storage/storage-breakdown-test.page'
+
+## Storage breakdown test
+
+Trang này dùng để test API **GET /api/storage/breakdown** (phân tích dung lượng đã dùng theo loại file hoặc MIME).
+
+- Chọn `Group by` (để trống = extension, chọn `mime` để group theo MIME) rồi bấm **Fetch breakdown**.
+- Hoặc dùng các nút **Quick** để test nhanh: unauthenticated (401), group by extension (200), group by mime (200).
+
+> Nhớ đăng nhập trước để test 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<StorageBreakdownTestPage />
+
+
+
+

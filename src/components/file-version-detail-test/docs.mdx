@@ -1,0 +1,13 @@
+import FileVersionDetailTestPage from '@/api/features/page/page-file-version/file-version-detail-test.page'
+
+## File version detail test
+
+Trang này dùng để test API **GET /api/files/\{id\}/versions/\{version_id\}** (lấy chi tiết metadata của một version cụ thể).
+
+- Điền `File ID` và `Version ID`, sau đó bấm **Fetch version detail**.
+- Các nút **Quick** giúp test nhanh các case: happy path (200), unauthenticated (401), file not found (404), version not found (404), forbidden (403).
+
+<FileVersionDetailTestPage />
+
+
+

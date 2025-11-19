@@ -1,0 +1,12 @@
+import FileVersionTestPage from '@/api/features/page/page-file-version/file-version-test.page'
+
+## File version upload test
+
+Trang này dùng để test API **POST /api/files/\{id\}/versions** (upload version mới cho file hiện tại).
+
+- Điền `File ID`, `Action`, `Notes` (tuỳ chọn), chọn file PDF, sau đó bấm **Upload version**.
+- Có các nút **Quick** để test nhanh các case: happy path (201), thiếu file (422), forbidden (403), not found (404).
+
+<FileVersionTestPage />
+
+
