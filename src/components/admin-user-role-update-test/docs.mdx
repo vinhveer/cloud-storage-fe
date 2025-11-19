@@ -1,0 +1,15 @@
+import AdminUserRoleUpdateTestPage from '@/api/features/page/admin-user-role-update-test.page'
+
+## Admin user role update test
+
+Trang này dùng để test API thay đổi vai trò user (`PUT /api/admin/users/{id}/role`).
+
+- Nhập `User ID`, chọn `Role` rồi nhấn **Update role**.
+- Quick: success (200), unauthenticated (401), unauthorized (500), missing role (422), invalid role (422), user not found (404), self demotion (422).
+
+> Yêu cầu quyền admin để thay đổi role.
+
+<AdminUserRoleUpdateTestPage />
+
+
+

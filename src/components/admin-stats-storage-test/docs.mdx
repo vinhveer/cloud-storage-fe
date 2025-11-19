@@ -1,0 +1,16 @@
+import AdminStatsStorageTestPage from '@/api/features/page/admin-stats-storage-test.page'
+
+## Admin storage stats test
+
+Trang này dùng để test API thống kê tổng dung lượng (`GET /api/admin/stats/storage`).
+
+- Có thể nhập `start_date` và `end_date` (định dạng `YYYY-MM-DD`), hoặc để trống để lấy mặc định.
+- Nhấn **Fetch stats** để lấy dữ liệu.
+- Nút Quick cung cấp các case: mặc định, theo khoảng ngày, 1 ngày, và ngày không hợp lệ (500).
+
+> Cần đăng nhập bằng tài khoản có quyền admin.
+
+<AdminStatsStorageTestPage />
+
+
+

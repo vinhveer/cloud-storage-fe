@@ -1,0 +1,15 @@
+import AdminUserDeleteTestPage from '@/api/features/page/admin-user-delete-test.page'
+
+## Admin user delete test
+
+Trang này dùng để test API xóa người dùng (`DELETE /api/admin/users/{id}`).
+
+- Nhập `User ID` và nhấn **Delete user**.
+- Quick: success (200), unauthenticated (401), unauthorized (500), cannot delete self (422), delete admin (403), user not found (404).
+
+> Yêu cầu quyền admin để xóa user.
+
+<AdminUserDeleteTestPage />
+
+
+

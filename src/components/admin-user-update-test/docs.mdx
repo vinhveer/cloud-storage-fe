@@ -1,0 +1,15 @@
+import AdminUserUpdateTestPage from '@/api/features/page/admin-user-update-test.page'
+
+## Admin user update test
+
+Trang này dùng để test API cập nhật người dùng (`PUT /api/admin/users/{id}`).
+
+- Nhập `User ID`, `name`, `storage_limit` rồi nhấn **Update user** (có thể để trống name hoặc storage_limit để bỏ qua trường đó).
+- Quick: success (200), user not found (404), hướng dẫn 401, hướng dẫn unauthorized (500).
+
+> Yêu cầu quyền admin để cập nhật.
+
+<AdminUserUpdateTestPage />
+
+
+

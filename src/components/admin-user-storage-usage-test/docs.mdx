@@ -1,0 +1,15 @@
+import AdminUserStorageUsageTestPage from '@/api/features/page/admin-user-storage-usage-test.page'
+
+## Admin user storage usage test
+
+Trang này dùng để test API xem dung lượng đã dùng của user (`GET /api/admin/users/{id}/storage-usage`).
+
+- Nhập `User ID` và nhấn **Fetch usage**.
+- Quick: success (200), user not found (404), hướng dẫn 401, hướng dẫn unauthorized (500).
+
+> Yêu cầu quyền admin để xem dữ liệu.
+
+<AdminUserStorageUsageTestPage />
+
+
+

@@ -1,0 +1,15 @@
+import AdminUserCreateTestPage from '@/api/features/page/admin-user-create-test.page'
+
+## Admin user create test
+
+Trang này dùng để test API tạo người dùng mới (`POST /api/admin/users`).
+
+- Nhập `name`, `email`, `password`, `role` rồi nhấn **Create user**.
+- Quick: success (201), missing fields (422), hướng dẫn 401, hướng dẫn unauthorized (500).
+
+> Yêu cầu quyền admin để tạo user.
+
+<AdminUserCreateTestPage />
+
+
+

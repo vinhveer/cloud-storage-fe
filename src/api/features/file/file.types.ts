@@ -30,6 +30,8 @@ import {
   FilePreviewEnvelopeSchema,
   FilePreviewFileSchema,
   FilePreviewSuccessSchema,
+  DeleteFileVersionEnvelopeSchema,
+  DeleteFileVersionSuccessSchema,
 } from './file.schemas'
 
 export type UploadedFile = z.infer<typeof UploadedFileSchema>
@@ -78,5 +80,8 @@ export type RecentFilesEnvelope = z.infer<typeof RecentFilesEnvelopeSchema>
 export type FilePreviewFile = z.infer<typeof FilePreviewFileSchema>
 export type FilePreviewSuccess = z.infer<typeof FilePreviewSuccessSchema>
 export type FilePreviewEnvelope = z.infer<typeof FilePreviewEnvelopeSchema>
+
+export type DeleteFileVersionSuccess = z.infer<typeof DeleteFileVersionSuccessSchema>
+export type DeleteFileVersionEnvelope = z.infer<typeof DeleteFileVersionEnvelopeSchema>
 
 

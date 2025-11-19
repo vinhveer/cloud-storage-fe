@@ -15,6 +15,7 @@ import {
   CopyFileRequestSchema,
   FilePreviewEnvelopeSchema,
   RecentFilesEnvelopeSchema,
+  DeleteFileVersionEnvelopeSchema,
 } from './file.schemas'
 import type {
   CopyFileEnvelope,
@@ -29,6 +30,8 @@ import type {
   ListFilesEnvelope,
   ListFilesParams,
   ListFilesSuccess,
+  DeleteFileVersionEnvelope,
+  DeleteFileVersionSuccess,
   MoveFileRequest,
   MoveFileSuccess,
   RecentFilesEnvelope,
@@ -49,6 +52,7 @@ const deleteFileEnvelope = DeleteFileEnvelopeSchema
 const copyFileEnvelope = CopyFileEnvelopeSchema
 const recentFilesEnvelope = RecentFilesEnvelopeSchema
 const filePreviewEnvelope = FilePreviewEnvelopeSchema
+const deleteFileVersionEnvelope = DeleteFileVersionEnvelopeSchema
 
 function toUploadFileFormData(payload: UploadFileRequest): FormData {
   const record: Record<string, unknown> = {
@@ -144,6 +148,12 @@ export async function getRecentFiles(limit?: number): Promise<RecentFilesSuccess
 export async function getFilePreview(fileId: number): Promise<FilePreviewSuccess> {
   const response = await get<unknown>(`/api/files/${fileId}/preview`)
   const parsed = parseWithZod<FilePreviewEnvelope>(filePreviewEnvelope, response)
+  return parsed.data
+}
+
+export async function deleteFileVersion(fileId: number, versionId: number): Promise<DeleteFileVersionSuccess> {
+  const response = await deleteRequest<unknown>(`/api/files/${fileId}/versions/${versionId}`)
+  const parsed = parseWithZod<DeleteFileVersionEnvelope>(deleteFileVersionEnvelope, response)
   return parsed.data
 }
 

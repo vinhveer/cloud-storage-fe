@@ -1,0 +1,14 @@
+import FileVersionDeleteTestPage from '@/api/features/page/file-version-delete-test.page'
+
+## Admin file version delete test
+
+Trang này dùng để test API xóa phiên bản file (`DELETE /api/files/{id}/versions/{version_id}`).
+
+- Nhập `File ID` và `Version ID` rồi nhấn **Delete version**.
+- Có các nút Quick để thử nhanh: success (200), unauthenticated (401), forbidden (403), file not found (404), version not found (404).
+- Hành động chỉ dành cho Admin.
+
+<FileVersionDeleteTestPage />
+
+
+
