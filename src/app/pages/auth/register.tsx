@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
 import FormCard from '@/components/FormCard/FormCard'
-import FormGroup from '@/components/FormGroup/FormInput/FormInput'
+import FormGroup from '@/components/FormGroup/FormGroup'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
 import { Button } from '@/components/Button/Button'
 import { useRegister, useResendVerificationEmail } from '@/api/features/auth/auth.mutations'
