@@ -16,5 +16,6 @@ export function useStorageLimit() {
     queryFn: () => getStorageLimit(),
   })
 }
-
+// Alias phục vụ page test admin storage overview
+export const useAdminStorageOverview = useStorageLimit
 

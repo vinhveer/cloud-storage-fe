@@ -17,4 +17,5 @@ export function useDashboardStats(params: DashboardStatsParams = {}) {
   })
 }
 
+export const useAdminDashboard = useDashboardOverview
 
