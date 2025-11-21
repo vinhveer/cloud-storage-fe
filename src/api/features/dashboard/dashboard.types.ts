@@ -1,8 +1,19 @@
 import { z } from 'zod'
-import { DashboardEnvelopeSchema, DashboardSuccessSchema, RecentUserSchema } from './dashboard.schemas'
+import {
+  DashboardFileTypeStatSchema,
+  DashboardOverviewEnvelopeSchema,
+  DashboardOverviewSchema,
+  DashboardStatsEnvelopeSchema,
+  DashboardStatsSchema,
+  DashboardStorageTimelinePointSchema,
+} from './dashboard.schemas'
 
-export type RecentUser = z.infer<typeof RecentUserSchema>
-export type DashboardSuccess = z.infer<typeof DashboardSuccessSchema>
-export type DashboardEnvelope = z.infer<typeof DashboardEnvelopeSchema>
+export type DashboardOverview = z.infer<typeof DashboardOverviewSchema>
+export type DashboardOverviewEnvelope = z.infer<typeof DashboardOverviewEnvelopeSchema>
+
+export type DashboardFileTypeStat = z.infer<typeof DashboardFileTypeStatSchema>
+export type DashboardStorageTimelinePoint = z.infer<typeof DashboardStorageTimelinePointSchema>
+export type DashboardStats = z.infer<typeof DashboardStatsSchema>
+export type DashboardStatsEnvelope = z.infer<typeof DashboardStatsEnvelopeSchema>
 
 

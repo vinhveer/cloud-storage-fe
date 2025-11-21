@@ -1,0 +1,14 @@
+import BulkMoveTestPage from '@/api/features/page/page-bulk/bulk-move-test.page'
+
+## Bulk move test
+
+Trang này dùng để test API bulk move (`POST /api/bulk/bulk-move`).
+
+- Nhập `file_ids`, `folder_ids`, `destination_folder_id` rồi nhấn **Run bulk move**.
+- Hoặc dùng các nút **Quick** để test nhanh happy path, DESTINATION_ERROR và case không item nào được move.
+
+> Nhớ đăng nhập trước để có token hợp lệ.
+
+<BulkMoveTestPage />
+
+

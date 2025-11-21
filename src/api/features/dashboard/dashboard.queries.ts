@@ -1,13 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAdminDashboard } from './dashboard.api'
-import type { DashboardSuccess } from './dashboard.types'
+import { getDashboardOverview, getDashboardStats, type DashboardStatsParams } from './dashboard.api'
+import type { DashboardOverview, DashboardStats } from './dashboard.types'
 import type { AppError } from '../../core/error'
-import { qk } from '../../query/keys'
 
-export function useAdminDashboard() {
-  return useQuery<DashboardSuccess, AppError>({
-    queryKey: qk.admin.dashboard(),
-    queryFn: () => getAdminDashboard(),
+export function useDashboardOverview() {
+  return useQuery<DashboardOverview, AppError>({
+    queryKey: ['dashboard', 'overview'],
+    queryFn: () => getDashboardOverview(),
+  })
+}
+
+export function useDashboardStats(params: DashboardStatsParams = {}) {
+  return useQuery<DashboardStats, AppError>({
+    queryKey: ['dashboard', 'stats', params],
+    queryFn: () => getDashboardStats(params),
   })
 }
 

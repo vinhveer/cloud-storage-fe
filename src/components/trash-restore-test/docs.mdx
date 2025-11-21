@@ -1,0 +1,15 @@
+import TrashRestoreTestPage from '@/api/features/page/page-trash/trash-restore-test.page'
+
+## Trash restore test
+
+Trang này dùng để test API **POST /api/trash/\{id\}/restore** (khôi phục 1 file hoặc folder khỏi thùng rác).
+
+- Nhập **ID** (bắt buộc) và chọn **Type** (file hoặc folder) rồi bấm **Restore item**.
+- Hoặc dùng các nút **Quick** để test nhanh: restore file (200), restore folder (200), missing type (500), invalid type (500), unauth (401), child item (400), not found (400).
+
+> Nhớ đăng nhập trước để test 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+> 
+> **Lưu ý:** Để test missing type hoặc invalid type, bạn cần sửa code để gửi request body rỗng hoặc type không hợp lệ (hoặc dùng Postman/curl).
+
+<TrashRestoreTestPage />
+

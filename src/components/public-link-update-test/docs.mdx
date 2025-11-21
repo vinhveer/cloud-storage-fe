@@ -1,0 +1,15 @@
+import PublicLinkUpdateTestPage from '@/api/features/page/page-public-link/public-link-update-test.page'
+
+## Public link update test
+
+Trang này dùng để test API **PUT /api/public-links/\{id\}** (cập nhật quyền hoặc thời hạn hết hạn của public link).
+
+- Nhập `Public link ID`, `permission`, `expired_at` rồi bấm **Update public link**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: thành công (200), validation error (422), not found (404).
+
+> Nhớ đăng nhập trước để có token hợp lệ.
+
+<PublicLinkUpdateTestPage />
+
+
+

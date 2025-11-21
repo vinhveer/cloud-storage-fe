@@ -1,0 +1,17 @@
+import TrashDeleteTestPage from '@/api/features/page/page-trash/trash-delete-test.page'
+
+## Trash delete test
+
+Trang này dùng để test API **DELETE /api/trash/\{id\}** (xóa vĩnh viễn 1 file hoặc folder khỏi hệ thống, không thể khôi phục).
+
+- Nhập **ID** (bắt buộc) và chọn **Type** (file hoặc folder) rồi bấm **Delete permanently**.
+- Hoặc dùng các nút **Quick** để test nhanh: delete file (200), delete folder (200), invalid type (422), unauth (401), child item (400), not found (400).
+
+> ⚠️ **CẢNH BÁO:** Hành động này xóa vĩnh viễn và không thể khôi phục! Hãy cẩn thận khi test.
+> 
+> Nhớ đăng nhập trước để test 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+> 
+> **Lưu ý:** Để test invalid type, bạn cần sửa code để gửi type không hợp lệ (hoặc dùng Postman/curl).
+
+<TrashDeleteTestPage />
+

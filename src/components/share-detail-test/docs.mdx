@@ -1,0 +1,16 @@
+import ShareDetailTestPage from '@/api/features/page/page-share/share-detail-test.page'
+
+## Share detail test
+
+Trang này dùng để test API **GET /api/shares/\{id\}** (lấy chi tiết thông tin share, gồm danh sách user được chia sẻ).
+
+- Nhập `Share ID` rồi bấm **Fetch share detail**.
+- Hoặc dùng các nút **Quick** để test nhanh: unauthenticated (401), không phải owner (404), owner hợp lệ (200).
+
+> Nhớ đăng nhập bằng đúng owner khi test case 200. Với case 404, dùng token của user không phải owner của share đó.
+
+<ShareDetailTestPage />
+
+
+
+

@@ -1,0 +1,15 @@
+import PublicLinkCreateTestPage from '@/api/features/page/page-public-link/public-link-create-test.page'
+
+## Public link create test
+
+Trang này dùng để test API **POST /api/public-links** (tạo public link cho file hoặc folder).
+
+- Nhập `shareable_type`, `shareable_id`, `permission`, `expired_at` rồi bấm **Create public link**.
+- Hoặc dùng các nút **Quick** để test nhanh các case trong spec: 201, 401, 422, 404, 403.
+
+> Nhớ đăng nhập trước để có token hợp lệ (trừ khi test case 401).
+
+<PublicLinkCreateTestPage />
+
+
+

@@ -41,8 +41,16 @@ export const MoveFileSuccessSchema = z.object({
 
 export const MoveFileEnvelopeSchema = createApiResponseSchema(MoveFileSuccessSchema)
 
-export const FileListItemSchema = UploadedFileSchema.extend({
+export const FileListItemSchema = z.object({
+  file_id: z.number(),
+  display_name: z.string(),
+  file_size: z.number(),
+  mime_type: z.string(),
+  file_extension: z.string(),
+  folder_id: z.number().nullable(),
+  user_id: z.number(),
   is_deleted: z.boolean(),
+  created_at: z.string().optional(),
 })
 
 export const FileListPaginationSchema = z.object({

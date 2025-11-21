@@ -1,0 +1,13 @@
+import ListFoldersTestPage from '@/api/features/page/page-folder/list-folders-test.page'
+
+## List folders test
+
+Trang này dùng để test API **GET /api/folders** (danh sách folder con của parent hoặc root).
+
+- Nhập `Parent ID` (để trống để lấy root), `Page`, `Per page`, sau đó bấm **Fetch folders**.
+- Các nút **Quick**: root folders (200), children of 29 (200), pagination (200), parent not found (404), unauthenticated (401).
+
+<ListFoldersTestPage />
+
+
+

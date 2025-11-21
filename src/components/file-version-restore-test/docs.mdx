@@ -1,0 +1,13 @@
+import FileVersionRestoreTestPage from '@/api/features/page/page-file-version/file-version-restore-test.page'
+
+## File version restore test
+
+Trang này dùng để test API **POST /api/files/\{id\}/versions/\{version_id\}/restore** (khôi phục một version thành version hiện tại của file).
+
+- Điền `File ID` và `Version ID`, sau đó bấm **Restore version**.
+- Các nút **Quick** giúp test nhanh các case: happy path (201), unauthenticated (401), forbidden (403), file not found (404), version not found (404).
+
+<FileVersionRestoreTestPage />
+
+
+

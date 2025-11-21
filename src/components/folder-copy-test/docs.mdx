@@ -1,0 +1,15 @@
+import FolderCopyTestPage from '@/api/features/page/page-folder/folder-copy-test.page'
+
+## Folder copy test
+
+Trang này dùng để test API **POST /api/folders/\{id\}/copy** (sao chép folder cùng toàn bộ cây con).
+
+- Nhập `Source folder ID` và `Target folder ID` (có thể để trống để copy ra root), sau đó bấm **Copy folder**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: happy path (200), validation error (422), forbidden (403), unauthenticated (401).
+
+> Nhớ đăng nhập trước để có token hợp lệ (trừ khi bạn cố tình test 401).
+
+<FolderCopyTestPage />
+
+
+

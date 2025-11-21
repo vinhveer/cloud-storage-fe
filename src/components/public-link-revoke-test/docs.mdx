@@ -1,0 +1,16 @@
+import PublicLinkRevokeTestPage from '@/api/features/page/page-public-link/public-link-revoke-test.page'
+
+## Public link revoke test
+
+Trang này dùng để test API **POST /api/public-links/\{id\}/revoke** (thu hồi thủ công public link, set `revoked_at`).
+
+- Nhập `Public link ID` rồi bấm **Revoke public link**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: thành công (200) và unauthenticated (401).
+
+> Nhớ đăng nhập trước khi test case 200. Để test 401, mở một tab mới chưa đăng nhập và chạy lại trang samples này.
+
+<PublicLinkRevokeTestPage />
+
+
+
+

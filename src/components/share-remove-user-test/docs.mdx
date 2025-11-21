@@ -1,0 +1,16 @@
+import ShareRemoveUserTestPage from '@/api/features/page/page-share/share-remove-user-test.page'
+
+## Share remove user test
+
+Trang này dùng để test API **DELETE /api/shares/\{id\}/users/\{user_id\}** (xóa quyền truy cập của 1 user khỏi share).
+
+- Nhập `Share ID` và `User ID` rồi bấm **Remove user from share**.
+- Hoặc dùng các nút **Quick** để test nhanh: unauthenticated (401), share/user không tồn tại hoặc không thuộc share (404), và xóa thành công (200).
+
+> Nhớ đăng nhập bằng owner của share khi test case 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<ShareRemoveUserTestPage />
+
+
+
+

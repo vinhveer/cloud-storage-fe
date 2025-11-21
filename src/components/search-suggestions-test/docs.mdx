@@ -1,0 +1,16 @@
+import SearchSuggestionsTestPage from '@/api/features/page/page-search/search-suggestions-test.page'
+
+## Search suggestions test
+
+Trang này dùng để test API **GET /api/search/suggestions** (gợi ý autocomplete cho thanh tìm kiếm).
+
+- Nhập `q`, chọn `type` (file/folder/all), `limit` rồi bấm **Fetch suggestions**.
+- Hoặc dùng các nút **Quick** để test nhanh: thiếu `q` (422), chỉ file (200), chỉ folder (200), tất cả (200), limit > 100 (422).
+
+> Nhớ đăng nhập trước để có token hợp lệ.
+
+<SearchSuggestionsTestPage />
+
+
+
+

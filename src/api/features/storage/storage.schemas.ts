@@ -1,23 +1,29 @@
 import { z } from 'zod'
-import { createApiResponseSchema } from '../../core/guards'
 
-export const StorageOverviewFormattedSchema = z.object({
-  used: z.string().min(1),
-  limit: z.string().min(1),
+export const StorageBreakdownItemSchema = z.object({
+  type: z.string(),
+  total_size: z.number(),
+  count: z.number(),
 })
 
-export const SystemOverviewSchema = z.object({
-  total_users: z.number(),
-  total_files: z.number(),
-  total_storage_used: z.number(),
-  total_storage_limit: z.number(),
-  formatted: StorageOverviewFormattedSchema,
+export const StorageBreakdownSchema = z.object({
+  success: z.literal(true),
+  user_id: z.number(),
+  breakdown: z.array(StorageBreakdownItemSchema),
+  total_size: z.number(),
 })
 
-export const StorageOverviewSuccessSchema = z.object({
-  system_overview: SystemOverviewSchema,
+export const StorageLimitSchema = z.object({
+  success: z.literal(true),
+  user_id: z.number(),
+  storage_limit: z.number(),
+  storage_used: z.number(),
+  remaining: z.number(),
+  formatted: z.object({
+    limit: z.string(),
+    used: z.string(),
+    remaining: z.string(),
+  }),
 })
-
-export const StorageOverviewEnvelopeSchema = createApiResponseSchema(StorageOverviewSuccessSchema)
 
 

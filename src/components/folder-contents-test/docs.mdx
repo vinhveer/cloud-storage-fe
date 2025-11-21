@@ -1,0 +1,13 @@
+import FolderContentsTestPage from '@/api/features/page/page-folder/folder-contents-test.page'
+
+## Folder contents test
+
+Trang này dùng để test API **GET /api/folders/\{id\}/contents** (folders + files bên trong một folder).
+
+- Nhập `Folder ID` (0 = root) rồi bấm **Fetch contents** để xem danh sách `folders` và `files`.
+- Các nút **Quick**: folder 29 (200), root (200), unauthenticated (401), not found (404).
+
+<FolderContentsTestPage />
+
+
+

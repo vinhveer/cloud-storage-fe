@@ -1,0 +1,13 @@
+import TrashFolderContentsTestPage from '@/api/features/page/page-trash/trash-folder-contents-test.page'
+
+## Trash folder contents test
+
+Trang này dùng để test API **GET /api/trash/folders/\{folderId\}/contents** (lấy danh sách file & folder con trong một folder đã bị xóa).
+
+- Nhập **Folder ID** (bắt buộc), **Search** (tìm kiếm), **Page** (số trang), **Per page** (số item mỗi trang) rồi bấm **Fetch folder contents**.
+- Hoặc dùng các nút **Quick** để test nhanh: unauthenticated (401), basic (200), search (200), pagination (200), not found (404).
+
+> Nhớ đăng nhập trước để test 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<TrashFolderContentsTestPage />
+

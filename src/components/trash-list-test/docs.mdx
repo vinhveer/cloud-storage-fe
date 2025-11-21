@@ -1,0 +1,13 @@
+import TrashListTestPage from '@/api/features/page/page-trash/trash-list-test.page'
+
+## Trash list test
+
+Trang này dùng để test API **GET /api/trash** (lấy danh sách file & folder đã bị xóa của user hiện tại).
+
+- Nhập **Search** (tìm kiếm), **Page** (số trang), **Per page** (số item mỗi trang) rồi bấm **Fetch trash list**.
+- Hoặc dùng các nút **Quick** để test nhanh: unauthenticated (401), basic list (200), search (200), pagination (200).
+
+> Nhớ đăng nhập trước để test 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<TrashListTestPage />
+

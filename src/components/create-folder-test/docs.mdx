@@ -1,0 +1,13 @@
+import CreateFolderTestPage from '@/api/features/page/page-folder/create-folder-test.page'
+
+## Create folder test
+
+Trang này dùng để test API **POST /api/folders** (tạo folder mới trong thư mục cha hoặc gốc).
+
+- Điền `Folder name`, `Parent folder ID` (nếu muốn tạo trong folder cha), sau đó bấm **Create folder**.
+- Các nút **Quick** giúp test nhanh các case: create at root (200), create inside parent (200), missing name (422), invalid parent (500), unauthenticated (401).
+
+<CreateFolderTestPage />
+
+
+

@@ -1,0 +1,16 @@
+import ShareCreateTestPage from '@/api/features/page/page-share/share-create-test.page'
+
+## Share create test
+
+Trang này dùng để test API **POST /api/shares** (chia sẻ file hoặc folder cho user khác).
+
+- Nhập `shareable_type`, `shareable_id`, danh sách `user_ids` (cách nhau bằng dấu phẩy) và `permission`, sau đó bấm **Share**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: tạo share mới, re-share cùng quyền, re-share đổi quyền, thêm user mới, unauthenticated (401), thiếu field (422), shareable không tồn tại (404), recipients rỗng (422), permission invalid (422).
+
+> Nhớ đăng nhập trước để test các case 201/200/404/422. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<ShareCreateTestPage />
+
+
+
+

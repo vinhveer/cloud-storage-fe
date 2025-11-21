@@ -1,14 +1,8 @@
 import { z } from 'zod'
-import {
-  StorageOverviewEnvelopeSchema,
-  StorageOverviewFormattedSchema,
-  StorageOverviewSuccessSchema,
-  SystemOverviewSchema,
-} from './storage.schemas'
+import { StorageBreakdownItemSchema, StorageBreakdownSchema, StorageLimitSchema } from './storage.schemas'
 
-export type StorageOverviewFormatted = z.infer<typeof StorageOverviewFormattedSchema>
-export type SystemOverview = z.infer<typeof SystemOverviewSchema>
-export type StorageOverviewSuccess = z.infer<typeof StorageOverviewSuccessSchema>
-export type StorageOverviewEnvelope = z.infer<typeof StorageOverviewEnvelopeSchema>
+export type StorageBreakdownItem = z.infer<typeof StorageBreakdownItemSchema>
+export type StorageBreakdown = z.infer<typeof StorageBreakdownSchema>
+export type StorageLimit = z.infer<typeof StorageLimitSchema>
 
 

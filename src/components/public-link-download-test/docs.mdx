@@ -1,0 +1,16 @@
+import PublicLinkDownloadTestPage from '@/api/features/page/page-public-link/public-link-download-test.page'
+
+## Public link download test
+
+Trang này dùng để test API **GET /api/public-links/\{token\}/download** (lấy `download_url` để tải file qua public link, không cần đăng nhập).
+
+- Nhập `token` rồi bấm **Get download URL**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: token hợp lệ (200), permission denied (403), token không tồn tại (404).
+
+> API này chỉ áp dụng khi public link có `permission` là `download`.
+
+<PublicLinkDownloadTestPage />
+
+
+
+

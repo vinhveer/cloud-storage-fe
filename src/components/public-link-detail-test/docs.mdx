@@ -1,0 +1,13 @@
+import PublicLinkDetailTestPage from '@/api/features/page/page-public-link/public-link-detail-test.page'
+
+## Public link detail test
+
+Trang này dùng để test API **GET /api/public-links/\{token\}** (lấy thông tin chi tiết của public link, không cần đăng nhập).
+
+- Nhập `token` rồi bấm **Fetch public link info**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: token hợp lệ (200), token invalid (404), token revoked/expired (403).
+
+<PublicLinkDetailTestPage />
+
+
+

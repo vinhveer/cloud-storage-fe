@@ -1,0 +1,16 @@
+import ShareDeleteTestPage from '@/api/features/page/page-share/share-delete-test.page'
+
+## Share delete test
+
+Trang này dùng để test API **DELETE /api/shares/\{id\}** (thu hồi share, tất cả user nhận share mất quyền).
+
+- Nhập `Share ID` rồi bấm **Delete share**.
+- Hoặc dùng các nút **Quick** để test nhanh: unauthenticated (401), share not found (404), và xóa thành công (200).
+
+> Nhớ đăng nhập bằng owner của share khi test case 200. Để test 401, mở tab chưa đăng nhập rồi truy cập lại trang samples này.
+
+<ShareDeleteTestPage />
+
+
+
+

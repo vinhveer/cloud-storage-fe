@@ -1,0 +1,16 @@
+import PublicLinkPreviewTestPage from '@/api/features/page/page-public-link/public-link-preview-test.page'
+
+## Public link preview test
+
+Trang này dùng để test API **GET /api/public-links/\{token\}/preview** (xem trước file qua public link, không cần đăng nhập).
+
+- Nhập `token` rồi bấm **Fetch preview**.
+- Hoặc dùng các nút **Quick** để test nhanh các case: token hợp lệ (200) và token không tồn tại (404).
+
+> API này chỉ áp dụng khi public link có `permission` là `view` hoặc `download`.
+
+<PublicLinkPreviewTestPage />
+
+
+
+
