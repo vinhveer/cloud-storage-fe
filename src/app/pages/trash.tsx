@@ -2,6 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import FileList from '@/components/FileList'
 import type { FileItem } from '@/components/FileList'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { useAlert } from '@/components/Alert'
 
 const trashItems: FileItem[] = [
   {
@@ -42,6 +43,17 @@ const trashItems: FileItem[] = [
 ]
 
 export default function TrashPage() {
+  const { showAlert } = useAlert()
+
+  const handleEmptyTrash = () => {
+    // TODO: implement API call
+    showAlert({
+      type: 'warning',
+      heading: 'Empty Trash',
+      message: 'This feature is not yet implemented. Coming soon!',
+      duration: 4000
+    })
+  }
   return (
     <div className="space-y-6">
       <Breadcrumb items={[{ id: 'trash', label: 'Trash' }]} />
@@ -65,6 +77,7 @@ export default function TrashPage() {
               </span>
               <button
                 type="button"
+                onClick={handleEmptyTrash}
                 className="px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-700 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors inline-flex items-center gap-1.5"
               >
                 <TrashIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />

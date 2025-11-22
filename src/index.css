@@ -91,6 +91,10 @@
     }
   }
 
+  .animate-slide-in {
+    animation: slideInRight 0.3s ease-out;
+  }
+
   /* Sidebar custom scrollbar */
   .sidebar-scroll,
   .sidebar-scrollbar {

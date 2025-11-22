@@ -6,13 +6,15 @@ import FormInput from '@/components/FormGroup/FormInput/FormInput'
 import { Button } from '@/components/Button/Button'
 import { useLogin } from '@/api/features/auth/auth.mutations'
 import { AppError } from '@/api/core/error'
+import { useAlert } from '@/components/Alert'
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+  const [showForgotPassword, setShowForgotPassword] = React.useState(false)
   const navigate = useNavigate()
   const loginMutation = useLogin()
+  const { showAlert } = useAlert()
 
   const deviceName = 'web-client'
 
@@ -20,8 +22,6 @@ export default function LoginPage() {
     if (loginMutation.isPending) {
       return
     }
-
-    setErrorMessage(null)
 
     try {
       await loginMutation.mutateAsync({
@@ -44,26 +44,37 @@ export default function LoginPage() {
           to: '/auth/verify-email',
         })
       } else {
-        setErrorMessage(applicationError.message || 'Đăng nhập thất bại, vui lòng thử lại.')
+        setShowForgotPassword(true)
+        showAlert({
+          type: 'error',
+          heading: 'Login Failed',
+          message: applicationError.message || 'Login failed, please try again.',
+          icon: false,
+          duration: 0
+        })
       }
     }
   }
 
   return (
     <FormCard
-      title="Đăng nhập"
-      subtitle="Chào mừng trở lại"
+      title="Login"
+      subtitle="Welcome back"
       footer={(
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Chưa có tài khoản?{' '}
-          <Link to="/auth/register" className="text-blue-600 dark:text-blue-400 hover:underline">Đăng ký</Link>
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Don't have an account?{' '}
+            <Link to="/auth/register" className="text-blue-600 dark:text-blue-400 hover:underline">Register</Link>
+          </p>
+          {showForgotPassword && (
+            <Link to="/auth/forgot-password" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              Forgot Password?
+            </Link>
+          )}
+        </div>
       )}
     >
       <div className="space-y-4">
-        {errorMessage && (
-          <p className="text-sm text-red-500" role="alert">{errorMessage}</p>
-        )}
         <FormGroup label="Email">
           <FormInput
             type="email"
@@ -74,7 +85,7 @@ export default function LoginPage() {
           />
         </FormGroup>
 
-        <FormGroup label="Mật khẩu">
+        <FormGroup label="Password">
           <FormInput
             type="password"
             placeholder="••••••••"
@@ -90,10 +101,10 @@ export default function LoginPage() {
             variant="primary"
             size="lg"
             isLoading={loginMutation.isPending}
-            loadingText="Đang đăng nhập..."
+            loadingText="Logging in..."
             disabled={!email || !password}
           >
-            Đăng nhập
+            Login
           </Button>
         </div>
       </div>

@@ -10,6 +10,8 @@ import {
   RegisterSuccessSchema,
   ResetPasswordRequestSchema,
   ResendVerificationRequestSchema,
+  UpdateProfileRequestSchema,
+  ChangePasswordRequestSchema,
 } from './auth.schemas'
 
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>
@@ -22,3 +24,5 @@ export type ResendVerificationRequest = z.infer<typeof ResendVerificationRequest
 export type ForgotPasswordRequest = z.infer<typeof ForgotPasswordRequestSchema>
 export type ResetPasswordRequest = z.infer<typeof ResetPasswordRequestSchema>
 export type MessageOnlySuccess = z.infer<typeof MessageOnlySuccessSchema>
+export type UpdateProfileRequest = z.infer<typeof UpdateProfileRequestSchema>
+export type ChangePasswordRequest = z.infer<typeof ChangePasswordRequestSchema>
