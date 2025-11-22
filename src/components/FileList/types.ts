@@ -25,6 +25,8 @@ export type FileListProps = {
   onItemOpen?: (file: FileItem, index: number) => void
   /** Custom nội dung bên phải toolbar; nếu không truyền sẽ hiện số lượng + Filter/Sort */
   toolbarRight?: React.ReactNode
+  /** If true, tiles view will align items to the left (useful when few items) */
+  tilesAlignLeft?: boolean
 }
 
 

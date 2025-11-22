@@ -36,7 +36,7 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
               )}
 
               <div className="mb-2">
-                {file.icon ?? getDefaultFileIcon(file, 'w-7 h-7')}
+                {file.icon ?? getDefaultFileIcon(file, 'w-15 h-15')}
               </div>
               <div className="text-center w-full">
                 <div className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate" title={file.name ?? 'Unknown'}>

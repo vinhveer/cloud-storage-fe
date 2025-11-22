@@ -1,5 +1,5 @@
-import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import FileList from '@/components/FileList'
+import { Button } from '@/components/Button/Button'
 import type { FileItem } from '@/components/FileList'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '@/components/Alert'
@@ -56,7 +56,6 @@ export default function TrashPage() {
   }
   return (
     <div className="space-y-6">
-      <Breadcrumb items={[{ id: 'trash', label: 'Trash' }]} />
 
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Trash</h2>
@@ -69,20 +68,21 @@ export default function TrashPage() {
         <FileList
           files={trashItems}
           viewMode="details"
+          tilesAlignLeft={true}
           heightVh={60}
           toolbarRight={
             <>
               <span className="hidden sm:inline-block text-sm text-gray-500 dark:text-gray-400 mr-2">
                 {trashItems.length} items
               </span>
-              <button
-                type="button"
-                onClick={handleEmptyTrash}
-                className="px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-700 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors inline-flex items-center gap-1.5"
-              >
-                <TrashIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
-                Làm trống Thùng rác
-              </button>
+              <Button
+                variant="danger"
+                size="sm"
+                icon={<TrashIcon className="w-4 h-4 text-current" aria-hidden="true" />}
+                value="Làm trống Thùng rác"
+                className="inline-flex items-center gap-1.5"
+                aria-label="Làm trống Thùng rác"
+              />
             </>
           }
         />

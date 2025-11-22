@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
+
 import FileList from '@/components/FileList'
 import type { FileItem } from '@/components/FileList'
 
@@ -43,14 +43,6 @@ export default function MyFilesPage() {
   const isRoot = currentFolder === 'root'
   const files = isRoot ? rootFiles : designerFiles
 
-  const breadcrumbItems =
-    currentFolder === 'root'
-      ? [{ id: 'my-files', label: 'My files' }]
-      : [
-          { id: 'my-files', label: 'My files' },
-          { id: 'designer', label: 'Designer' },
-        ]
-
   const title = isRoot ? 'My files' : 'Designer'
   const subtitle = isRoot
     ? 'Danh sách thư mục và tệp của bạn.'
@@ -58,14 +50,6 @@ export default function MyFilesPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={breadcrumbItems}
-        onItemClick={(item) => {
-          if (item.id === 'my-files') {
-            setCurrentFolder('root')
-          }
-        }}
-      />
 
       <header>
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h2>

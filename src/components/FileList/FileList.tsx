@@ -19,6 +19,7 @@ export default function FileList({
   heightVh,
   onItemOpen,
   toolbarRight,
+  tilesAlignLeft,
 }: Readonly<FileListProps>) {
   const {
     dropdownOpen,
@@ -186,6 +187,7 @@ export default function FileList({
             isSelected={isSelected}
             toggleItem={toggleItem}
             onItemOpen={onItemOpen}
+            tilesAlignLeft={tilesAlignLeft}
           />
         )}
 

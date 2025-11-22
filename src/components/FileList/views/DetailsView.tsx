@@ -45,7 +45,7 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
                   </div>
                 )}
                 <div className="flex-shrink-0 mr-3">
-                  {file.icon ?? getDefaultFileIcon(file, 'w-5 h-5')}
+                  {file.icon ?? getDefaultFileIcon(file, 'w-10 h-10')}
                 </div>
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{file.name ?? 'Unknown'}</div>
               </div>

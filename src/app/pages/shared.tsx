@@ -3,7 +3,6 @@ import Subnav from '@/components/Subnav/Subnav'
 import type { SubnavItem } from '@/components/Subnav/Subnav'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 import type { FileItem } from '@/components/FileList'
-import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 
 type SharedItem = FileItem & {
   owner: string
@@ -64,40 +63,15 @@ const subnavItems: SubnavItem[] = [
 ]
 
 type Tab = 'with' | 'by'
-type TypeFilter = 'all' | 'word' | 'excel' | 'powerpoint' | 'pdf'
+
 
 export default function SharedPage() {
   const [activeTab, setActiveTab] = useState<Tab>('with')
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all')
 
   const items = activeTab === 'with' ? withYouData : byYouData
 
-  const filteredItems = useMemo(
-    () =>
-      items.filter((item) => {
-        if (typeFilter === 'all') return true
-        const t = item.type?.toLowerCase() ?? ''
-        if (typeFilter === 'word') return t.includes('word')
-        if (typeFilter === 'excel') return t.includes('excel')
-        if (typeFilter === 'powerpoint') return t.includes('powerpoint')
-        if (typeFilter === 'pdf') return t.includes('pdf')
-        return true
-      }),
-    [items, typeFilter]
-  )
-
-  const typeFilterLabel = (t: TypeFilter) => {
-    if (t === 'all') return 'All'
-    if (t === 'word') return 'Word'
-    if (t === 'excel') return 'Excel'
-    if (t === 'powerpoint') return 'PowerPoint'
-    if (t === 'pdf') return 'PDF'
-    return t
-  }
-
   return (
     <div className="space-y-4">
-      <Breadcrumb items={[{ id: 'shared', label: 'Shared' }]} />
 
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Shared</h2>
@@ -114,38 +88,15 @@ export default function SharedPage() {
           }}
         />
 
-        <div className="flex items-center gap-2">
-          {(['all', 'word', 'excel', 'powerpoint', 'pdf'] as TypeFilter[]).map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setTypeFilter(t)}
-              className={
-                'px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ' +
-                (typeFilter === t
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-900/40 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800')
-              }
-            >
-              {typeFilterLabel(t)}
-            </button>
-          ))}
-        </div>
       </div>
 
       <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400">
           <div>
-            {activeTab === 'with' ? 'With you' : 'By you'} · {filteredItems.length}{' '}
-            {filteredItems.length === 1 ? 'item' : 'items'}
+            {activeTab === 'with' ? 'With you' : 'By you'} · {items.length}{' '}
+            {items.length === 1 ? 'item' : 'items'}
           </div>
-          <div>
-              <input
-                type="text"
-                placeholder="Filter by name or person"
-                className="rounded-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 px-3 py-1 text-xs text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-          </div>
+
         </div>
 
         <table className="min-w-full text-sm text-gray-900 dark:text-gray-100">
@@ -157,7 +108,7 @@ export default function SharedPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredItems.map((item) => (
+            {items.map((item) => (
               <tr
                 key={item.id}
                 className="border-t border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/80 transition-colors cursor-pointer"

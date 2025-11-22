@@ -1,6 +1,5 @@
 import FileCard from '@/components/FileCard/FileCard'
 import StorageUsage from '@/components/StorageUsage/StorageUsage'
-import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 
 type HomeFileCard = {
   id: string
@@ -51,7 +50,6 @@ const homeCards: HomeFileCard[] = [
 export default function HomePage() {
   return (
     <div className="space-y-6">
-      <Breadcrumb items={[{ id: 'home', label: 'Home' }]} />
 
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Home</h2>
