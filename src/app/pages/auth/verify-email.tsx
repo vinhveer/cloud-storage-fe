@@ -4,13 +4,12 @@ import FormCard from '@/components/FormCard/FormCard'
 import { Button } from '@/components/Button/Button'
 import { useResendVerificationEmail } from '@/api/features/auth/auth.mutations'
 import { AppError } from '@/api/core/error'
+import { useAlert } from '@/components/Alert'
 
 export default function VerifyEmailPage() {
   const [email, setEmail] = React.useState('')
-  const [message, setMessage] = React.useState<string | null>(null)
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
-
   const resendVerificationMutation = useResendVerificationEmail()
+  const { showAlert } = useAlert()
 
   React.useEffect(() => {
     if (globalThis.window === undefined) {
@@ -51,7 +50,7 @@ export default function VerifyEmailPage() {
     hasAutoResentRef.current = true
     // eslint-disable-next-line no-console
     console.log('[VERIFY_EMAIL] auto resend once with email', email)
-    // Gọi tự động gửi lại email xác thực một lần khi vào trang nếu đã có email
+    // Automatically resend verification email once when landing on page if email is available
     void handleResend()
   }, [email])
 
@@ -63,46 +62,39 @@ export default function VerifyEmailPage() {
     // eslint-disable-next-line no-console
     console.log('[VERIFY_EMAIL] handleResend called with email', email)
 
-    setMessage(null)
-    setErrorMessage(null)
-
     try {
       const response = await resendVerificationMutation.mutateAsync({ email })
-      setMessage(response.message || 'Đã gửi lại email xác thực, vui lòng kiểm tra hộp thư.')
+      showAlert({
+        type: 'success',
+        message: response.message || 'Verification email has been resent, please check your inbox.',
+        duration: 5000
+      })
     } catch (unknownError) {
       const applicationError = unknownError as AppError
-      setErrorMessage(applicationError.message || 'Gửi lại email xác thực thất bại, vui lòng thử lại.')
+      showAlert({
+        type: 'error',
+        message: applicationError.message || 'Failed to resend verification email, please try again.',
+        duration: 5000
+      })
     }
   }
 
   return (
     <FormCard
-      title="Xác thực email"
-      subtitle="Hoàn tất bước xác thực tài khoản để tiếp tục sử dụng dịch vụ"
+      title="Verify Email"
+      subtitle="Complete the account verification step to continue using the service"
       footer={(
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Đã xác thực xong?{' '}
-          <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Quay lại đăng nhập</Link>
+          Already verified?{' '}
+          <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Back to login</Link>
         </p>
       )}
     >
       <div className="space-y-4">
         <p className="text-sm text-gray-700 dark:text-gray-300">
-          Chúng tôi đã gửi một email chứa liên kết xác thực đến địa chỉ email của bạn.
-          Vui lòng kiểm tra hộp thư đến (hoặc mục Spam) và nhấn vào liên kết trong email để kích hoạt tài khoản.
+          We have sent an email containing a verification link to your email address.
+          Please check your inbox (or Spam folder) and click on the link in the email to activate your account.
         </p>
-
-        {message && (
-          <output className="block text-sm text-green-600 dark:text-green-400">
-            {message}
-          </output>
-        )}
-
-        {errorMessage && (
-          <p className="text-sm text-red-500" role="alert">
-            {errorMessage}
-          </p>
-        )}
 
         <div className="space-y-2">
           <label
@@ -127,10 +119,10 @@ export default function VerifyEmailPage() {
             variant="primary"
             size="lg"
             isLoading={resendVerificationMutation.isPending}
-            loadingText="Đang gửi lại..."
+            loadingText="Resending..."
             disabled={!email}
           >
-            Gửi lại email xác thực
+            Resend verification email
           </Button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { get, post } from '../../core/fetcher'
+import { get, post, put } from '../../core/fetcher'
 import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
 import {
@@ -12,6 +12,8 @@ import {
   ResetPasswordRequestSchema,
   ResendVerificationRequestSchema,
   ForgotPasswordRequestSchema,
+  UpdateProfileRequestSchema,
+  ChangePasswordRequestSchema,
 } from './auth.schemas'
 import type {
   AuthSuccess,
@@ -24,6 +26,8 @@ import type {
   RegisterSuccess,
   ResetPasswordRequest,
   ResendVerificationRequest,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
 } from './auth.types'
 
 const authSuccessEnvelope = createApiResponseSchema(AuthSuccessSchema)
@@ -123,6 +127,25 @@ export async function resetPassword(payload: ResetPasswordRequest): Promise<Mess
   const response = await post<unknown, typeof requestBody>('/api/reset-password', requestBody, {
     skipAuth: true,
   })
+  const parsed = parseWithZod(messageOnlyEnvelope, response)
+  return parsed.data
+}
+
+export async function updateProfile(payload: UpdateProfileRequest): Promise<AuthenticatedUser> {
+  const validPayload = parseWithZod(UpdateProfileRequestSchema, payload)
+  const response = await put<unknown, UpdateProfileRequest>('/api/user/profile-information', validPayload)
+  const parsed = parseWithZod(profileEnvelope, response)
+  return parsed.data
+}
+
+export async function changePassword(payload: ChangePasswordRequest): Promise<MessageOnlySuccess> {
+  const validPayload = parseWithZod(ChangePasswordRequestSchema, payload)
+  const requestBody = {
+    current_password: validPayload.currentPassword,
+    password: validPayload.password,
+    password_confirmation: validPayload.passwordConfirmation,
+  }
+  const response = await put<unknown, typeof requestBody>('/api/user/password', requestBody)
   const parsed = parseWithZod(messageOnlyEnvelope, response)
   return parsed.data
 }

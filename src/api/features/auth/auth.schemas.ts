@@ -75,3 +75,19 @@ export const ResetPasswordRequestSchema = z
 export const LogoutSuccessSchema = z.object({
   message: z.string().min(1),
 })
+
+export const UpdateProfileRequestSchema = z.object({
+  name: z.string().min(1),
+  email: emailSchema,
+})
+
+export const ChangePasswordRequestSchema = z
+  .object({
+    currentPassword: z.string().min(1),
+    password: z.string().min(8),
+    passwordConfirmation: z.string().min(8),
+  })
+  .refine(values => values.password === values.passwordConfirmation, {
+    message: 'Password confirmation must match password',
+    path: ['passwordConfirmation'],
+  })

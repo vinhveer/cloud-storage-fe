@@ -4,19 +4,19 @@ import FormCard from '@/components/FormCard/FormCard'
 import FormGroup from '@/components/FormGroup/FormGroup'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
 import { Button } from '@/components/Button/Button'
-import { useRegister, useResendVerificationEmail } from '@/api/features/auth/auth.mutations'
+import { useRegister } from '@/api/features/auth/auth.mutations'
 import { AppError } from '@/api/core/error'
+import { useAlert } from '@/components/Alert'
+import { useNavigate } from '@tanstack/react-router'
 
 export default function RegisterPage() {
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
-  const [resendMessage, setResendMessage] = React.useState<string | null>(null)
   const registerMutation = useRegister()
-  const resendVerificationMutation = useResendVerificationEmail()
+  const { showAlert } = useAlert()
+  const navigate = useNavigate()
 
   function passwordsMatch() {
     return password === confirmPassword
@@ -28,13 +28,13 @@ export default function RegisterPage() {
     }
 
     if (!passwordsMatch()) {
-      setErrorMessage('Mật khẩu xác nhận không khớp.')
+      showAlert({
+        type: 'error',
+        message: 'Password confirmation does not match.',
+        duration: 5000
+      })
       return
     }
-
-    setErrorMessage(null)
-    setSuccessMessage(null)
-    setResendMessage(null)
 
     try {
       const response = await registerMutation.mutateAsync({
@@ -43,74 +43,53 @@ export default function RegisterPage() {
         password,
         passwordConfirmation: confirmPassword,
       })
-      setSuccessMessage(response.message || 'Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.')
+
+      // Save email to sessionStorage for verify-email page
+      if (globalThis.window) {
+        try {
+          globalThis.window.sessionStorage.setItem('cloud-storage.lastRegisterEmail', email)
+        } catch {
+          // ignore storage errors
+        }
+      }
+
+      showAlert({
+        type: 'success',
+        heading: 'Registration Successful',
+        message: response.message || 'Registration successful. Please check your email to verify your account.',
+        duration: 3000
+      })
+
+      // Redirect to verify-email page after short delay
+      setTimeout(() => {
+        navigate({ to: '/auth/verify-email' })
+      }, 1000)
     } catch (unknownError) {
       const applicationError = unknownError as AppError
-      setErrorMessage(applicationError.message || 'Đăng ký thất bại, vui lòng thử lại.')
-    }
-  }
-
-  async function handleResendVerification() {
-    if (!email || resendVerificationMutation.isPending) {
-      return
-    }
-
-    setResendMessage(null)
-
-    try {
-      const response = await resendVerificationMutation.mutateAsync({ email })
-      setResendMessage(response.message || 'Đã gửi lại email xác thực, vui lòng kiểm tra hộp thư.')
-    } catch (unknownError) {
-      const applicationError = unknownError as AppError
-      setResendMessage(applicationError.message || 'Gửi lại email xác thực thất bại, vui lòng thử lại.')
+      showAlert({
+        type: 'error',
+        heading: 'Registration Failed',
+        message: applicationError.message || 'Registration failed, please try again.',
+        duration: 0
+      })
     }
   }
 
   return (
     <FormCard
-      title="Đăng ký"
-      subtitle="Tạo tài khoản mới"
+      title="Register"
+      subtitle="Create a new account"
       footer={(
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Đã có tài khoản?{' '}
-          <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Đăng nhập</Link>
+          Already have an account?{' '}
+          <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Login</Link>
         </p>
       )}
     >
       <div className="space-y-4">
-        {errorMessage && (
-          <p className="text-sm text-red-500" role="alert">{errorMessage}</p>
-        )}
-        {successMessage && (
-          <div className="rounded-md border border-green-300 bg-green-50 p-3 text-sm text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-100">
-            <p className="mb-2">
-              {successMessage}
-            </p>
-            <p className="mb-2">
-              Nếu bạn chưa nhận được email, hãy kiểm tra hộp thư rác hoặc nhấn nút bên dưới để gửi lại liên kết xác thực.
-            </p>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleResendVerification}
-                isLoading={resendVerificationMutation.isPending}
-                loadingText="Đang gửi lại..."
-                disabled={!email}
-              >
-                Gửi lại email xác thực
-              </Button>
-              {resendMessage && (
-                <span className="text-xs">
-                  {resendMessage}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-        <FormGroup label="Họ tên">
+        <FormGroup label="Full Name">
           <FormInput
-            placeholder="Nguyễn Văn A"
+            placeholder="John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -127,7 +106,7 @@ export default function RegisterPage() {
           />
         </FormGroup>
 
-        <FormGroup label="Mật khẩu">
+        <FormGroup label="Password">
           <FormInput
             type="password"
             placeholder="••••••••"
@@ -137,7 +116,7 @@ export default function RegisterPage() {
           />
         </FormGroup>
 
-        <FormGroup label="Nhập lại mật khẩu">
+        <FormGroup label="Confirm Password">
           <FormInput
             type="password"
             placeholder="••••••••"
@@ -153,14 +132,14 @@ export default function RegisterPage() {
             variant="primary"
             size="lg"
             isLoading={registerMutation.isPending}
-            loadingText="Đang đăng ký..."
+            loadingText="Registering..."
             disabled={!name || !email || !password || !confirmPassword}
           >
-            Đăng ký
+            Register
           </Button>
         </div>
       </div>
-    </FormCard>
+    </FormCard >
   )
 }
 

@@ -1,14 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
+  changePassword,
   forgotPassword,
   login,
   logout,
   register,
   resendVerificationEmail,
   resetPassword,
+  updateProfile,
 } from './auth.api'
 import type {
+  AuthenticatedUser,
   AuthSuccess,
+  ChangePasswordRequest,
   ForgotPasswordRequest,
   LoginRequest,
   LogoutSuccess,
@@ -17,6 +21,7 @@ import type {
   RegisterSuccess,
   ResendVerificationRequest,
   ResetPasswordRequest,
+  UpdateProfileRequest,
 } from './auth.types'
 import { qk } from '../../query/keys'
 import { AppError } from '../../core/error'
@@ -65,5 +70,22 @@ export function useForgotPassword() {
 export function useResetPassword() {
   return useMutation<MessageOnlySuccess, AppError, ResetPasswordRequest>({
     mutationFn: resetPassword,
+  })
+}
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient()
+
+  return useMutation<AuthenticatedUser, AppError, UpdateProfileRequest>({
+    mutationFn: updateProfile,
+    onSuccess: (user) => {
+      queryClient.setQueryData(qk.auth.profile(), user)
+    },
+  })
+}
+
+export function useChangePassword() {
+  return useMutation<MessageOnlySuccess, AppError, ChangePasswordRequest>({
+    mutationFn: changePassword,
   })
 }
