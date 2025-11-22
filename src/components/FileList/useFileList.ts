@@ -21,6 +21,14 @@ export function useFileList({ initialViewMode = 'list', fileCount = 0 }: UseFile
     setSelected([])
   }, [])
 
+  const enableSelectionMode = React.useCallback(() => {
+    setSelectionMode(true)
+  }, [])
+
+  const selectSingle = React.useCallback((index: number) => {
+    setSelected([index])
+  }, [])
+
   const isSelected = React.useCallback((index: number) => selected.includes(index), [selected])
 
   const toggleItem = React.useCallback((index: number) => {
@@ -46,9 +54,12 @@ export function useFileList({ initialViewMode = 'list', fileCount = 0 }: UseFile
     // selection
     selectionMode,
     toggleSelectionMode,
+    enableSelectionMode,
+    setSelectionMode,
     selected,
     isSelected,
     toggleItem,
+    selectSingle,
     selectAll,
     deselectAll,
   }

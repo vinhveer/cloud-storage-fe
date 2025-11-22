@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function DetailsView({ files, selectionMode, isSelected, toggleItem, onItemOpen }: FileListViewProps) {
+export default function DetailsView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext }: FileListViewProps) {
   return (
     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0">
       <thead className="bg-gray-0 dark:bg-gray-800">
@@ -33,6 +33,10 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
                 onItemOpen?.(file, index)
               }
             }}
+            onContextMenu={(e) => {
+              e.preventDefault()
+              onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
+            }}
             className={clsx('hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer', selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30')}
           >
             <td className="px-6 py-4 whitespace-nowrap">
@@ -45,7 +49,7 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
                   </div>
                 )}
                 <div className="flex-shrink-0 mr-3">
-                  {file.icon ?? getDefaultFileIcon(file, 'w-5 h-5')}
+                  {file.icon ?? getDefaultFileIcon(file, 'w-10 h-10')}
                 </div>
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{file.name ?? 'Unknown'}</div>
               </div>

@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen }: FileListViewProps) {
+export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext }: FileListViewProps) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -23,6 +23,10 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
                   onItemOpen?.(file, index)
                 }
               }}
+              onContextMenu={(e) => {
+                e.preventDefault()
+                onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
+              }}
               type="button"
               aria-pressed={selectionMode ? isSelected(index) : undefined}
               className={clsx('relative flex flex-col items-center p-3 rounded-lg border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-white dark:bg-gray-900 border-transparent')}
@@ -36,7 +40,7 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
               )}
 
               <div className="mb-2">
-                {file.icon ?? getDefaultFileIcon(file, 'w-7 h-7')}
+                {file.icon ?? getDefaultFileIcon(file, 'w-15 h-15')}
               </div>
               <div className="text-center w-full">
                 <div className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate" title={file.name ?? 'Unknown'}>

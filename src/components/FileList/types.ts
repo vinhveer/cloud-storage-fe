@@ -23,8 +23,12 @@ export type FileListProps = {
   heightVh?: number
   /** Callback khi user click vào item (khi không ở selection mode) */
   onItemOpen?: (file: FileItem, index: number) => void
+  /** Callback khi user right-click (context) vào item: (file, index, clientX, clientY) */
+  onItemContext?: (file: FileItem, index: number, clientX: number, clientY: number) => void
   /** Custom nội dung bên phải toolbar; nếu không truyền sẽ hiện số lượng + Filter/Sort */
   toolbarRight?: React.ReactNode
+  /** If true, tiles view will align items to the left (useful when few items) */
+  tilesAlignLeft?: boolean
 }
 
 
