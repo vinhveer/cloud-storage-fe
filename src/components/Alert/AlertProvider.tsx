@@ -81,7 +81,17 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
 export function useAlert() {
     const context = React.useContext(AlertContext)
     if (!context) {
-        throw new Error('useAlert must be used within AlertProvider')
+        // During HMR or if a component is rendered outside the AlertProvider,
+        // fall back to a no-op implementation to avoid crashing the app.
+        // Log a warning to help developers find the missing provider.
+        // This makes the hook resilient in development and avoids Vite reload failures.
+        // Note: prefer adding `AlertProvider` at the app root; this is a safe fallback.
+        // eslint-disable-next-line no-console
+        console.warn('useAlert called outside AlertProvider — returning no-op handlers')
+        return {
+            showAlert: () => undefined,
+            hideAlert: () => undefined,
+        }
     }
     return context
 }
