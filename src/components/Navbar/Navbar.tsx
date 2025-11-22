@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
+import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon, FolderIcon, DocumentIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/Button/Button'
 import AccountDropdown from '@/components/Navbar/AccountDropdown/AccountDropdown'
 import Search from '@/components/Navbar/Search/Search'
@@ -10,9 +10,13 @@ import { AppError } from '@/api/core/error'
 import { useState } from 'react'
 import type { NavbarProps } from '@/components/Navbar/types'
 
+import { useQuery } from '@tanstack/react-query'
+import { getProfile } from '@/api/features/auth/auth.api'
+import { searchSuggestions } from '@/api/features/search/search.api'
+import { qk } from '@/api/query/keys'
+
 export default function Navbar({
   title = 'CloudStorage',
-  onSearch,
   searchPlaceholder = 'Search everything...',
   className,
 }: Readonly<NavbarProps>) {
@@ -20,6 +24,19 @@ export default function Navbar({
   const navigate = useNavigate()
   const logoutMutation = useLogout()
   const [logoutError, setLogoutError] = useState<string | null>(null)
+
+  const { data: user, isLoading, error } = useQuery({
+    queryKey: qk.auth.profile(),
+    queryFn: getProfile,
+  })
+
+  if (error) {
+    console.error('Failed to fetch user profile:', error)
+  }
+
+  if (user) {
+    console.log('User profile loaded:', user)
+  }
 
   async function handleLogout() {
     setLogoutError(null)
@@ -31,6 +48,22 @@ export default function Navbar({
       setLogoutError(applicationError.message || 'Đăng xuất thất bại.')
     }
   }
+  const handleSearch = async (query: string) => {
+    try {
+      const data = await searchSuggestions({ q: query, limit: 5 })
+      return data.suggestions.map((item) => ({
+        id: item.id.toString(),
+        title: item.name,
+        description: item.full_path,
+        url: item.type === 'folder' ? `/my-files?folderId=${item.id}` : `/my-files?fileId=${item.id}`,
+        icon: item.type === 'folder' ? <FolderIcon className="w-5 h-5 text-blue-500" /> : <DocumentIcon className="w-5 h-5 text-gray-500" />,
+      }))
+    } catch (error) {
+      console.error('Search failed:', error)
+      return []
+    }
+  }
+
   return (
     <nav className={clsx('sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-2', className)}>
       <div className="flex items-center justify-between">
@@ -42,7 +75,7 @@ export default function Navbar({
         {/* Center: Search */}
         {/* old: <Search onSearch={onSearch} placeholder={searchPlaceholder} className="flex-1 max-w-md mx-8" /> */}
         <div className="flex-1 flex justify-center">
-          <Search onSearch={onSearch} placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
+          <Search onSearch={handleSearch} placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
         </div>
 
         {/* Right: Actions & Account */}
@@ -86,7 +119,12 @@ export default function Navbar({
             icon={<ArrowUpTrayIcon className="w-4 h-4" />}
             aria-label="Upload"
           />
-          <AccountDropdown onLogout={handleLogout} settingsHref="/app/account-settings" />
+          <AccountDropdown
+            onLogout={handleLogout}
+            settingsHref="/app/account-settings"
+            userName={isLoading ? 'Loading...' : user?.name}
+            userEmail={isLoading ? '...' : user?.email}
+          />
         </div>
       </div>
       {logoutError && (
