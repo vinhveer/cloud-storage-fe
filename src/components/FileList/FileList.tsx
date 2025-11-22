@@ -8,7 +8,11 @@ import TilesView from '@/components/FileList/views/TilesView'
 import DetailsView from '@/components/FileList/views/DetailsView'
 import FilterButton from '@/components/FileList/FilterButton'
 import SortButton from '@/components/FileList/SortButton'
-import type { FileListProps, ViewMode } from '@/components/FileList/types'
+import SelectionToolbar from '@/components/FileList/SelectionToolbar'
+import ContextMenu from '@/components/FileList/ContextMenu'
+import type { FileListProps, ViewMode, FileItem } from '@/components/FileList/types'
+import type { SelectionToolbarAction } from './SelectionToolbar'
+import type { ContextMenuAction } from './ContextMenu'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
 
 export default function FileList({
@@ -18,6 +22,7 @@ export default function FileList({
   className,
   heightVh,
   onItemOpen,
+  onItemContext,
   toolbarRight,
   tilesAlignLeft,
 }: Readonly<FileListProps>) {
@@ -29,12 +34,21 @@ export default function FileList({
     changeViewMode,
     selectionMode,
     toggleSelectionMode,
+    enableSelectionMode,
     selected: selectedItems,
     isSelected,
     toggleItem,
     selectAll,
     deselectAll,
+    selectSingle,
   } = useFileList({ initialViewMode: viewMode, fileCount: files.length })
+
+  const [contextMenu, setContextMenu] = React.useState<{
+    file: FileItem
+    element: HTMLElement | null
+    x: number
+    y: number
+  } | null>(null)
 
   const dropdownRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -49,6 +63,94 @@ export default function FileList({
   }, [currentViewMode])
 
   const currentView = viewModeConfigs[currentViewMode]
+
+  const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number, element?: HTMLElement) => {
+    // Enable selection mode and select this item
+    enableSelectionMode()
+    selectSingle(index)
+
+    // Store element reference so menu can follow it
+    setContextMenu({ file, x: clientX, y: clientY, element: element || null })
+    onItemContext?.(file, index, clientX, clientY)
+  }
+
+  const handleToolbarAction = (action: SelectionToolbarAction, items: FileItem[]) => {
+    // Dispatch action - in real app, these would call actual APIs
+    // For now, just log and show placeholder behavior
+    // eslint-disable-next-line no-console
+    console.log('Toolbar action:', action, 'items:', items)
+
+    switch (action) {
+      case 'share':
+        // TODO: show share dialog
+        break
+      case 'copyLink':
+        // TODO: copy to clipboard
+        break
+      case 'delete':
+        // TODO: delete items via API
+        break
+      case 'download':
+        // TODO: download items
+        break
+      case 'moveTo':
+        // TODO: show move dialog
+        break
+      case 'copyTo':
+        // TODO: show copy dialog
+        break
+      case 'rename':
+        // TODO: show rename dialog (single item only)
+        break
+      case 'details':
+        // TODO: show details panel
+        break
+      case 'deselectAll':
+        deselectAll()
+        break
+    }
+  }
+
+  const handleContextMenuAction = (action: ContextMenuAction, file: FileItem) => {
+    // Dispatch action - in real app, these would call actual APIs
+    // eslint-disable-next-line no-console
+    console.log('Context menu action:', action, 'file:', file)
+
+    switch (action) {
+      case 'share':
+        // TODO: show share dialog
+        break
+      case 'copyLink':
+        // TODO: copy to clipboard
+        break
+      case 'manageAccess':
+        // TODO: show access management dialog
+        break
+      case 'delete':
+        // TODO: delete item via API
+        break
+      case 'download':
+        // TODO: download item
+        break
+      case 'rename':
+        // TODO: show rename dialog
+        break
+      case 'moveTo':
+        // TODO: show move dialog
+        break
+      case 'copyTo':
+        // TODO: show copy dialog
+        break
+      case 'details':
+        // TODO: show details panel
+        break
+    }
+    setContextMenu(null)
+  }
+
+  const getSelectedFilesForToolbar = (): FileItem[] => {
+    return selectedItems.map(idx => files[idx]).filter(Boolean)
+  }
 
   React.useEffect(() => {
     if (!dropdownOpen) return
@@ -70,138 +172,168 @@ export default function FileList({
   }, [dropdownOpen, setDropdownOpen])
 
   return (
-    <div
-      className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
-      style={heightVh ? { height: `${heightVh}dvh` } : undefined}
-    >
-      {/* Toolbar */}
-      <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {/* View mode dropdown */}
-            <div className="relative" ref={dropdownRef}>
+    <>
+      {/* Floating Selection Toolbar */}
+      {selectionMode && selectedItems.length > 0 && (
+        <div className="mb-4">{/* Thêm margin-bottom */}
+          <SelectionToolbar
+            selectedItems={getSelectedFilesForToolbar()}
+            selectedCount={selectedItems.length}
+            onAction={handleToolbarAction}
+            onDeselectAll={deselectAll}
+          />
+        </div>
+      )}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <ContextMenu
+          file={contextMenu.file}
+          fileElement={contextMenu.element}
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onAction={handleContextMenuAction}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
+
+      <div
+        className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
+        style={heightVh ? { height: `${heightVh}dvh` } : undefined}
+      >
+        {/* Toolbar */}
+        <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              {/* View mode dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setDropdownOpen((prev: boolean) => !prev)}
+                  className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  aria-haspopup="listbox"
+                  aria-expanded={dropdownOpen}
+                >
+                  <span className="text-sm">
+                    <currentView.icon className="w-4 h-4" />
+                  </span>
+                  <span>{currentView.label}</span>
+                  <ChevronDownIcon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                    {Object.entries(viewModeConfigs).map(([modeKey, cfg]) => (
+                      <button
+                        key={modeKey}
+                        type="button"
+                        onClick={() => {
+                          changeViewMode(modeKey as ViewMode)
+                          setDropdownOpen(false)
+                        }}
+                        className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                        aria-pressed={currentViewMode === (modeKey as ViewMode)}
+                      >
+                        <span className="text-sm">
+                          <cfg.icon className="w-4 h-4" />
+                        </span>
+                        <span>{cfg.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Selection toggle */}
               <button
                 type="button"
-                onClick={() => setDropdownOpen((prev: boolean) => !prev)}
-                className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
-                aria-haspopup="listbox"
-                aria-expanded={dropdownOpen}
+                onClick={toggleSelectionMode}
+                className={clsx(
+                  'flex items-center space-x-2 px-3 py-2 text-sm font-medium border rounded-lg focus:outline-none focus:ring-2 transition-colors duration-200',
+                  selectionMode
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
+                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-300 dark:border-gray-700'
+                )}
+                aria-pressed={selectionMode}
               >
-                <span className="text-sm">
-                  <currentView.icon className="w-4 h-4" />
-                </span>
-                <span>{currentView.label}</span>
-                <ChevronDownIcon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                <CheckCircleIcon className="w-3.5 h-3.5" />
+                <span>{selectionMode ? 'Cancel' : 'Select'}</span>
               </button>
 
-              {dropdownOpen && (
-                <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-                  {Object.entries(viewModeConfigs).map(([modeKey, cfg]) => (
-                    <button
-                      key={modeKey}
-                      type="button"
-                      onClick={() => {
-                        changeViewMode(modeKey as ViewMode)
-                        setDropdownOpen(false)
-                      }}
-                      className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                      aria-pressed={currentViewMode === (modeKey as ViewMode)}
-                    >
-                      <span className="text-sm">
-                        <cfg.icon className="w-4 h-4" />
-                      </span>
-                      <span>{cfg.label}</span>
-                    </button>
-                  ))}
+              {selectionMode && (
+                <div className="flex items-center space-x-2">
+                  <button type="button" onClick={selectAll} className="px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200">Select All</button>
+                  <button type="button" onClick={deselectAll} className="px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200">Deselect All</button>
+                  {selectedItems.length > 0 && (
+                    <span className="text-sm text-gray-500">({selectedItems.length} selected)</span>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Selection toggle */}
-            <button
-              type="button"
-              onClick={toggleSelectionMode}
-              className={clsx(
-                'flex items-center space-x-2 px-3 py-2 text-sm font-medium border rounded-lg focus:outline-none focus:ring-2 transition-colors duration-200',
-                selectionMode
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
-                  : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-300 dark:border-gray-700'
+            <div className="flex items-center gap-2">
+              {toolbarRight ?? (
+                <>
+                  <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">
+                    {files.length} items
+                  </div>
+                  <FilterButton />
+                  <SortButton />
+                </>
               )}
-              aria-pressed={selectionMode}
-            >
-              <CheckCircleIcon className="w-3.5 h-3.5" />
-              <span>{selectionMode ? 'Cancel' : 'Select'}</span>
-            </button>
-
-            {selectionMode && (
-              <div className="flex items-center space-x-2">
-                <button type="button" onClick={selectAll} className="px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200">Select All</button>
-                <button type="button" onClick={deselectAll} className="px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200">Deselect All</button>
-                {selectedItems.length > 0 && (
-                  <span className="text-sm text-gray-500">({selectedItems.length} selected)</span>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            {toolbarRight ?? (
-              <>
-                <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">
-                  {files.length} items
-                </div>
-                <FilterButton />
-                <SortButton />
-              </>
-            )}
+            </div>
           </div>
         </div>
+
+        {/* Content */}
+        <div className="overflow-x-auto overflow-y-auto flex-1">
+          {currentViewMode === 'list' && (
+            <ListView
+              files={files}
+              selectionMode={selectionMode}
+              isSelected={isSelected}
+              toggleItem={toggleItem}
+              onItemOpen={onItemOpen}
+              onItemContext={handleContextMenu}
+            />
+          )}
+
+          {currentViewMode === 'grid' && (
+            <GridView
+              files={files}
+              selectionMode={selectionMode}
+              isSelected={isSelected}
+              toggleItem={toggleItem}
+              onItemOpen={onItemOpen}
+              onItemContext={handleContextMenu}
+            />
+          )}
+
+          {currentViewMode === 'tiles' && (
+            <TilesView
+              files={files}
+              selectionMode={selectionMode}
+              isSelected={isSelected}
+              toggleItem={toggleItem}
+              onItemOpen={onItemOpen}
+              onItemContext={handleContextMenu}
+              tilesAlignLeft={tilesAlignLeft}
+            />
+          )}
+
+          {currentViewMode === 'details' && (
+            <DetailsView
+              files={files}
+              selectionMode={selectionMode}
+              isSelected={isSelected}
+              toggleItem={toggleItem}
+              onItemOpen={onItemOpen}
+              onItemContext={handleContextMenu}
+            />
+          )}
+        </div>
       </div>
-
-      {/* Content */}
-      <div className="overflow-x-auto overflow-y-auto flex-1">
-        {currentViewMode === 'list' && (
-          <ListView
-            files={files}
-            selectionMode={selectionMode}
-            isSelected={isSelected}
-            toggleItem={toggleItem}
-            onItemOpen={onItemOpen}
-          />
-        )}
-
-        {currentViewMode === 'grid' && (
-          <GridView
-            files={files}
-            selectionMode={selectionMode}
-            isSelected={isSelected}
-            toggleItem={toggleItem}
-            onItemOpen={onItemOpen}
-          />
-        )}
-
-        {currentViewMode === 'tiles' && (
-          <TilesView
-            files={files}
-            selectionMode={selectionMode}
-            isSelected={isSelected}
-            toggleItem={toggleItem}
-            onItemOpen={onItemOpen}
-            tilesAlignLeft={tilesAlignLeft}
-          />
-        )}
-
-        {currentViewMode === 'details' && (
-          <DetailsView
-            files={files}
-            selectionMode={selectionMode}
-            isSelected={isSelected}
-            toggleItem={toggleItem}
-            onItemOpen={onItemOpen}
-          />
-        )}
-      </div>
-    </div>
+    </>
   )
 }
 

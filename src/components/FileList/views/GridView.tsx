@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen }: FileListViewProps) {
+export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext }: FileListViewProps) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -22,6 +22,10 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
                 } else {
                   onItemOpen?.(file, index)
                 }
+              }}
+              onContextMenu={(e) => {
+                e.preventDefault()
+                onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
               }}
               type="button"
               aria-pressed={selectionMode ? isSelected(index) : undefined}

@@ -6,6 +6,7 @@ export type FileListViewProps = Readonly<{
   isSelected: (index: number) => boolean
   toggleItem: (index: number) => void
   onItemOpen?: (file: FileItem, index: number) => void
+  onItemContext?: (file: FileItem, index: number, clientX: number, clientY: number) => void
   tilesAlignLeft?: boolean
 }>
 

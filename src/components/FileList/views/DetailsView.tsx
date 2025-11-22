@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function DetailsView({ files, selectionMode, isSelected, toggleItem, onItemOpen }: FileListViewProps) {
+export default function DetailsView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext }: FileListViewProps) {
   return (
     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0">
       <thead className="bg-gray-0 dark:bg-gray-800">
@@ -32,6 +32,10 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
               } else {
                 onItemOpen?.(file, index)
               }
+            }}
+            onContextMenu={(e) => {
+              e.preventDefault()
+              onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
             }}
             className={clsx('hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer', selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30')}
           >
