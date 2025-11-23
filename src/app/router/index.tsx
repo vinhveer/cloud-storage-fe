@@ -6,6 +6,7 @@ import { getPublicRoutes } from './segments/public'
 import { getVerificationRoutes } from './segments/verification'
 import { getStorageRoutes } from './segments/storage'
 import { getSamplesRoutes } from './segments/sample'
+import { getAdminRoutes } from './segments/admin'
 import RedirectToHome from '@/app/pages/redirects/RedirectToHome'
 
 const routeTree = rootRoute.addChildren([
@@ -15,6 +16,7 @@ const routeTree = rootRoute.addChildren([
   ...getStorageRoutes(),
   ...getVerificationRoutes(),
   getSamplesRoutes(),
+  getAdminRoutes(),
 ])
 
 const notFoundRoute = new NotFoundRoute({
