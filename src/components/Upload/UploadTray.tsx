@@ -9,7 +9,7 @@ export default function UploadTray() {
     if (tasks.length === 0) return null
 
     return (
-        <div className="fixed bottom-4 right-4 z-50 w-80 space-y-3">
+        <div className="fixed bottom-4 right-4 z-[9999] w-80 space-y-3">
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden">
                 <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700">
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Uploads</span>

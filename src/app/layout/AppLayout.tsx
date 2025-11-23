@@ -1,5 +1,4 @@
 import Navbar from '@/components/Navbar/Navbar'
-import UploadTray from '@/components/Upload/UploadTray'
 import { Outlet } from '@tanstack/react-router'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import SidebarSync from '@/app/router/components/SidebarSync'
@@ -18,7 +17,6 @@ export default function AppLayout() {
             </div>
           </main>
         </div>
-        <UploadTray />
       </div>
     </>
   )

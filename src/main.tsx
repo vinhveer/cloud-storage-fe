@@ -7,6 +7,7 @@ import { store } from './state/store'
 import { ThemeProvider } from './app/providers/ThemeProvider'
 import QueryProvider from './app/providers/QueryProvider'
 import { SidebarProvider } from './components/Sidebar/SidebarContext'
+import UploadTray from './components/Upload/UploadTray'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,4 +21,15 @@ createRoot(document.getElementById('root')!).render(
       </QueryProvider>
     </Provider>
   </StrictMode>,
+)
+
+// Render UploadTray directly to body to survive route reloads
+const uploadTrayRoot = document.createElement('div')
+document.body.appendChild(uploadTrayRoot)
+createRoot(uploadTrayRoot).render(
+  <Provider store={store}>
+    <ThemeProvider>
+      <UploadTray />
+    </ThemeProvider>
+  </Provider>,
 )
