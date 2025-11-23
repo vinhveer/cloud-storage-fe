@@ -1,6 +1,7 @@
 export type SampleMenuItem = {
   title: string
   href: string
+  requiresAdmin?: boolean
 }
 
 export const samplesTitle = 'Samples'
@@ -30,6 +31,9 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'NavGroup', href: '/samples/navgroup' },
   { title: 'Subnav', href: '/samples/subnav' },
   { title: 'Breadcrumb', href: '/samples/breadcrumb' },
+  // Admin pages (require admin role)
+  { title: 'Overview', href: '/samples/admin/overview', requiresAdmin: true },
+  { title: 'User Management', href: '/samples/admin/user-management', requiresAdmin: true },
   { title: 'File upload test', href: '/samples/test-page/file-upload-test' },
   { title: 'Move file test', href: '/samples/test-page/move-file-test' },
   { title: 'List files test', href: '/samples/test-page/list-files-test' },

@@ -27,11 +27,34 @@ export const LoginRequestSchema = z.object({
   deviceName: z.string().min(1).optional(),
 })
 
-export const AuthenticatedUserSchema = z.object({
-  id: z.number(),
+const RawAuthenticatedUserSchema = z.object({
+  user_id: z.number().optional(),
+  id: z.number().optional(),
   name: z.string().min(1),
   email: emailSchema,
+  role: z.enum(['admin', 'user', 'viewer']).default('user'),
+  storage_used: z.number().optional(),
+  storage_limit: z.number().optional(),
+  email_verified_at: z.string().optional(),
 })
+
+export const AuthenticatedUserSchema = RawAuthenticatedUserSchema.superRefine((data, ctx) => {
+  if (typeof data.user_id !== 'number' && typeof data.id !== 'number') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'user_id or id is required',
+      path: ['user_id'],
+    })
+  }
+}).transform((data) => ({
+  user_id: data.user_id ?? (data.id as number),
+  name: data.name,
+  email: data.email,
+  role: data.role,
+  storage_used: data.storage_used,
+  storage_limit: data.storage_limit,
+  email_verified_at: data.email_verified_at,
+}))
 
 export const UserPayloadSchema = z.object({
   user: AuthenticatedUserSchema,

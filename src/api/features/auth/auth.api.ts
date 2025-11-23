@@ -3,7 +3,6 @@ import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
 import {
   AuthSuccessSchema,
-  AuthenticatedUserSchema,
   LoginRequestSchema,
   LogoutSuccessSchema,
   MessageOnlySuccessSchema,
@@ -14,6 +13,7 @@ import {
   ForgotPasswordRequestSchema,
   UpdateProfileRequestSchema,
   ChangePasswordRequestSchema,
+  UserPayloadSchema,
 } from './auth.schemas'
 import type {
   AuthSuccess,
@@ -32,7 +32,7 @@ import type {
 
 const authSuccessEnvelope = createApiResponseSchema(AuthSuccessSchema)
 const registerSuccessEnvelope = createApiResponseSchema(RegisterSuccessSchema)
-const profileEnvelope = createApiResponseSchema(AuthenticatedUserSchema)
+const profileEnvelope = createApiResponseSchema(UserPayloadSchema)
 const logoutEnvelope = createApiResponseSchema(LogoutSuccessSchema)
 const optionalLogoutEnvelope = createNullableApiResponseSchema(LogoutSuccessSchema)
 const messageOnlyEnvelope = createApiResponseSchema(MessageOnlySuccessSchema)
@@ -73,14 +73,21 @@ export async function login(payload: LoginRequest): Promise<AuthSuccess> {
   const response = await post<unknown, ReturnType<typeof toLoginPayload>>('/api/login', toLoginPayload(validPayload), {
     skipAuth: true,
   })
+  // eslint-disable-next-line no-console
+  console.log('[auth.api.login] raw response', response)
   const parsed = parseWithZod(authSuccessEnvelope, response)
   return handleAuthSuccess(parsed.data)
 }
 
 export async function getProfile(): Promise<AuthenticatedUser> {
   const response = await get<unknown>('/api/user')
+  // Debug log to inspect raw API response shape
+  // eslint-disable-next-line no-console
+  console.log('[auth.api.getProfile] raw response', response)
   const parsed = parseWithZod(profileEnvelope, response)
-  return parsed.data
+  // eslint-disable-next-line no-console
+  console.log('[auth.api.getProfile] parsed data', parsed)
+  return parsed.data.user
 }
 
 export async function logout(): Promise<LogoutSuccess> {
@@ -135,7 +142,7 @@ export async function updateProfile(payload: UpdateProfileRequest): Promise<Auth
   const validPayload = parseWithZod(UpdateProfileRequestSchema, payload)
   const response = await put<unknown, UpdateProfileRequest>('/api/user/profile-information', validPayload)
   const parsed = parseWithZod(profileEnvelope, response)
-  return parsed.data
+  return parsed.data.user
 }
 
 export async function changePassword(payload: ChangePasswordRequest): Promise<MessageOnlySuccess> {
