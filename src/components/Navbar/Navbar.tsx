@@ -12,10 +12,7 @@ import { useCreateFolder } from '@/api/features/folder/folder.mutations'
 import UploadModal from '@/components/Upload/UploadModal'
 import type { NavbarProps } from '@/components/Navbar/types'
 
-import { useQuery } from '@tanstack/react-query'
-import { getProfile } from '@/api/features/auth/auth.api'
 import { searchSuggestions } from '@/api/features/search/search.api'
-import { qk } from '@/api/query/keys'
 
 export default function Navbar({
   title = 'CloudStorage',
@@ -135,12 +132,41 @@ export default function Navbar({
               />
             )
           })()}
-          <Button
-            variant="primary"
-            size="md"
-            icon={<ArrowUpTrayIcon className="w-4 h-4" />}
-            aria-label="Upload"
-          />
+          <div className="relative" ref={uploadButtonRef}>
+            <Button
+              variant="primary"
+              size="md"
+              icon={<ArrowUpTrayIcon className="w-4 h-4" />}
+              aria-label="Upload"
+              onClick={() => setUploadMenuOpen(prev => !prev)}
+            />
+            {uploadMenuOpen && (
+              <div
+                ref={uploadMenuRef}
+                className="absolute top-full mt-2 right-0 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-2 z-50"
+              >
+                <button
+                  onClick={() => {
+                    setUploadMenuOpen(false)
+                    setCreateFolderOpen(true)
+                    setNewFolderName('')
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                >
+                  + Create folder
+                </button>
+                <button
+                  onClick={() => {
+                    setUploadMenuOpen(false)
+                    setUploadModalOpen(true)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                >
+                  ↑ Upload files
+                </button>
+              </div>
+            )}
+          </div>
           <AccountDropdown onLogout={handleLogout} settingsHref="/app/account-settings" />
         </div>
       </div>
