@@ -1,0 +1,136 @@
+import Table from '@/components/Table/Table'
+import { createColumns } from '@/components/Table/createColumns'
+import { mockUsers, mockProducts } from '@/components/Table/mockData'
+import {
+  BasicUserTableDemo,
+  SelectableUserTableDemo,
+  ProductTableDemo,
+  EmptyTableDemo,
+} from '@/components/Table/table.demos'
+
+# Table
+
+Hiển thị dữ liệu dạng bảng với hỗ trợ sort, chọn hàng, custom render.
+
+## Cách sử dụng
+
+### 1. Define Model (TypeScript)
+
+```typescript
+interface User {
+  id: string | number
+  fullname: string
+  email: string
+  phone: string
+  role: 'admin' | 'user' | 'viewer'
+  status: 'active' | 'inactive'
+  joinedDate: string
+  storageUsed: number
+}
+```
+
+### 2. Define Header Config (Ánh xạ sang tiếng Việt)
+
+```typescript
+const columns = createColumns<User>({
+  fullname: { label: 'Họ và tên', sortable: true },
+  email: { label: 'Email', sortable: true },
+  phone: { label: 'Điện thoại' },
+  role: { label: 'Vai trò' },
+  status: { label: 'Trạng thái' },
+  joinedDate: { label: 'Ngày tham gia', sortable: true },
+})
+```
+
+### 3. Chuẩn bị Mock Data
+
+```typescript
+const mockUsers: User[] = [
+  {
+    id: 1,
+    fullname: 'Nguyễn Văn A',
+    email: 'nguyen.van.a@example.com',
+    phone: '0901234567',
+    role: 'admin',
+    status: 'active',
+    joinedDate: '2024-01-15',
+    storageUsed: 5120,
+  },
+  // ... thêm dữ liệu khác
+]
+```
+
+### 4. Render Table
+
+```tsx
+<Table<User>
+  columns={columns}
+  data={mockUsers}
+  selectable
+  onRowClick={(row) => console.log(row)}
+  onSelectionChange={(ids) => console.log(ids)}
+/>
+```
+
+## Ví dụ
+
+### Table cơ bản
+
+<BasicUserTableDemo />
+
+### Table với checkbox chọn hàng
+
+<SelectableUserTableDemo />
+
+### Table với custom render
+
+<ProductTableDemo />
+
+### Table rỗng
+
+<EmptyTableDemo />
+
+## Props
+
+| Tên | Kiểu | Mô tả |
+|-----|------|-------|
+| `columns` | `TableColumn<T>[]` | Mảng định nghĩa cột |
+| `data` | `T[]` | Dữ liệu hiển thị |
+| `loading` | `boolean` | Hiển thị loading spinner |
+| `emptyMessage` | `string` | Thông báo khi không có dữ liệu |
+| `selectable` | `boolean` | Hiển thị checkbox chọn hàng |
+| `onRowClick` | `(row: T) => void` | Callback khi click hàng |
+| `onSelectionChange` | `(ids: (string \| number)[]) => void` | Callback khi chọn hàng |
+| `className` | `string` | Custom class cho table |
+
+## Column Config
+
+```typescript
+type TableColumn<T> = {
+  key: keyof T // Khóa trường dữ liệu
+  label: string // Tên hiển thị
+  render?: (value: T[keyof T], row: T) => ReactNode // Custom render
+  width?: string // Độ rộng cột (vd: '200px')
+  sortable?: boolean // Có thể sort không
+  align?: 'left' | 'center' | 'right' // Căn lề
+}
+```
+
+## Features
+
+- ✅ Sort cột (configurable)
+- ✅ Chọn một/tất cả hàng (checkbox)
+- ✅ Custom render từng cell
+- ✅ Loading state
+- ✅ Empty state
+- ✅ Responsive overflow
+- ✅ Dark mode hỗ trợ
+- ✅ TypeScript generic với type-safe
+
+## Best Practices
+
+1. **Luôn define model rõ ràng** – Không dùng `any` cho data
+2. **Sử dụng `createColumns`** – Helper rút ngắn boilerplate
+3. **Custom render cho format đặc biệt** – Tiền tệ, ngày tháng, status badge, v.v.
+4. **Xử lý selection ở parent** – State được pass từ component cha
+5. **Mock data tách riêng** – Dễ dàng swap với API thực tế

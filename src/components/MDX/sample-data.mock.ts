@@ -12,6 +12,7 @@ export const sampleMenuItems: SampleMenuItem[] = [
   { title: 'Card', href: '/samples/card' },
   { title: 'FileCard', href: '/samples/filecard' },
   { title: 'FileList', href: '/samples/filelist' },
+  { title: 'Table', href: '/samples/table' },
   { title: 'Offcanvas', href: '/samples/offcanvas' },
   { title: 'StorageUsage', href: '/samples/storageusage' },
   { title: 'Navbar', href: '/samples/navbar' },
