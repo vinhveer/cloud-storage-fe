@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
+import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon, FolderIcon, DocumentIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/Button/Button'
 import AccountDropdown from '@/components/Navbar/AccountDropdown/AccountDropdown'
 import Search from '@/components/Navbar/Search/Search'
@@ -12,9 +12,13 @@ import { useCreateFolder } from '@/api/features/folder/folder.mutations'
 import UploadModal from '@/components/Upload/UploadModal'
 import type { NavbarProps } from '@/components/Navbar/types'
 
+import { useQuery } from '@tanstack/react-query'
+import { getProfile } from '@/api/features/auth/auth.api'
+import { searchSuggestions } from '@/api/features/search/search.api'
+import { qk } from '@/api/query/keys'
+
 export default function Navbar({
   title = 'CloudStorage',
-  onSearch,
   searchPlaceholder = 'Search everything...',
   className,
   currentFolderId = null,
@@ -66,6 +70,22 @@ export default function Navbar({
       setLogoutError(applicationError.message || 'Đăng xuất thất bại.')
     }
   }
+  const handleSearch = async (query: string) => {
+    try {
+      const data = await searchSuggestions({ q: query, limit: 5 })
+      return data.suggestions.map((item) => ({
+        id: item.id.toString(),
+        title: item.name,
+        description: item.full_path,
+        url: item.type === 'folder' ? `/my-files?folderId=${item.id}` : `/my-files?fileId=${item.id}`,
+        icon: item.type === 'folder' ? <FolderIcon className="w-5 h-5 text-blue-500" /> : <DocumentIcon className="w-5 h-5 text-gray-500" />,
+      }))
+    } catch (error) {
+      console.error('Search failed:', error)
+      return []
+    }
+  }
+
   return (
     <nav className={clsx('sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-2', className)}>
       <div className="flex items-center justify-between">
@@ -77,7 +97,7 @@ export default function Navbar({
         {/* Center: Search */}
         {/* old: <Search onSearch={onSearch} placeholder={searchPlaceholder} className="flex-1 max-w-md mx-8" /> */}
         <div className="flex-1 flex justify-center">
-          <Search onSearch={onSearch} placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
+          <Search onSearch={handleSearch} placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
         </div>
 
         {/* Right: Actions & Account */}
@@ -115,41 +135,12 @@ export default function Navbar({
               />
             )
           })()}
-          <div className="relative" ref={uploadButtonRef}>
-            <Button
-              variant="primary"
-              size="md"
-              icon={<ArrowUpTrayIcon className="w-4 h-4" />}
-              aria-label="Upload"
-              onClick={() => setUploadMenuOpen(prev => !prev)}
-            />
-            {uploadMenuOpen && (
-              <div
-                ref={uploadMenuRef}
-                className="absolute top-full mt-2 right-0 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-2 z-50"
-              >
-                <button
-                  onClick={() => {
-                    setUploadMenuOpen(false)
-                    setCreateFolderOpen(true)
-                    setNewFolderName('')
-                  }}
-                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-                >
-                  + Create folder
-                </button>
-                <button
-                  onClick={() => {
-                    setUploadMenuOpen(false)
-                    setUploadModalOpen(true)
-                  }}
-                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-                >
-                  ↑ Upload files
-                </button>
-              </div>
-            )}
-          </div>
+          <Button
+            variant="primary"
+            size="md"
+            icon={<ArrowUpTrayIcon className="w-4 h-4" />}
+            aria-label="Upload"
+          />
           <AccountDropdown onLogout={handleLogout} settingsHref="/app/account-settings" />
         </div>
       </div>
