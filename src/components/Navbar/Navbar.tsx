@@ -7,36 +7,55 @@ import { useTheme } from '@/app/providers/ThemeProvider'
 import { useLogout } from '@/api/features/auth/auth.mutations'
 import { useNavigate } from '@tanstack/react-router'
 import { AppError } from '@/api/core/error'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useCreateFolder } from '@/api/features/folder/folder.mutations'
+import UploadModal from '@/components/Upload/UploadModal'
 import type { NavbarProps } from '@/components/Navbar/types'
 
-import { useQuery } from '@tanstack/react-query'
-import { getProfile } from '@/api/features/auth/auth.api'
 import { searchSuggestions } from '@/api/features/search/search.api'
-import { qk } from '@/api/query/keys'
 
 export default function Navbar({
   title = 'CloudStorage',
   searchPlaceholder = 'Search everything...',
   className,
+  currentFolderId = null,
 }: Readonly<NavbarProps>) {
   const { theme, cycleTheme } = useTheme()
   const navigate = useNavigate()
   const logoutMutation = useLogout()
   const [logoutError, setLogoutError] = useState<string | null>(null)
+  const [uploadMenuOpen, setUploadMenuOpen] = useState(false)
+  const [createFolderOpen, setCreateFolderOpen] = useState(false)
+  const [newFolderName, setNewFolderName] = useState('')
+  const uploadButtonRef = useRef<HTMLDivElement | null>(null)
+  const uploadMenuRef = useRef<HTMLDivElement | null>(null)
 
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: qk.auth.profile(),
-    queryFn: getProfile,
-  })
+  const createFolderMutation = useCreateFolder()
+  const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
-  if (error) {
-    console.error('Failed to fetch user profile:', error)
-  }
-
-  if (user) {
-    console.log('User profile loaded:', user)
-  }
+  // Outside click / escape handling for upload menu
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (!uploadMenuOpen) return
+      if (
+        uploadMenuRef.current &&
+        !uploadMenuRef.current.contains(e.target as Node) &&
+        uploadButtonRef.current &&
+        !uploadButtonRef.current.contains(e.target as Node)
+      ) {
+        setUploadMenuOpen(false)
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setUploadMenuOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
+  }, [uploadMenuOpen])
 
   async function handleLogout() {
     setLogoutError(null)
@@ -113,23 +132,105 @@ export default function Navbar({
               />
             )
           })()}
-          <Button
-            variant="primary"
-            size="md"
-            icon={<ArrowUpTrayIcon className="w-4 h-4" />}
-            aria-label="Upload"
-          />
-          <AccountDropdown
-            onLogout={handleLogout}
-            settingsHref="/app/account-settings"
-            userName={isLoading ? 'Loading...' : user?.name}
-            userEmail={isLoading ? '...' : user?.email}
-          />
+          <div className="relative" ref={uploadButtonRef}>
+            <Button
+              variant="primary"
+              size="md"
+              icon={<ArrowUpTrayIcon className="w-4 h-4" />}
+              aria-label="Upload"
+              onClick={() => setUploadMenuOpen(prev => !prev)}
+            />
+            {uploadMenuOpen && (
+              <div
+                ref={uploadMenuRef}
+                className="absolute top-full mt-2 right-0 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-2 z-50"
+              >
+                <button
+                  onClick={() => {
+                    setUploadMenuOpen(false)
+                    setCreateFolderOpen(true)
+                    setNewFolderName('')
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                >
+                  + Create folder
+                </button>
+                <button
+                  onClick={() => {
+                    setUploadMenuOpen(false)
+                    setUploadModalOpen(true)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                >
+                  ↑ Upload files
+                </button>
+              </div>
+            )}
+          </div>
+          <AccountDropdown onLogout={handleLogout} settingsHref="/app/account-settings" />
         </div>
       </div>
       {logoutError && (
         <p className="text-xs text-red-500 text-right mt-1" role="alert">{logoutError}</p>
       )}
+
+      {/* Create Folder Modal */}
+      {createFolderOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={() => setCreateFolderOpen(false)} />
+          <div className="relative w-full max-w-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg p-6 mx-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Create new folder</h2>
+            <label className="block mb-3">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Folder name</span>
+              <input
+                autoFocus
+                value={newFolderName}
+                onChange={e => setNewFolderName(e.target.value)}
+                className="mt-1 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g. Project Docs"
+              />
+            </label>
+            {createFolderMutation.isError && (
+              <p className="text-xs text-red-500 mb-2" role="alert">{createFolderMutation.error?.message || 'Failed to create folder.'}</p>
+            )}
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                type="button"
+                onClick={() => setCreateFolderOpen(false)}
+                className="px-4 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={!newFolderName.trim() || createFolderMutation.status === 'pending'}
+                onClick={() => {
+                  const name = newFolderName.trim()
+                  if (!name) return
+                  createFolderMutation.mutate(
+                    { folder_name: name, parent_folder_id: currentFolderId ?? undefined },
+                    {
+                      onSuccess: () => {
+                        setCreateFolderOpen(false)
+                        setNewFolderName('')
+                      },
+                    },
+                  )
+                }}
+                className={clsx(
+                  'px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2',
+                )}
+              >
+                {createFolderMutation.status === 'pending' && (
+                  <span className="animate-spin h-4 w-4 border-2 border-white/60 border-t-transparent rounded-full" />
+                )}
+                Create folder
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <UploadModal open={uploadModalOpen} onClose={() => setUploadModalOpen(false)} folderId={currentFolderId} />
     </nav>
   )
 }

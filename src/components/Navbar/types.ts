@@ -13,6 +13,7 @@ export type NavbarProps = {
   onSearch?: (query: string) => Promise<NavbarSearchResult[]>
   searchPlaceholder?: string
   className?: string
+  currentFolderId?: number | null
 }
 
 

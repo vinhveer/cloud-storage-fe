@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import Subnav from '@/components/Subnav/Subnav'
 import type { SubnavItem } from '@/components/Subnav/Subnav'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
