@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon, FolderIcon, DocumentIcon } from '@heroicons/react/24/outline'
+import { ArrowUpTrayIcon, MoonIcon, SunIcon, ComputerDesktopIcon, FolderIcon, DocumentIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/Button/Button'
 import AccountDropdown from '@/components/Navbar/AccountDropdown/AccountDropdown'
 import Search from '@/components/Navbar/Search/Search'
@@ -151,18 +151,20 @@ export default function Navbar({
                     setCreateFolderOpen(true)
                     setNewFolderName('')
                   }}
-                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                  className="w-full flex items-center gap-2 text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
                 >
-                  + Create folder
+                  <PlusSmallIcon className="w-4 h-4" />
+                  <span>Create folder</span>
                 </button>
                 <button
                   onClick={() => {
                     setUploadMenuOpen(false)
                     setUploadModalOpen(true)
                   }}
-                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                  className="w-full flex items-center gap-2 text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
                 >
-                  ↑ Upload files
+                  <ArrowUpTrayIcon className="w-4 h-4" />
+                  <span>Upload files</span>
                 </button>
               </div>
             )}

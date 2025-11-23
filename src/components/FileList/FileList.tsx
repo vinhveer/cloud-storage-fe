@@ -48,6 +48,7 @@ export default function FileList({
     x: number
     y: number
   } | null>(null)
+  const containerRef = React.useRef<HTMLDivElement | null>(null)
 
   const dropdownRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -189,12 +190,14 @@ export default function FileList({
           file={contextMenu.file}
           x={contextMenu.x}
           y={contextMenu.y}
+          containerRect={containerRef.current?.getBoundingClientRect()}
           onAction={handleContextMenuAction}
           onClose={() => setContextMenu(null)}
         />
       )}
 
       <div
+        ref={containerRef}
         className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
         style={heightVh ? { height: `${heightVh}dvh` } : undefined}
       >

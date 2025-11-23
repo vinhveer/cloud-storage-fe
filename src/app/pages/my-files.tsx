@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import FileList from '@/components/FileList'
 import type { FileItem } from '@/components/FileList'
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 
 const rootFiles: FileItem[] = [
   {
@@ -43,17 +44,28 @@ export default function MyFilesPage() {
   const isRoot = currentFolder === 'root'
   const files = isRoot ? rootFiles : designerFiles
 
-  const title = isRoot ? 'My files' : 'Designer'
-  const subtitle = isRoot
-    ? 'Danh sách thư mục và tệp của bạn.'
-    : 'Các tệp bên trong thư mục Designer.'
-
   return (
     <div className="space-y-6">
 
       <header>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">{subtitle}</p>
+        <Breadcrumb
+          items={[
+            { id: 'my-files-root', label: 'My Files' },
+            ...(isRoot
+              ? []
+              : [
+                {
+                  id: 'folder-designer',
+                  label: 'Designer',
+                },
+              ]),
+          ]}
+          onItemClick={(item) => {
+            if (item.id === 'my-files-root') {
+              setCurrentFolder('root')
+            }
+          }}
+        />
       </header>
 
       <section>

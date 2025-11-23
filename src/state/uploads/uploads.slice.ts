@@ -14,7 +14,7 @@ export interface UploadTask {
     completedAt?: number
 }
 
-interface UploadsState {
+export interface UploadsState {
     tasks: UploadTask[]
 }
 
