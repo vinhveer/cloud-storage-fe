@@ -11,7 +11,6 @@ import {
     EllipsisHorizontalIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { Button } from '@/components/Button/Button'
 import type { FileItem } from './types'
 
 export type SelectionToolbarAction =

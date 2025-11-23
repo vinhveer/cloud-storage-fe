@@ -45,7 +45,6 @@ export default function FileList({
 
   const [contextMenu, setContextMenu] = React.useState<{
     file: FileItem
-    element: HTMLElement | null
     x: number
     y: number
   } | null>(null)
@@ -64,13 +63,12 @@ export default function FileList({
 
   const currentView = viewModeConfigs[currentViewMode]
 
-  const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number, element?: HTMLElement) => {
+  const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
     // Enable selection mode and select this item
     enableSelectionMode()
     selectSingle(index)
 
-    // Store element reference so menu can follow it
-    setContextMenu({ file, x: clientX, y: clientY, element: element || null })
+    setContextMenu({ file, x: clientX, y: clientY })
     onItemContext?.(file, index, clientX, clientY)
   }
 
@@ -189,7 +187,6 @@ export default function FileList({
       {contextMenu && (
         <ContextMenu
           file={contextMenu.file}
-          fileElement={contextMenu.element}
           x={contextMenu.x}
           y={contextMenu.y}
           onAction={handleContextMenuAction}

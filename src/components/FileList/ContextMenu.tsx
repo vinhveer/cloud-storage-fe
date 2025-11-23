@@ -25,25 +25,17 @@ export type ContextMenuAction =
 
 export interface ContextMenuProps {
     file: FileItem
-    fileElement?: HTMLElement | null
     x: number
     y: number
     onAction: (action: ContextMenuAction, file: FileItem) => void
     onClose: () => void
 }
 
-export default function ContextMenu({
-    file,
-    fileElement,
-    x,
-    y,
-    onAction,
-    onClose,
-}: ContextMenuProps) {
+export default function ContextMenu({ file, x, y, onAction, onClose }: ContextMenuProps) {
     const menuRef = React.useRef<HTMLDivElement>(null)
     const [menuPos, setMenuPos] = React.useState({ x, y })
 
-    // Chỉ set vị trí ban đầu theo tọa độ chuột, không cập nhật theo fileElement nữa
+    // Set vị trí ban đầu theo tọa độ chuột
     React.useEffect(() => {
         setMenuPos({ x, y })
     }, [x, y])
