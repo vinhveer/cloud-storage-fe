@@ -10,6 +10,7 @@ import {
     PencilIcon,
     EllipsisHorizontalIcon,
     XMarkIcon,
+    ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline'
 import type { FileItem } from './types'
 
@@ -23,6 +24,7 @@ export type SelectionToolbarAction =
     | 'rename'
     | 'details'
     | 'deselectAll'
+    | 'open'
 
 export interface SelectionToolbarProps {
     selectedItems: FileItem[]
@@ -76,6 +78,16 @@ export default function SelectionToolbar({
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl px-4 py-2.5 flex items-center gap-3 justify-between" style={{ width: '100%', maxWidth: 'calc(100%)' }}>
             {/* Left side - Main actions */}
             <div className="flex items-center gap-2">
+                {selectedCount === 1 && (
+                    <button
+                        onClick={() => handleAction('open')}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                        title="Open"
+                    >
+                        <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                        <span className="hidden sm:inline">Open</span>
+                    </button>
+                )}
                 {mainActions.map(action => (
                     <button
                         key={action.id}

@@ -121,7 +121,7 @@ export default function MyFilesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col gap-6">
       <header>
         <Breadcrumb
           items={breadcrumbItems}
@@ -129,11 +129,11 @@ export default function MyFilesPage() {
         />
       </header>
 
-      <section>
+      <section className="flex-1 min-h-0 flex flex-col">
         <FileList
           files={files}
           viewMode="details"
-          heightVh={60}
+          className="flex-1 min-h-0"
           onItemOpen={handleItemOpen}
         />
       </section>

@@ -1,4 +1,4 @@
-import { get, post, put } from '../../core/fetcher'
+import { get, post, put, patch } from '../../core/fetcher'
 import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
 import { setCachedUserRole } from '@/utils/roleGuard'
@@ -144,7 +144,7 @@ export async function resetPassword(payload: ResetPasswordRequest): Promise<Mess
 
 export async function updateProfile(payload: UpdateProfileRequest): Promise<AuthenticatedUser> {
   const validPayload = parseWithZod(UpdateProfileRequestSchema, payload)
-  const response = await put<unknown, UpdateProfileRequest>('/api/user/profile-information', validPayload)
+  const response = await put<unknown, UpdateProfileRequest>('/api/user/profile', validPayload)
   const parsed = parseWithZod(profileEnvelope, response)
   return parsed.data.user
 }
@@ -153,8 +153,8 @@ export async function changePassword(payload: ChangePasswordRequest): Promise<Me
   const validPayload = parseWithZod(ChangePasswordRequestSchema, payload)
   const requestBody = {
     current_password: validPayload.currentPassword,
-    password: validPayload.password,
-    password_confirmation: validPayload.passwordConfirmation,
+    new_password: validPayload.password,
+    new_password_confirmation: validPayload.passwordConfirmation,
   }
   const response = await put<unknown, typeof requestBody>('/api/user/password', requestBody)
   const parsed = parseWithZod(messageOnlyEnvelope, response)

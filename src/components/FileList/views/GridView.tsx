@@ -8,8 +8,8 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
     <div className="p-6">
       {files.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-500 dark:text-gray-400">
-          <FolderOpenIcon />
-          <p>No files found</p>
+          <FolderOpenIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No files found</p>
         </div>
       ) : (
         <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">

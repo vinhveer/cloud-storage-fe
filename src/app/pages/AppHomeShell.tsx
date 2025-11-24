@@ -7,12 +7,12 @@ export default function AppHomeShell() {
   return (
     <>
       <SidebarSync />
-      <div className="min-h-dvh flex flex-col bg-white dark:bg-[#0D1117] text-gray-900 dark:text-gray-100">
+      <div className="h-dvh overflow-hidden flex flex-col bg-white dark:bg-[#0D1117] text-gray-900 dark:text-gray-100">
         <Navbar />
-        <div className="flex flex-1">
+        <div className="flex flex-1 min-h-0">
           <Sidebar />
-          <main className="flex-1 ml-64 h-[calc(100dvh-var(--navbar-h)-1px)] overflow-y-auto">
-            <div className="container mx-auto p-4">
+          <main className="flex-1 ml-64 overflow-y-auto">
+            <div className="container mx-auto p-4 h-full">
               <HomePage />
             </div>
           </main>

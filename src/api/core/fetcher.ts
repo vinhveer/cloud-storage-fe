@@ -52,6 +52,22 @@ export async function put<ResponseData, RequestBody>(
 }
 
 /**
+ * Gửi HTTP PATCH với request body và trả về dữ liệu đã được gõ kiểu.
+ */
+export async function patch<ResponseData, RequestBody>(
+  requestUrl: string,
+  requestBody: RequestBody,
+  requestConfig: HttpRequestConfig = {},
+): Promise<ResponseData> {
+  try {
+    const response = await httpClient.patch<ResponseData>(requestUrl, requestBody, requestConfig)
+    return response.data
+  } catch (error) {
+    throw toAppError(error)
+  }
+}
+
+/**
  * Gửi HTTP DELETE và trả về dữ liệu đã được gõ kiểu.
  */
 export async function deleteRequest<ResponseData>(

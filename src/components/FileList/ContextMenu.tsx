@@ -1,27 +1,5 @@
 import React from 'react'
-import {
-    ShareIcon,
-    LinkIcon,
-    LockOpenIcon,
-    TrashIcon,
-    ArrowDownTrayIcon,
-    PencilIcon,
-    FolderIcon,
-    DocumentDuplicateIcon,
-    InformationCircleIcon,
-} from '@heroicons/react/24/outline'
-import type { FileItem } from './types'
-
-export type ContextMenuAction =
-    | 'share'
-    | 'copyLink'
-    | 'manageAccess'
-    | 'delete'
-    | 'download'
-    | 'rename'
-    | 'moveTo'
-    | 'copyTo'
-    | 'details'
+import type { FileItem, MenuItem } from './types'
 
 export interface ContextMenuProps {
     file: FileItem
@@ -85,27 +63,10 @@ export default function ContextMenu({ file, x, y, container, onAction, onClose }
         }
     }, [onClose])
 
-    const handleAction = (action: ContextMenuAction) => {
-        onAction(action, file)
+    const handleAction = (fn: (item: FileItem) => void) => {
+        fn(file)
         onClose()
     }
-
-    const menuItems: Array<{
-        label: string
-        icon: React.ReactNode
-        action: ContextMenuAction
-        divider?: boolean
-    }> = [
-            { label: 'Share', icon: <ShareIcon className="w-4 h-4" />, action: 'share' },
-            { label: 'Copy link', icon: <LinkIcon className="w-4 h-4" />, action: 'copyLink' },
-            { label: 'Manage access', icon: <LockOpenIcon className="w-4 h-4" />, action: 'manageAccess' },
-            { label: 'Delete', icon: <TrashIcon className="w-4 h-4" />, action: 'delete', divider: true },
-            { label: 'Download', icon: <ArrowDownTrayIcon className="w-4 h-4" />, action: 'download' },
-            { label: 'Rename', icon: <PencilIcon className="w-4 h-4" />, action: 'rename' },
-            { label: 'Move to', icon: <FolderIcon className="w-4 h-4" />, action: 'moveTo' },
-            { label: 'Copy to', icon: <DocumentDuplicateIcon className="w-4 h-4" />, action: 'copyTo' },
-            { label: 'Details', icon: <InformationCircleIcon className="w-4 h-4" />, action: 'details' },
-        ]
 
     return (
         <div
@@ -116,21 +77,25 @@ export default function ContextMenu({ file, x, y, container, onAction, onClose }
                 top: `${menuPos.y}px`,
             }}
         >
-            {menuItems.map((item, idx) => (
-                <React.Fragment key={item.action}>
+            {menuItems.map((item) => {
+                const Icon = item.icon
+                return (
                     <button
+                        key={item.label}
                         onClick={() => handleAction(item.action)}
-                        className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-left flex items-center gap-3 transition-colors"
+                        className={
+                            'w-full px-4 py-2 text-sm text-left flex items-center gap-3 transition-colors ' +
+                            (item.variant === 'danger'
+                                ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20'
+                                : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800')
+                        }
                         title={item.label}
                     >
-                        {item.icon}
+                        <Icon className="w-4 h-4" />
                         {item.label}
                     </button>
-                    {item.divider && idx < menuItems.length - 1 && (
-                        <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
-                    )}
-                </React.Fragment>
-            ))}
+                )
+            })}
         </div>
     )
 }
