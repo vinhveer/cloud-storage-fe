@@ -57,10 +57,23 @@ export default function AccountSettingsPage() {
 
         // Extract validation errors if available
         if (applicationError.details && typeof applicationError.details === 'object') {
-          const details = applicationError.details as Record<string, string[] | string>
-          const validationMessages = Object.values(details)
-            .flat()
-            .map(msg => String(msg))
+          const details = applicationError.details as Record<string, unknown>
+          const validationMessages: string[] = []
+
+          // Iterate through all fields in details
+          Object.values(details).forEach((messages) => {
+            if (Array.isArray(messages)) {
+              // If messages is an array, add each message
+              messages.forEach(msg => {
+                if (typeof msg === 'string') {
+                  validationMessages.push(msg)
+                }
+              })
+            } else if (typeof messages === 'string') {
+              // If messages is a string, add it directly
+              validationMessages.push(messages)
+            }
+          })
 
           if (validationMessages.length > 0) {
             errorMessage = validationMessages.join('\n')
@@ -114,10 +127,23 @@ export default function AccountSettingsPage() {
 
         // Extract validation errors if available
         if (applicationError.details && typeof applicationError.details === 'object') {
-          const details = applicationError.details as Record<string, string[] | string>
-          const validationMessages = Object.values(details)
-            .flat()
-            .map(msg => String(msg))
+          const details = applicationError.details as Record<string, unknown>
+          const validationMessages: string[] = []
+
+          // Iterate through all fields in details
+          Object.values(details).forEach((messages) => {
+            if (Array.isArray(messages)) {
+              // If messages is an array, add each message
+              messages.forEach(msg => {
+                if (typeof msg === 'string') {
+                  validationMessages.push(msg)
+                }
+              })
+            } else if (typeof messages === 'string') {
+              // If messages is a string, add it directly
+              validationMessages.push(messages)
+            }
+          })
 
           if (validationMessages.length > 0) {
             errorMessage = validationMessages.join('\n')
