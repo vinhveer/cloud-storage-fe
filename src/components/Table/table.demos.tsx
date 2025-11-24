@@ -42,10 +42,10 @@ export function SelectableUserTableDemo() {
     })
 
     return (
-        <div className="space-y-4">
+        <div className="">
             <div>
-                <h3 className="text-lg font-semibold mb-2">Danh sách người dùng (có chọn)</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <h3 className="text-lg font-semibold ">Danh sách người dùng (có chọn)</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                     Đã chọn {selectedIds.length}/{mockUsers.length}
                 </p>
             </div>
@@ -90,8 +90,8 @@ export function ProductTableDemo() {
                 return (
                     <span
                         className={`inline-flex px-2 py-1 rounded text-sm font-medium ${value === 'available'
-                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                             }`}
                     >
                         {statusMap[value] || value}
@@ -120,7 +120,7 @@ export function EmptyTableDemo() {
     })
 
     return (
-        <div className="space-y-4">
+        <div className="">
             <h3 className="text-lg font-semibold">Bảng rỗng</h3>
             <Table<User> columns={columns} data={[]} emptyMessage="Chưa có dữ liệu người dùng" />
         </div>

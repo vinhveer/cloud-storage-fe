@@ -47,6 +47,7 @@ export default function FileList({
     file: FileItem
     x: number
     y: number
+    container: HTMLDivElement
   } | null>(null)
   const containerRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -65,11 +66,13 @@ export default function FileList({
   const currentView = viewModeConfigs[currentViewMode]
 
   const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
+    const containerEl = containerRef.current
+    if (!containerEl) return
     // Enable selection mode and select this item
     enableSelectionMode()
     selectSingle(index)
 
-    setContextMenu({ file, x: clientX, y: clientY })
+    setContextMenu({ file, x: clientX, y: clientY, container: containerEl })
     onItemContext?.(file, index, clientX, clientY)
   }
 
@@ -184,21 +187,9 @@ export default function FileList({
         </div>
       )}
 
-      {/* Context Menu */}
-      {contextMenu && (
-        <ContextMenu
-          file={contextMenu.file}
-          x={contextMenu.x}
-          y={contextMenu.y}
-          containerRect={containerRef.current?.getBoundingClientRect()}
-          onAction={handleContextMenuAction}
-          onClose={() => setContextMenu(null)}
-        />
-      )}
-
       <div
         ref={containerRef}
-        className={clsx('bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
+        className={clsx('relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden flex flex-col', className)}
         style={heightVh ? { height: `${heightVh}dvh` } : undefined}
       >
         {/* Toolbar */}
@@ -332,6 +323,17 @@ export default function FileList({
             />
           )}
         </div>
+
+        {contextMenu && (
+          <ContextMenu
+            file={contextMenu.file}
+            x={contextMenu.x}
+            y={contextMenu.y}
+            container={contextMenu.container}
+            onAction={handleContextMenuAction}
+            onClose={() => setContextMenu(null)}
+          />
+        )}
       </div>
     </>
   )

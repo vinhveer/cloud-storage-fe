@@ -30,6 +30,20 @@ export type TableColumn<T> = {
  * Props của Table component
  * T là generic type của dữ liệu trong bảng
  */
+export type TableToolbarAction = {
+    id: string
+    label: string
+    icon?: React.ReactNode
+    requireSingle?: boolean
+}
+
+export type TableContextMenuAction = {
+    id: string
+    label: string
+    icon?: React.ReactNode
+    divider?: boolean
+}
+
 export type TableProps<T extends { id: string | number }> = {
     columns: TableColumn<T>[]
     data: T[]
@@ -41,6 +55,11 @@ export type TableProps<T extends { id: string | number }> = {
     onRowClick?: (row: T) => void
     selectable?: boolean
     onSelectionChange?: (selectedIds: (string | number)[]) => void
+    toolbarActions?: TableToolbarAction[]
+    onToolbarAction?: (actionId: string, rows: T[]) => void
+    contextMenuActions?: TableContextMenuAction[]
+    onContextMenuAction?: (actionId: string, row: T) => void
+    enableContextMenu?: boolean
 }
 
 /**
