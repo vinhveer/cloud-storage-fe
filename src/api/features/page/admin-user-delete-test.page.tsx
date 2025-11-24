@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDeleteAdminUser } from '@/api/features/users/admin-user-delete.mutations'
+import { useDeleteAdminUser } from '@/api/features/users/users.mutations'
 
 export default function AdminUserDeleteTestPage() {
   const [userId, setUserId] = React.useState<string>('7')

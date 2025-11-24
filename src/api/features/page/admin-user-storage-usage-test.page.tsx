@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAdminUserStorageUsage } from '@/api/features/users/admin-user-storage-usage.queries'
+import { useAdminUserStorageUsage } from '@/api/features/users/users.queries'
 
 export default function AdminUserStorageUsageTestPage() {
   const [userIdInput, setUserIdInput] = React.useState<string>('15')

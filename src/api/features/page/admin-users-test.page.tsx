@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAdminUsers } from '@/api/features/users/admin-users.queries'
+import { useAdminUsers } from '@/api/features/users/users.queries'
 
 export default function AdminUsersTestPage() {
   const [search, setSearch] = React.useState<string>('')

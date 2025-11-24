@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAdminUserDetail } from '@/api/features/users/admin-user-detail.queries'
+import { useAdminUserDetail } from '@/api/features/users/users.queries'
 
 export default function AdminUserDetailTestPage() {
   const [userIdInput, setUserIdInput] = React.useState<string>('7')
