@@ -55,7 +55,7 @@ export default function TrashPage() {
     })
   }
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col gap-6">
 
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Trash</h2>
@@ -64,12 +64,12 @@ export default function TrashPage() {
         </p>
       </header>
 
-      <section>
+      <section className="flex-1 min-h-0 flex flex-col">
         <FileList
           files={trashItems}
           viewMode="details"
           tilesAlignLeft={true}
-          heightVh={60}
+          className="flex-1 min-h-0"
           toolbarRight={
             <>
               <span className="hidden sm:inline-block text-sm text-gray-500 dark:text-gray-400 mr-2">

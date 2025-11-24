@@ -10,9 +10,9 @@ import FilterButton from '@/components/FileList/FilterButton'
 import SortButton from '@/components/FileList/SortButton'
 import SelectionToolbar from '@/components/FileList/SelectionToolbar'
 import ContextMenu from '@/components/FileList/ContextMenu'
+import { useMockMenuItems } from '@/components/FileList/mockMenuItems'
 import type { FileListProps, ViewMode, FileItem } from '@/components/FileList/types'
 import type { SelectionToolbarAction } from './SelectionToolbar'
-import type { ContextMenuAction } from './ContextMenu'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
 
 export default function FileList({
@@ -64,11 +64,10 @@ export default function FileList({
 
   const currentView = viewModeConfigs[currentViewMode]
 
-  const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
-    // Enable selection mode and select this item
-    enableSelectionMode()
-    selectSingle(index)
+  const { folderContextMenuItem, fileContextMenuItem } = useMockMenuItems()
 
+  const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
+    // On right-click, only open context menu without toggling selection mode
     setContextMenu({ file, x: clientX, y: clientY })
     onItemContext?.(file, index, clientX, clientY)
   }
@@ -80,6 +79,11 @@ export default function FileList({
     console.log('Toolbar action:', action, 'items:', items)
 
     switch (action) {
+      case 'open':
+        if (items.length === 1) {
+          onItemOpen?.(items[0], 0) // Index 0 is placeholder, logic usually depends on ID
+        }
+        break
       case 'share':
         // TODO: show share dialog
         break
@@ -110,42 +114,7 @@ export default function FileList({
     }
   }
 
-  const handleContextMenuAction = (action: ContextMenuAction, file: FileItem) => {
-    // Dispatch action - in real app, these would call actual APIs
-    // eslint-disable-next-line no-console
-    console.log('Context menu action:', action, 'file:', file)
-
-    switch (action) {
-      case 'share':
-        // TODO: show share dialog
-        break
-      case 'copyLink':
-        // TODO: copy to clipboard
-        break
-      case 'manageAccess':
-        // TODO: show access management dialog
-        break
-      case 'delete':
-        // TODO: delete item via API
-        break
-      case 'download':
-        // TODO: download item
-        break
-      case 'rename':
-        // TODO: show rename dialog
-        break
-      case 'moveTo':
-        // TODO: show move dialog
-        break
-      case 'copyTo':
-        // TODO: show copy dialog
-        break
-      case 'details':
-        // TODO: show details panel
-        break
-    }
-    setContextMenu(null)
-  }
+  // No explicit action handler needed; actions are embedded in menu item callbacks
 
   const getSelectedFilesForToolbar = (): FileItem[] => {
     return selectedItems.map(idx => files[idx]).filter(Boolean)
@@ -173,7 +142,7 @@ export default function FileList({
   return (
     <>
       {/* Floating Selection Toolbar */}
-      {selectionMode && selectedItems.length > 0 && (
+      {selectionMode && selectedItems.length > 0 && !contextMenu && (
         <div className="mb-4">{/* Thêm margin-bottom */}
           <SelectionToolbar
             selectedItems={getSelectedFilesForToolbar()}
@@ -191,7 +160,7 @@ export default function FileList({
           x={contextMenu.x}
           y={contextMenu.y}
           containerRect={containerRef.current?.getBoundingClientRect()}
-          onAction={handleContextMenuAction}
+          menuItems={(contextMenu.file.type ?? '').toLowerCase() === 'folder' ? folderContextMenuItem : fileContextMenuItem}
           onClose={() => setContextMenu(null)}
         />
       )}
