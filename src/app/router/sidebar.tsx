@@ -1,12 +1,29 @@
 import { HomeIcon, FolderIcon, ShareIcon, TrashIcon, Squares2X2Icon, UsersIcon, EyeIcon } from '@heroicons/react/24/outline'
 import type { SidebarItemData } from '@/components/Sidebar/types'
 import { sampleMenuItems } from '@/components/MDX/sample-data.mock'
-import { isAdmin } from '@/utils/roleGuard'
+import { isAdmin as readAdminFromGuard } from '@/utils/roleGuard'
+
+function getBaseAppItems(): SidebarItemData[] {
+  return [
+    { key: 'home', title: 'Home', href: '/', icon: <HomeIcon className="w-5 h-5" /> },
+    { key: 'files', title: 'My Files', href: '/my-files', icon: <FolderIcon className="w-5 h-5" /> },
+    { key: 'shared', title: 'Shared', href: '/shared', icon: <ShareIcon className="w-5 h-5" /> },
+    { key: 'trash', title: 'Trash', href: '/trash', icon: <TrashIcon className="w-5 h-5" /> },
+  ]
+}
+
+function getAdminItems(isAdminUser: boolean): SidebarItemData[] {
+  if (!isAdminUser) return []
+  return [
+    { key: 'admin-overview', title: 'Overview', href: '/samples/admin/overview', icon: <EyeIcon className="w-5 h-5" />, },
+    { key: 'admin-user-management', title: 'User Management', href: '/samples/admin/user-management', icon: <UsersIcon className="w-5 h-5" />, },
+  ]
+}
 
 type SidebarConfig = {
   id: string
   match: (pathname: string) => boolean
-  items: () => SidebarItemData[]
+  items: (ctx: { isAdmin: boolean }) => SidebarItemData[]
 }
 
 function prefixMatcher(prefixes: string[]): (pathname: string) => boolean {
@@ -21,38 +38,22 @@ const SIDEBAR_CONFIGS: SidebarConfig[] = [
   {
     id: 'admin',
     match: prefixMatcher(['/samples/admin']),
-    items: () => {
-      const items: SidebarItemData[] = []
-
-      // Admin sidebar section: only visible for admin
-      if (typeof window !== 'undefined' && isAdmin()) {
-        items.push(
-          {
-            key: 'overview',
-            title: 'Overview',
-            href: '/samples/admin/overview',
-            icon: <EyeIcon className="w-5 h-5" />,
-          },
-          {
-            key: 'user-management',
-            title: 'User Management',
-            href: '/samples/admin/user-management',
-            icon: <UsersIcon className="w-5 h-5" />,
-          },
-        )
+    items: ({ isAdmin }) => {
+      const items = getBaseAppItems()
+      if (isAdmin) {
+        items.push(...getAdminItems(isAdmin))
       }
-
       return items
     },
   },
   {
     id: 'samples',
     match: prefixMatcher(['/samples']),
-    items: () => {
+    items: ({ isAdmin }) => {
       // Filter admin items based on role
       const filtered = sampleMenuItems.filter(m => {
         if (m.requiresAdmin) {
-          return typeof window !== 'undefined' && isAdmin()
+          return isAdmin
         }
         return true
       })
@@ -67,40 +68,20 @@ const SIDEBAR_CONFIGS: SidebarConfig[] = [
   {
     id: 'app',
     match: prefixMatcher(['', '/', '/app', '/my-files', '/shared', '/trash']),
-    items: () => {
-      const baseItems: SidebarItemData[] = [
-        { key: 'home', title: 'Home', href: '/', icon: <HomeIcon className="w-5 h-5" /> },
-        { key: 'files', title: 'My Files', href: '/my-files', icon: <FolderIcon className="w-5 h-5" /> },
-        { key: 'shared', title: 'Shared', href: '/shared', icon: <ShareIcon className="w-5 h-5" /> },
-        { key: 'trash', title: 'Trash', href: '/trash', icon: <TrashIcon className="w-5 h-5" /> },
-      ]
-
-      // For admin users, always append Overview & User Management
-      if (typeof window !== 'undefined' && isAdmin()) {
-        baseItems.push(
-          {
-            key: 'admin-overview',
-            title: 'Overview',
-            href: '/samples/admin/overview',
-            icon: <EyeIcon className="w-5 h-5" />,
-          },
-          {
-            key: 'admin-user-management',
-            title: 'User Management',
-            href: '/samples/admin/user-management',
-            icon: <UsersIcon className="w-5 h-5" />,
-          },
-        )
+    items: ({ isAdmin }) => {
+      const baseItems = getBaseAppItems()
+      if (isAdmin) {
+        baseItems.push(...getAdminItems(isAdmin))
       }
-
       return baseItems
     },
   },
 ]
 
-export function getItemsForPath(pathname: string): SidebarItemData[] {
+export function getItemsForPath(pathname: string, options?: { isAdmin?: boolean }): SidebarItemData[] {
   const config = SIDEBAR_CONFIGS.find((c) => c.match(pathname))
-  return config ? config.items() : []
+  const isAdmin = options?.isAdmin ?? (typeof window !== 'undefined' && readAdminFromGuard())
+  return config ? config.items({ isAdmin }) : []
 }
 
 export function pickActiveKey(items: SidebarItemData[], pathname: string): string | undefined {

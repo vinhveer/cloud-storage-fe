@@ -12,8 +12,9 @@ export function useSetupUserRole() {
     const { data: user, error, isLoading } = useQuery({
         queryKey: qk.auth.profile(),
         queryFn: getProfile,
-        staleTime: Infinity,
+        staleTime: 5 * 60 * 1000,
         retry: false,
+        refetchOnMount: 'always',
     })
 
     useEffect(() => {

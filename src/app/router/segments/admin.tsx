@@ -1,6 +1,6 @@
 import { createAccessRoute } from '../route-factories'
 import { rootRoute } from '../root'
-import NoLayout from '@/app/layout/NoLayout'
+import AppLayout from '@/app/layout/AppLayout'
 import AdminOverviewPage from '@/app/pages/samples/admin/overview'
 import AdminUserManagementPage from '@/app/pages/samples/admin/user-management'
 import { isAdmin } from '@/utils/roleGuard'
@@ -13,7 +13,7 @@ import { redirect } from '@tanstack/react-router'
 export const adminRoute = createAccessRoute({
     getParentRoute: () => rootRoute,
     path: '/samples/admin',
-    component: NoLayout,
+    component: AppLayout,
     access: 'protected',
     beforeLoad: () => {
         // Check if user is admin
