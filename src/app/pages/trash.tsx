@@ -77,11 +77,11 @@ export default function TrashPage() {
               </span>
               <Button
                 variant="danger"
-                size="sm"
-                icon={<TrashIcon className="w-4 h-4 text-current" aria-hidden="true" />}
-                value="Làm trống Thùng rác"
-                className="inline-flex items-center gap-1.5"
-                aria-label="Làm trống Thùng rác"
+                size="md"
+                icon={<TrashIcon className="w-5 h-5 text-current" aria-hidden="true" />}
+                value="Empty Trash"
+                className="inline-flex items-center gap-2"
+                aria-label="Empty Trash"
                 onClick={handleEmptyTrash}
               />
             </>
