@@ -18,8 +18,8 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
         {files.length === 0 && (
           <tr>
             <td colSpan={4} className="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
-              <FolderOpenIcon />
-              <p>No files found</p>
+              <FolderOpenIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
+              <p className="text-gray-500 dark:text-gray-400 text-lg">No files found</p>
             </td>
           </tr>
         )}
