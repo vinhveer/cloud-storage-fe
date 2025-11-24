@@ -31,4 +31,11 @@ export type FileListProps = {
   tilesAlignLeft?: boolean
 }
 
+export type MenuItem = {
+  label: string
+  icon: React.ElementType
+  action: (item: FileItem) => void
+  variant?: 'default' | 'danger'
+}
+
 

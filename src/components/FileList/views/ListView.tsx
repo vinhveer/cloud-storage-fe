@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
@@ -11,6 +11,7 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Modified</th>
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Size</th>
+          <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-10" aria-label="Actions"></th>
         </tr>
       </thead>
       <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
@@ -36,7 +37,7 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
               e.preventDefault()
               onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
             }}
-            className={clsx('hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer', selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30')}
+            className={clsx('group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer', selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30')}
           >
             <td className="px-6 py-4 whitespace-nowrap">
               <div className="flex items-center">
@@ -59,6 +60,21 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{file.modified ?? 'Unknown'}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{file.size ?? 'Unknown'}</td>
+            <td className="px-3 py-4 whitespace-nowrap text-right">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  const btn = e.currentTarget as HTMLButtonElement
+                  const rect = btn.getBoundingClientRect()
+                  onItemContext?.(file, index, rect.right, rect.bottom, btn)
+                }}
+                className="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100"
+                aria-label="More actions"
+              >
+                <EllipsisVerticalIcon className="w-5 h-5" />
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>
