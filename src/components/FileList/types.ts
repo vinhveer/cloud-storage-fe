@@ -38,4 +38,3 @@ export type MenuItem = {
   variant?: 'default' | 'danger'
 }
 
-

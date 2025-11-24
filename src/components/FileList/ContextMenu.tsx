@@ -5,12 +5,12 @@ export interface ContextMenuProps {
     file: FileItem
     x: number
     y: number
-    container?: HTMLDivElement | null
-    onAction: (action: ContextMenuAction, file: FileItem) => void
+    containerRect?: DOMRect
+    menuItems: MenuItem[]
     onClose: () => void
 }
 
-export default function ContextMenu({ file, x, y, container, onAction, onClose }: ContextMenuProps) {
+export default function ContextMenu({ file, x, y, containerRect, menuItems, onClose }: ContextMenuProps) {
     const menuRef = React.useRef<HTMLDivElement>(null)
     const [menuPos, setMenuPos] = React.useState({ x, y })
 
@@ -18,22 +18,20 @@ export default function ContextMenu({ file, x, y, container, onAction, onClose }
     React.useEffect(() => {
         // After first render we may know menu size -> adjust
         function clampPosition(rawX: number, rawY: number): { x: number; y: number } {
+            const rect = containerRect
             const menuEl = menuRef.current
             if (!menuEl) return { x: rawX, y: rawY }
             const { width, height } = menuEl.getBoundingClientRect()
-            if (container) {
-                const rect = container.getBoundingClientRect()
-                const offsetX = rawX - rect.left + container.scrollLeft
-                const offsetY = rawY - rect.top + container.scrollTop
-                const minX = container.scrollLeft
-                const minY = container.scrollTop
-                const maxX = container.scrollLeft + container.clientWidth - width
-                const maxY = container.scrollTop + container.clientHeight - height
-                return {
-                    x: Math.min(Math.max(offsetX, minX), Math.max(minX, maxX)),
-                    y: Math.min(Math.max(offsetY, minY), Math.max(minY, maxY)),
-                }
+            if (rect) {
+                const minX = rect.left
+                const maxX = rect.right - width
+                const minY = rect.top
+                const maxY = rect.bottom - height
+                const clampedX = Math.min(Math.max(rawX, minX), maxX)
+                const clampedY = Math.min(Math.max(rawY, minY), maxY)
+                return { x: clampedX, y: clampedY }
             }
+            // Fallback clamp to viewport
             const vw = window.innerWidth
             const vh = window.innerHeight
             return {
@@ -41,10 +39,11 @@ export default function ContextMenu({ file, x, y, container, onAction, onClose }
                 y: Math.min(Math.max(rawY, 0), vh - height - 4),
             }
         }
+        // Use timeout to ensure menu size measured after paint
         requestAnimationFrame(() => {
             setMenuPos(clampPosition(x, y))
         })
-    }, [x, y, container])
+    }, [x, y, containerRect])
 
     React.useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -71,7 +70,7 @@ export default function ContextMenu({ file, x, y, container, onAction, onClose }
     return (
         <div
             ref={menuRef}
-            className="absolute z-50 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 animate-fade-in"
+            className="fixed z-50 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 animate-fade-in"
             style={{
                 left: `${menuPos.x}px`,
                 top: `${menuPos.y}px`,

@@ -156,5 +156,3 @@ export async function deleteFileVersion(fileId: number, versionId: number): Prom
   const parsed = parseWithZod<DeleteFileVersionEnvelope>(deleteFileVersionEnvelope, response)
   return parsed.data
 }
-
-

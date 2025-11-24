@@ -81,5 +81,3 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
     </table>
   )
 }
-
-

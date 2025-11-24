@@ -127,5 +127,3 @@ export async function copyFolder(folderId: number, payload: CopyFolderRequest): 
   const parsed = parseWithZod<CopyFolderEnvelope>(copyFolderEnvelope, response)
   return parsed.data
 }
-
-

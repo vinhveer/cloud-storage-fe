@@ -89,5 +89,3 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
     </table>
   )
 }
-
-
