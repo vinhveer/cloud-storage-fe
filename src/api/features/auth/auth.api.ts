@@ -1,6 +1,7 @@
 import { get, post, put, patch } from '../../core/fetcher'
 import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
+import { setCachedUserRole } from '@/utils/roleGuard'
 import {
   AuthSuccessSchema,
   LoginRequestSchema,
@@ -56,6 +57,9 @@ function toLoginPayload(payload: LoginRequest) {
 
 function handleAuthSuccess(data: AuthSuccess): AuthSuccess {
   setAccessToken(data.token)
+  if (data.user?.role) {
+    setCachedUserRole(data.user.role)
+  }
   return data
 }
 

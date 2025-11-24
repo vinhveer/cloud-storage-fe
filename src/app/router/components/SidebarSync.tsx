@@ -2,6 +2,8 @@ import React from 'react'
 import { useRouterState } from '@tanstack/react-router'
 import { useSidebar } from '@/components/Sidebar/SidebarContext'
 import { getItemsForPath, pickActiveKey } from '../sidebar'
+import { isAdmin } from '@/utils/roleGuard'
+import { useRoleVersion } from '@/hooks/useRoleVersion'
 
 function areSame(
   a: { key: string; title: string; href?: string }[],
@@ -19,16 +21,18 @@ export default function SidebarSync() {
   const { location } = useRouterState({ select: (s) => ({ location: s.location }) })
   const pathname = location.pathname
   const { items, setItems, setActiveKey } = useSidebar()
+  const roleVersion = useRoleVersion()
+  const isAdminSnapshot = React.useMemo(() => (typeof window !== 'undefined' ? isAdmin() : false), [roleVersion])
 
   React.useEffect(() => {
-    const expectedItems = getItemsForPath(pathname)
+    const expectedItems = getItemsForPath(pathname, { isAdmin: isAdminSnapshot })
     const current = items.map((it: any) => ({ key: it.key, title: it.title, href: it.href }))
     const expected = expectedItems.map((it: any) => ({ key: it.key, title: it.title, href: it.href }))
     if (!areSame(current, expected)) {
       setItems(expectedItems)
     }
     setActiveKey(pickActiveKey(expectedItems, pathname))
-  }, [pathname, items, setItems, setActiveKey])
+  }, [pathname, items, setItems, setActiveKey, roleVersion, isAdminSnapshot])
 
   return null
 }

@@ -3,6 +3,32 @@
  */
 export type UserRole = 'admin' | 'user' | 'viewer'
 
+type RoleListener = () => void
+const roleListeners = new Set<RoleListener>()
+let roleVersionCounter = 0
+
+function notifyRoleChange() {
+    roleVersionCounter += 1
+    roleListeners.forEach(listener => {
+        try {
+            listener()
+        } catch {
+            // ignore listener errors
+        }
+    })
+}
+
+export function subscribeToRoleChanges(listener: RoleListener) {
+    roleListeners.add(listener)
+    return () => {
+        roleListeners.delete(listener)
+    }
+}
+
+export function getRoleVersion() {
+    return roleVersionCounter
+}
+
 /**
  * Get user role from React Query cache or localStorage
  */
@@ -82,6 +108,7 @@ export function setCachedUserRole(role: UserRole): void {
         } catch {
             // ignore storage errors
         }
+        notifyRoleChange()
     }
 }
 
