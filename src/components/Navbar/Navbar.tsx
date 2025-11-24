@@ -11,6 +11,9 @@ import { useState, useRef, useEffect } from 'react'
 import { useCreateFolder } from '@/api/features/folder/folder.mutations'
 import UploadModal from '@/components/Upload/UploadModal'
 import type { NavbarProps } from '@/components/Navbar/types'
+import { useQuery } from '@tanstack/react-query'
+import { getProfile } from '@/api/features/auth/auth.api'
+import { qk } from '@/api/query/keys'
 
 import { searchSuggestions } from '@/api/features/search/search.api'
 
@@ -32,6 +35,12 @@ export default function Navbar({
 
   const createFolderMutation = useCreateFolder()
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
+
+  // Fetch user profile
+  const { data: user } = useQuery({
+    queryKey: qk.auth.profile(),
+    queryFn: getProfile,
+  })
 
   // Outside click / escape handling for upload menu
   useEffect(() => {
@@ -169,7 +178,12 @@ export default function Navbar({
               </div>
             )}
           </div>
-          <AccountDropdown onLogout={handleLogout} settingsHref="/app/account-settings" />
+          <AccountDropdown
+            userName={user?.name}
+            userEmail={user?.email}
+            onLogout={handleLogout}
+            settingsHref="/app/account-settings"
+          />
         </div>
       </div>
       {logoutError && (

@@ -33,6 +33,13 @@ export const qk = {
     byId: (fileId: string) => ['file', fileId] as const,
     list: (params?: ListParams) => ['files', params ?? {}] as const,
   },
+  folders: {
+    root: () => ['folders'] as const,
+    byId: (folderId: number | string) => ['folder', folderId] as const,
+    contents: (folderId: number | string) => ['folder', folderId, 'contents'] as const,
+    breadcrumb: (folderId: number | string) => ['folder', folderId, 'breadcrumb'] as const,
+    list: (params?: ListParams) => ['folders', params ?? {}] as const,
+  },
 } as const
 
 

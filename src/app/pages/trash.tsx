@@ -82,6 +82,7 @@ export default function TrashPage() {
                 value="Làm trống Thùng rác"
                 className="inline-flex items-center gap-1.5"
                 aria-label="Làm trống Thùng rác"
+                onClick={handleEmptyTrash}
               />
             </>
           }

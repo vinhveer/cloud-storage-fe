@@ -4,6 +4,8 @@ import { useAppDispatch } from '@/state/store'
 import { startUploads, updateProgressByFile, markSuccessByFile, markErrorByFile } from '@/state/uploads/uploads.slice'
 import { toFormData } from '@/api/core/upload'
 import { upload } from '@/api/core/fetcher'
+import { useQueryClient } from '@tanstack/react-query'
+import { qk } from '@/api/query/keys'
 
 interface UploadModalProps {
     open: boolean
@@ -13,6 +15,7 @@ interface UploadModalProps {
 
 export default function UploadModal({ open, onClose, folderId = null }: UploadModalProps) {
     const dispatch = useAppDispatch()
+    const queryClient = useQueryClient()
     const [files, setFiles] = React.useState<File[]>([])
     const [starting, setStarting] = React.useState(false)
 
@@ -39,6 +42,11 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
                 dispatch(markErrorByFile({ fileName: f.name, size: f.size, error: e?.message || 'Upload failed' }))
             }
         }
+
+        // Invalidate queries to refresh file list
+        await queryClient.invalidateQueries({
+            queryKey: qk.folders.contents(folderId ?? 'root')
+        })
 
         setStarting(false)
         onClose()
