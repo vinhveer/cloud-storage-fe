@@ -1,10 +1,10 @@
 import React from 'react'
-import { useAdminUserDetail } from '@/api/features/users/users.queries'
+import { useUserDetail } from '@/api/features/users/users.queries'
 
 export default function AdminUserDetailTestPage() {
   const [userIdInput, setUserIdInput] = React.useState<string>('7')
   const numericId = userIdInput === '' ? undefined : Number(userIdInput)
-  const query = useAdminUserDetail(Number.isNaN(numericId as number) ? undefined : numericId)
+  const query = useUserDetail(Number.isNaN(numericId as number) ? undefined : numericId)
 
   const runQuick = (mode: 'success' | 'not-found' | 'unauthenticated' | 'unauthorized') => {
     if (mode === 'success') {

@@ -1,10 +1,10 @@
 import React from 'react'
-import { useAdminUserStorageUsage } from '@/api/features/users/users.queries'
+import { useUserStorageUsage } from '@/api/features/users/users.queries'
 
 export default function AdminUserStorageUsageTestPage() {
   const [userIdInput, setUserIdInput] = React.useState<string>('15')
   const numericId = userIdInput === '' ? undefined : Number(userIdInput)
-  const query = useAdminUserStorageUsage(Number.isNaN(numericId as number) ? undefined : numericId)
+  const query = useUserStorageUsage(Number.isNaN(numericId as number) ? undefined : numericId)
 
   const runQuick = (mode: 'success' | 'not-found' | 'unauthenticated' | 'unauthorized') => {
     if (mode === 'success') {

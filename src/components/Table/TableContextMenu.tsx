@@ -20,19 +20,21 @@ export default function TableContextMenu<T>({ row, x, y, actions, container, onA
             const menuEl = menuRef.current
             if (!menuEl) return { x: rawX, y: rawY }
             const { width, height } = menuEl.getBoundingClientRect()
+
+            // Nếu có container (bảng), clamp toạ độ trong vùng visible của bảng theo viewport
             if (container) {
                 const rect = container.getBoundingClientRect()
-                const offsetX = rawX - rect.left + container.scrollLeft
-                const offsetY = rawY - rect.top + container.scrollTop
-                const minX = container.scrollLeft
-                const maxX = container.scrollLeft + container.clientWidth - width
-                const minY = container.scrollTop
-                const maxY = container.scrollTop + container.clientHeight - height
+                const minX = rect.left
+                const maxX = rect.right - width
+                const minY = rect.top
+                const maxY = rect.bottom - height
                 return {
-                    x: Math.min(Math.max(offsetX, minX), Math.max(minX, maxX)),
-                    y: Math.min(Math.max(offsetY, minY), Math.max(minY, maxY)),
+                    x: Math.min(Math.max(rawX, minX), Math.max(minX, maxX)),
+                    y: Math.min(Math.max(rawY, minY), Math.max(minY, maxY)),
                 }
             }
+
+            // Nếu không có container, clamp trong viewport
             return {
                 x: Math.min(Math.max(rawX, 0), window.innerWidth - width - 4),
                 y: Math.min(Math.max(rawY, 0), window.innerHeight - height - 4),
@@ -70,7 +72,7 @@ export default function TableContextMenu<T>({ row, x, y, actions, container, onA
     return (
         <div
             ref={menuRef}
-            className="absolute z-50 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
+            className="fixed z-50 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
             style={{ left: position.x, top: position.y }}
         >
             {actions.map((action, index) => (

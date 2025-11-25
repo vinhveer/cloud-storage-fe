@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export type ConfirmType = 'danger' | 'primary' | 'neutral'
 
 export type DialogProps = {
@@ -19,6 +21,7 @@ export type DialogProps = {
   closeOnEsc?: boolean
   closeOnBackdrop?: boolean
   className?: string
+  children?: React.ReactNode
 }
 
 

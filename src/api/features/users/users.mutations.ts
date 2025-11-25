@@ -1,48 +1,48 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-    createAdminUser,
-    updateAdminUser,
-    deleteAdminUser,
-    updateAdminUserRole,
+    createUser,
+    updateUser,
+    deleteUser,
+    updateUserRole,
 } from './users.api'
 import type {
-    AdminUserCreateRequest,
-    AdminUserItem,
-    AdminUserItem as AdminUserItemUpdate,
-    AdminUserUpdateRequest,
-    AdminUserDeleteSuccess,
-    AdminUserRoleUpdateRequest,
+    UserCreateRequest,
+    UserItem,
+    UserItem as UserItemUpdate,
+    UserUpdateRequest,
+    UserDeleteSuccess,
+    UserRoleUpdateRequest,
     UpdatedUserRole,
 } from './users.types'
 import type { AppError } from '../../core/error'
 import { qk } from '../../query/keys'
 
-export function useCreateAdminUser() {
-    return useMutation<AdminUserItem, AppError, AdminUserCreateRequest>({
-        mutationFn: payload => createAdminUser(payload),
+export function useCreateUser() {
+    return useMutation<UserItem, AppError, UserCreateRequest>({
+        mutationFn: payload => createUser(payload),
     })
 }
 
-export type UpdateAdminUserVariables = {
+export type UpdateUserVariables = {
     userId: number
     name?: string
     storage_limit?: number
 }
 
-export function useUpdateAdminUser() {
-    return useMutation<AdminUserItemUpdate, AppError, UpdateAdminUserVariables>({
+export function useUpdateUser() {
+    return useMutation<UserItemUpdate, AppError, UpdateUserVariables>({
         mutationFn: variables =>
-            updateAdminUser(variables.userId, {
+            updateUser(variables.userId, {
                 name: variables.name,
                 storage_limit: variables.storage_limit,
-            } as AdminUserUpdateRequest),
+            } as UserUpdateRequest),
     })
 }
 
-export function useDeleteAdminUser() {
+export function useDeleteUser() {
     const queryClient = useQueryClient()
-    return useMutation<AdminUserDeleteSuccess, AppError, number>({
-        mutationFn: userId => deleteAdminUser(userId),
+    return useMutation<UserDeleteSuccess, AppError, number>({
+        mutationFn: userId => deleteUser(userId),
         onSuccess: (_data, userId) => {
             queryClient.removeQueries({ queryKey: qk.admin.userById(String(userId)) })
             // optionally refetch the users list
@@ -51,14 +51,14 @@ export function useDeleteAdminUser() {
     })
 }
 
-export type UpdateAdminUserRoleVariables = {
+export type UpdateUserRoleVariables = {
     userId: number
     role: 'user' | 'admin'
 }
 
-export function useUpdateAdminUserRole() {
-    return useMutation<UpdatedUserRole, AppError, UpdateAdminUserRoleVariables>({
+export function useUpdateUserRole() {
+    return useMutation<UpdatedUserRole, AppError, UpdateUserRoleVariables>({
         mutationFn: variables =>
-            updateAdminUserRole(variables.userId, { role: variables.role } as AdminUserRoleUpdateRequest),
+            updateUserRole(variables.userId, { role: variables.role } as UserRoleUpdateRequest),
     })
 }
