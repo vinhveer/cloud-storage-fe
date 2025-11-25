@@ -11,6 +11,16 @@ import SortButton from '@/components/FileList/SortButton'
 import SelectionToolbar from '@/components/FileList/SelectionToolbar'
 import ContextMenu from '@/components/FileList/ContextMenu'
 import { useMockMenuItems } from '@/components/FileList/mockMenuItems'
+import DeleteFileDialog from '@/components/Dialog/DeleteFileDialog'
+import DeleteFolderDialog from '@/components/Dialog/DeleteFolderDialog'
+import RenameFileDialog from '@/components/Dialog/RenameFileDialog'
+import RenameFolderDialog from '@/components/Dialog/RenameFolderDialog'
+import ShareFolderDialog from '@/components/Dialog/ShareFolderDialog'
+import MoveFileDialog from '@/components/Dialog/MoveFileDialog'
+import CopyFileDialog from '@/components/Dialog/CopyFileDialog'
+import ShareFileDialog from '@/components/Dialog/ShareFileDialog'
+import FileDetailPanel from '@/components/FileList/FileDetailPanel'
+import { useAlert } from '@/components/Alert/AlertProvider'
 import type { FileListProps, ViewMode, FileItem } from '@/components/FileList/types'
 import type { SelectionToolbarAction } from './SelectionToolbar'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
@@ -34,14 +44,14 @@ export default function FileList({
     changeViewMode,
     selectionMode,
     toggleSelectionMode,
-    enableSelectionMode,
     selected: selectedItems,
     isSelected,
     toggleItem,
     selectAll,
     deselectAll,
-    selectSingle,
   } = useFileList({ initialViewMode: viewMode, fileCount: files.length })
+
+  const { showAlert } = useAlert()
 
   const [contextMenu, setContextMenu] = React.useState<{
     file: FileItem
@@ -51,6 +61,79 @@ export default function FileList({
   const containerRef = React.useRef<HTMLDivElement | null>(null)
 
   const dropdownRef = React.useRef<HTMLDivElement | null>(null)
+
+  const [detailFile, setDetailFile] = React.useState<FileItem | null>(null)
+
+  const [shareFileDialog, setShareFileDialog] = React.useState<{
+    open: boolean
+    file: FileItem | null
+  }>({
+    open: false,
+    file: null,
+  })
+
+  const [deleteFileDialog, setDeleteFileDialog] = React.useState<{ open: boolean; file: FileItem | null }>(
+    {
+      open: false,
+      file: null,
+    }
+  )
+
+  const [renameFileDialog, setRenameFileDialog] = React.useState<{
+    open: boolean
+    file: FileItem | null
+  }>({
+    open: false,
+    file: null,
+  })
+
+  const [moveFileDialog, setMoveFileDialog] = React.useState<{
+    open: boolean
+    file: FileItem | null
+    destinationFolderId?: number
+  }>({
+    open: false,
+    file: null,
+    destinationFolderId: undefined,
+  })
+
+  const [copyFileDialog, setCopyFileDialog] = React.useState<{
+    open: boolean
+    file: FileItem | null
+    destinationFolderId?: number | null
+    onlyLatest?: boolean
+  }>({
+    open: false,
+    file: null,
+    destinationFolderId: null,
+    onlyLatest: true,
+  })
+
+  const [renameFolderDialog, setRenameFolderDialog] = React.useState<{
+    open: boolean
+    folder: FileItem | null
+  }>({
+    open: false,
+    folder: null,
+  })
+
+  const [deleteFolderDialog, setDeleteFolderDialog] = React.useState<{
+    open: boolean
+    folder: FileItem | null
+  }>({
+    open: false,
+    folder: null,
+  })
+
+  const [shareFolderDialog, setShareFolderDialog] = React.useState<{
+    open: boolean
+    folder: FileItem | null
+  }>({
+    open: false,
+    folder: null,
+  })
+
+  const { folderContextMenuItem, fileContextMenuItem } = useMockMenuItems()
 
   React.useEffect(() => {
     setViewMode(viewMode)
@@ -64,7 +147,122 @@ export default function FileList({
 
   const currentView = viewModeConfigs[currentViewMode]
 
-  const { folderContextMenuItem, fileContextMenuItem } = useMockMenuItems()
+  const enhancedFolderContextMenuItem = React.useMemo(
+    () =>
+      folderContextMenuItem.map(item => {
+        if (item.label === 'Copy link') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              const link = `${window.location.origin}/share/folder/${folder.id}`
+              void navigator.clipboard.writeText(link)
+              showAlert({ type: 'success', message: 'Đã sao chép liên kết' })
+            },
+          }
+        }
+        if (item.label === 'Share') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              setShareFolderDialog({ open: true, folder })
+            },
+          }
+        }
+        if (item.label === 'Delete') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              setDeleteFolderDialog({ open: true, folder })
+            },
+          }
+        }
+        if (item.label === 'Rename') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              setRenameFolderDialog({ open: true, folder })
+            },
+          }
+        }
+        // Move to / Copy to / Details for folder: keep as is (no implementation yet)
+        return item
+      }),
+    [folderContextMenuItem]
+  )
+
+  const enhancedFileContextMenuItem = React.useMemo(
+    () =>
+      fileContextMenuItem.map(item => {
+        if (item.label === 'Copy link') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              const link = `${window.location.origin}/share/file/${file.id}`
+              void navigator.clipboard.writeText(link)
+              showAlert({ type: 'success', message: 'Đã sao chép liên kết' })
+            },
+          }
+        }
+        if (item.label === 'Share') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              setShareFileDialog({ open: true, file })
+            },
+          }
+        }
+        if (item.label === 'Delete') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              setDeleteFileDialog({ open: true, file })
+            },
+          }
+        }
+        if (item.label === 'Rename') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              setRenameFileDialog({ open: true, file })
+            },
+          }
+        }
+        if (item.label === 'Move to') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              setMoveFileDialog({ open: true, file })
+            },
+          }
+        }
+        if (item.label === 'Copy to') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              setCopyFileDialog({ open: true, file, destinationFolderId: null, onlyLatest: true })
+            },
+          }
+        }
+        if (item.label === 'Details') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              setDetailFile(file)
+            },
+          }
+        }
+        return item
+      }),
+    [fileContextMenuItem]
+  )
 
   const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
     // On right-click, only open context menu without toggling selection mode
@@ -160,7 +358,7 @@ export default function FileList({
           x={contextMenu.x}
           y={contextMenu.y}
           containerRect={containerRef.current?.getBoundingClientRect()}
-          menuItems={(contextMenu.file.type ?? '').toLowerCase() === 'folder' ? folderContextMenuItem : fileContextMenuItem}
+          menuItems={(contextMenu.file.type ?? '').toLowerCase() === 'folder' ? enhancedFolderContextMenuItem : enhancedFileContextMenuItem}
           onClose={() => setContextMenu(null)}
         />
       )}
@@ -302,6 +500,110 @@ export default function FileList({
           )}
         </div>
       </div>
+      <FileDetailPanel
+        file={detailFile}
+        open={detailFile != null}
+        onClose={() => setDetailFile(null)}
+      />
+      {deleteFolderDialog.open && deleteFolderDialog.folder?.id && (
+        <DeleteFolderDialog
+          open={deleteFolderDialog.open}
+          onOpenChange={open => {
+            if (!open) setDeleteFolderDialog({ open: false, folder: null })
+          }}
+          folderId={Number(deleteFolderDialog.folder.id)}
+          folderName={deleteFolderDialog.folder.name}
+        />
+      )}
+      {renameFolderDialog.open && renameFolderDialog.folder?.id && (
+        <RenameFolderDialog
+          open={renameFolderDialog.open}
+          onOpenChange={open => {
+            if (!open) setRenameFolderDialog({ open: false, folder: null })
+          }}
+          folderId={Number(renameFolderDialog.folder.id)}
+          currentName={renameFolderDialog.folder.name}
+        />
+      )}
+      {shareFolderDialog.open && shareFolderDialog.folder?.id && (
+        <ShareFolderDialog
+          open={shareFolderDialog.open}
+          onOpenChange={open => {
+            if (!open) setShareFolderDialog({ open: false, folder: null })
+          }}
+          folderId={Number(shareFolderDialog.folder.id)}
+          folderName={shareFolderDialog.folder.name}
+        />
+      )}
+      {shareFileDialog.open && shareFileDialog.file?.id && (
+        <ShareFileDialog
+          open={shareFileDialog.open}
+          onOpenChange={open => {
+            if (!open) setShareFileDialog({ open: false, file: null })
+          }}
+          fileId={Number(shareFileDialog.file.id)}
+          fileName={shareFileDialog.file.name}
+        />
+      )}
+      {deleteFileDialog.open && deleteFileDialog.file?.id && (
+        <DeleteFileDialog
+          open={deleteFileDialog.open}
+          onOpenChange={open => {
+            if (!open) setDeleteFileDialog({ open: false, file: null })
+          }}
+          title="Delete file"
+          confirmType="danger"
+          confirmText={`Are you sure you want to delete "${deleteFileDialog.file.name}"?`}
+          fileId={Number(deleteFileDialog.file.id)}
+          onSuccess={() => {
+            setDeleteFileDialog({ open: false, file: null })
+          }}
+        />
+      )}
+      {renameFileDialog.open && renameFileDialog.file?.id && (
+        <RenameFileDialog
+          open={renameFileDialog.open}
+          onOpenChange={open => {
+            if (!open) setRenameFileDialog(prev => ({ ...prev, open: false }))
+          }}
+          fileId={Number(renameFileDialog.file.id)}
+          currentName={renameFileDialog.file.name}
+          onSuccess={() => {
+            setRenameFileDialog(prev => ({ ...prev, open: false }))
+          }}
+        />
+      )}
+      {moveFileDialog.open && moveFileDialog.file?.id && (
+        <MoveFileDialog
+          open={moveFileDialog.open}
+          onOpenChange={open => {
+            if (!open) setMoveFileDialog(prev => ({ ...prev, open: false }))
+          }}
+          title="Move file"
+          confirmButtonText="Move"
+          fileId={Number(moveFileDialog.file.id)}
+          destinationFolderId={moveFileDialog.destinationFolderId}
+          onSuccess={() => {
+            setMoveFileDialog(prev => ({ ...prev, open: false }))
+          }}
+        />
+      )}
+      {copyFileDialog.open && copyFileDialog.file?.id && (
+        <CopyFileDialog
+          open={copyFileDialog.open}
+          onOpenChange={open => {
+            if (!open) setCopyFileDialog(prev => ({ ...prev, open: false }))
+          }}
+          title="Copy file"
+          confirmButtonText="Copy"
+          fileId={Number(copyFileDialog.file.id)}
+          destinationFolderId={copyFileDialog.destinationFolderId}
+          onlyLatest={copyFileDialog.onlyLatest}
+          onSuccess={() => {
+            setCopyFileDialog(prev => ({ ...prev, open: false }))
+          }}
+        />
+      )}
     </>
   )
 }

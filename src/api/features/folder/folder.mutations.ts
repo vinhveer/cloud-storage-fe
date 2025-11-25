@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { copyFolder, createFolder, deleteFolder, moveFolder, updateFolder } from './folder.api'
 import type {
   CreateFolderRequest,
@@ -14,8 +14,13 @@ import type {
 import type { AppError } from '../../core/error'
 
 export function useCreateFolder() {
+  const queryClient = useQueryClient()
+
   return useMutation<CreateFolderSuccess, AppError, CreateFolderRequest>({
     mutationFn: createFolder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+    },
   })
 }
 
@@ -25,11 +30,16 @@ export type MoveFolderVariables = {
 }
 
 export function useMoveFolder() {
+  const queryClient = useQueryClient()
+
   return useMutation<MoveFolderSuccess, AppError, MoveFolderVariables>({
     mutationFn: variables =>
       moveFolder(variables.folderId, {
         target_folder_id: variables.target_folder_id,
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+    },
   })
 }
 
@@ -39,17 +49,27 @@ export type UpdateFolderVariables = {
 }
 
 export function useUpdateFolder() {
+  const queryClient = useQueryClient()
+
   return useMutation<UpdateFolderSuccess, AppError, UpdateFolderVariables>({
     mutationFn: variables =>
       updateFolder(variables.folderId, {
         folder_name: variables.folder_name,
       } as UpdateFolderRequest),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+    },
   })
 }
 
 export function useDeleteFolder() {
+  const queryClient = useQueryClient()
+
   return useMutation<DeleteFolderSuccess, AppError, number>({
     mutationFn: folderId => deleteFolder(folderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+    },
   })
 }
 

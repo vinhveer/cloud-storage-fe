@@ -19,6 +19,7 @@ export type DialogProps = {
   closeOnEsc?: boolean
   closeOnBackdrop?: boolean
   className?: string
+  children?: React.ReactNode
 }
 
 

@@ -23,6 +23,7 @@ export default function Dialog({
   closeOnEsc = true,
   closeOnBackdrop = true,
   className,
+  children,
 }: Readonly<DialogProps>) {
   const reactId = React.useId()
   const modalId = useMemo(() => id ?? `modal-${reactId}`, [id, reactId])
@@ -61,7 +62,7 @@ export default function Dialog({
         <div
           className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-transparent dark:border-gray-800 opacity-0 scale-95 animate-[scaleIn_180ms_ease-out_forwards] z-10"
           aria-labelledby={`${modalId}-title`}
-          aria-describedby={confirmText ? `${modalId}-desc` : undefined}
+          aria-describedby={confirmText && !children ? `${modalId}-desc` : undefined}
         >
           <div className="px-6 pt-5 pb-4">
             {!isLoading && (
@@ -71,12 +72,22 @@ export default function Dialog({
                 </h3>
               </div>
             )}
-            {!isLoading && confirmText && (
-              <div className="mb-5">
-                <p id={`${modalId}-desc`} className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                  {confirmText}
-                </p>
-              </div>
+            {!isLoading && (
+              <>
+                {children ? (
+                  <div className="mb-5">
+                    {children}
+                  </div>
+                ) : (
+                  confirmText && (
+                    <div className="mb-5">
+                      <p id={`${modalId}-desc`} className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                        {confirmText}
+                      </p>
+                    </div>
+                  )
+                )}
+              </>
             )}
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
