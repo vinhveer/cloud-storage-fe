@@ -128,3 +128,38 @@ export const AdminUserStorageUsageResponseSchema = z.union([
     AdminUserStorageUsageSchema,
     AdminUserStorageUsageEnvelopeSchema,
 ])
+
+// User-friendly schema aliases (avoid Admin* naming in app code)
+export const UserItemSchema = AdminUserItemSchema
+export const UsersPaginationSchema = AdminUsersPaginationSchema
+export const UsersSuccessSchema = AdminUsersSuccessSchema
+export const UsersEnvelopeSchema = AdminUsersEnvelopeSchema
+export const UsersResponseSchema = AdminUsersResponseSchema
+
+export const UserCreateRequestSchema = AdminUserCreateRequestSchema
+export const UserCreateSuccessSchema = AdminUserCreateSuccessSchema
+export const UserCreateEnvelopeSchema = AdminUserCreateEnvelopeSchema
+export const UserCreateResponseSchema = AdminUserCreateResponseSchema
+
+export const UserUpdateRequestSchema = AdminUserUpdateRequestSchema
+export const UserUpdateSuccessSchema = AdminUserUpdateSuccessSchema
+export const UserUpdateEnvelopeSchema = AdminUserUpdateEnvelopeSchema
+export const UserUpdateResponseSchema = AdminUserUpdateResponseSchema
+
+export const UserDeleteRawSuccessSchema = AdminUserDeleteRawSuccessSchema
+export const UserDeleteEnvelopeSuccessSchema = AdminUserDeleteEnvelopeSuccessSchema
+export const UserDeleteResponseSchema = AdminUserDeleteResponseSchema
+export const UserDeleteSuccessSchema = AdminUserDeleteSuccessSchema
+
+export const UserWrapperSchema = AdminUserWrapperSchema
+export const UserEnvelopeSchema = AdminUserEnvelopeSchema
+export const UserDetailResponseSchema = AdminUserDetailResponseSchema
+
+export const UserRoleUpdateRequestSchema = AdminUserRoleUpdateRequestSchema
+export const UserRoleUpdateSuccessSchema = AdminUserRoleUpdateSuccessSchema
+export const UserRoleUpdateEnvelopeSchema = AdminUserRoleUpdateEnvelopeSchema
+export const UserRoleUpdateResponseSchema = AdminUserRoleUpdateResponseSchema
+
+export const UserStorageUsageSchema = AdminUserStorageUsageSchema
+export const UserStorageUsageEnvelopeSchema = AdminUserStorageUsageEnvelopeSchema
+export const UserStorageUsageResponseSchema = AdminUserStorageUsageResponseSchema

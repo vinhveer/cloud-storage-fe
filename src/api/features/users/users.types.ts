@@ -77,3 +77,38 @@ export type AdminUserRoleUpdateResponse = z.infer<typeof AdminUserRoleUpdateResp
 export type AdminUserStorageUsage = z.infer<typeof AdminUserStorageUsageSchema>
 export type AdminUserStorageUsageEnvelope = z.infer<typeof AdminUserStorageUsageEnvelopeSchema>
 export type AdminUserStorageUsageResponse = z.infer<typeof AdminUserStorageUsageResponseSchema>
+
+// User-friendly aliases (avoid Admin* naming in app code)
+export type UserItem = AdminUserItem
+export type UsersPagination = AdminUsersPagination
+export type UsersSuccess = AdminUsersSuccess
+export type UsersEnvelope = AdminUsersEnvelope
+export type UsersResponse = AdminUsersResponse
+export type UsersListParams = AdminUsersListParams
+
+export type UserCreateRequest = AdminUserCreateRequest
+export type UserCreateSuccess = AdminUserCreateSuccess
+export type UserCreateEnvelope = AdminUserCreateEnvelope
+export type UserCreateResponse = AdminUserCreateResponse
+
+export type UserUpdateRequest = AdminUserUpdateRequest
+export type UserUpdateSuccess = AdminUserUpdateSuccess
+export type UserUpdateEnvelope = AdminUserUpdateEnvelope
+export type UserUpdateResponse = AdminUserUpdateResponse
+
+export type UserDeleteSuccess = AdminUserDeleteSuccess
+export type UserDeleteResponse = AdminUserDeleteResponse
+
+export type User = AdminUser
+export type UserWrapper = AdminUserWrapper
+export type UserEnvelope = AdminUserEnvelope
+export type UserDetailResponse = AdminUserDetailResponse
+
+export type UserRoleUpdateRequest = AdminUserRoleUpdateRequest
+export type UserRoleUpdateSuccess = AdminUserRoleUpdateSuccess
+export type UserRoleUpdateEnvelope = AdminUserRoleUpdateEnvelope
+export type UserRoleUpdateResponse = AdminUserRoleUpdateResponse
+
+export type UserStorageUsage = AdminUserStorageUsage
+export type UserStorageUsageEnvelope = AdminUserStorageUsageEnvelope
+export type UserStorageUsageResponse = AdminUserStorageUsageResponse

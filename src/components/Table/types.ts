@@ -50,6 +50,12 @@ export type TableProps<T extends { id: string | number }> = {
     className?: string
     rowClassName?: string
     headerClassName?: string
+    /**
+     * Chiều cao tối đa cho phần thân bảng (tbody).
+     * Khi thiết lập, tbody sẽ cuộn trong khung này và header sẽ cố định.
+     * Ví dụ: '400px' hoặc 400.
+     */
+    maxBodyHeight?: string | number
     loading?: boolean
     emptyMessage?: string
     onRowClick?: (row: T) => void
