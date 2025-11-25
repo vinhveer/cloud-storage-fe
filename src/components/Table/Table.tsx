@@ -4,29 +4,13 @@ import Loading from '@/components/Loading/Loading'
 import TableSelectionToolbar from './TableSelectionToolbar'
 import TableContextMenu from './TableContextMenu'
 import type { TableProps, TableColumn, TableContextMenuAction } from './types'
-import {
-    ShareIcon,
-    LinkIcon,
-    LockOpenIcon,
-    TrashIcon,
-    ArrowDownTrayIcon,
-    PencilIcon,
-    FolderIcon,
-    DocumentDuplicateIcon,
-    InformationCircleIcon,
-    CheckCircleIcon,
-} from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const DEFAULT_CONTEXT_MENU_ACTIONS: TableContextMenuAction[] = [
-    { id: 'share', label: 'Share', icon: <ShareIcon className="w-4 h-4" /> },
-    { id: 'copyLink', label: 'Copy link', icon: <LinkIcon className="w-4 h-4" /> },
-    { id: 'manageAccess', label: 'Manage access', icon: <LockOpenIcon className="w-4 h-4" /> },
-    { id: 'delete', label: 'Delete', icon: <TrashIcon className="w-4 h-4" />, divider: true },
-    { id: 'download', label: 'Download', icon: <ArrowDownTrayIcon className="w-4 h-4" /> },
-    { id: 'rename', label: 'Rename', icon: <PencilIcon className="w-4 h-4" /> },
-    { id: 'moveTo', label: 'Move to', icon: <FolderIcon className="w-4 h-4" /> },
-    { id: 'copyTo', label: 'Copy to', icon: <DocumentDuplicateIcon className="w-4 h-4" /> },
-    { id: 'details', label: 'Details', icon: <InformationCircleIcon className="w-4 h-4" /> },
+    { id: 'deselect', label: 'Bỏ chọn', icon: <XMarkIcon className="w-4 h-4" /> },
+    { id: 'add', label: 'Thêm', icon: <PlusIcon className="w-4 h-4" /> },
+    { id: 'edit', label: 'Sửa', icon: <PencilIcon className="w-4 h-4" /> },
+    { id: 'delete', label: 'Xoá', icon: <TrashIcon className="w-4 h-4" /> },
 ]
 
 /**
@@ -78,7 +62,6 @@ export default function Table<T extends { id: string | number }>({
         y: number
         container: HTMLDivElement
     } | null>(null)
-    const [selectionMode, setSelectionMode] = React.useState(false)
 
     const applySelection = React.useCallback(
         (updater: (prev: Set<string | number>) => Set<string | number>) => {
@@ -154,7 +137,7 @@ export default function Table<T extends { id: string | number }>({
 
     const allSelected = data.length > 0 && selectedIds.size === data.length
     const hasSelection = selectable && selectedIds.size > 0
-    const showSelectionControls = selectable && (selectionMode || hasSelection)
+    const showSelectionControls = selectable
     const selectedRows = React.useMemo(() => data.filter(row => selectedIds.has(row.id)), [data, selectedIds])
 
     const handleToolbarAction = (actionId: string) => {
@@ -167,18 +150,6 @@ export default function Table<T extends { id: string | number }>({
     }
 
     const deselectAll = () => setSelection([])
-    const toggleSelectionMode = () => {
-        if (!selectable) return
-        setSelectionMode(prev => {
-            const next = !prev
-            if (!next) {
-                setSelection([])
-            }
-            return next
-        })
-    }
-    const enableSelectionMode = () => setSelectionMode(true)
-    const selectAllRows = () => setSelection(data.map(row => row.id))
 
     const handleRowContextMenu = (row: T, e: React.MouseEvent<HTMLTableRowElement>) => {
         if (!enableContextMenu) return
@@ -187,7 +158,6 @@ export default function Table<T extends { id: string | number }>({
         const containerEl = containerRef.current
         if (!containerEl) return
         if (selectable) {
-            enableSelectionMode()
             setSelection([row.id])
         }
         setContextMenu({ row, x: e.clientX, y: e.clientY, container: containerEl })
@@ -227,53 +197,6 @@ export default function Table<T extends { id: string | number }>({
                 <table className={clsx('mt-0 mb-0 min-w-full h-full divide-y divide-gray-200 dark:divide-gray-700')}>
                     {/* Header */}
                     <thead className={clsx('bg-gray-50 dark:bg-gray-800', headerClassName)}>
-                        {selectable && (
-                            <tr>
-                                <th
-                                    colSpan={columns.length + (selectable ? 1 : 0)}
-                                    className="px-6 py-3 text-left bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700"
-                                >
-                                    <div className="flex flex-wrap items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={toggleSelectionMode}
-                                            className={clsx(
-                                                'flex items-center gap-2 px-3 py-2 text-sm font-medium border rounded-lg focus:outline-none focus:ring-2 transition-colors duration-200',
-                                                selectionMode
-                                                    ? 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600 focus:ring-blue-500'
-                                                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-300 dark:border-gray-700 focus:ring-blue-200'
-                                            )}
-                                            aria-pressed={selectionMode}
-                                        >
-                                            <CheckCircleIcon className="w-4 h-4" />
-                                            <span>{selectionMode ? 'Cancel' : 'Select'}</span>
-                                        </button>
-
-                                        {selectionMode && (
-                                            <div className="flex flex-wrap items-center gap-2 text-sm">
-                                                <button
-                                                    type="button"
-                                                    onClick={selectAllRows}
-                                                    className="px-3 py-2 font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
-                                                >
-                                                    Select All
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={deselectAll}
-                                                    className="px-3 py-2 font-medium text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                                                >
-                                                    Deselect All
-                                                </button>
-                                                {selectedIds.size > 0 && (
-                                                    <span className="text-gray-500">({selectedIds.size} selected)</span>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </th>
-                            </tr>
-                        )}
                         <tr>
                             {showSelectionControls && (
                                 <th className="px-6 py-3 text-left">
@@ -342,19 +265,21 @@ export default function Table<T extends { id: string | number }>({
                                             />
                                         </td>
                                     )}
-                                    {columns.map(col => (
-                                        <td
-                                            key={String(col.key)}
-                                            className={clsx(
-                                                'px-6 py-4 text-sm text-gray-900 dark:text-gray-100',
-                                                col.align === 'center' && 'text-center',
-                                                col.align === 'right' && 'text-right'
-                                            )}
-                                            style={{ width: col.width }}
-                                        >
-                                            {col.render ? col.render(row[col.key], row) : String(row[col.key])}
-                                        </td>
-                                    ))}
+                                    {columns.map(col => {
+                                        const cellAlign = col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
+                                        return (
+                                            <td
+                                                key={String(col.key)}
+                                                className={clsx(
+                                                    'px-6 py-4 text-sm text-gray-900 dark:text-gray-100',
+                                                    cellAlign
+                                                )}
+                                                style={{ width: col.width }}
+                                            >
+                                                {col.render ? col.render(row[col.key], row) : String(row[col.key])}
+                                            </td>
+                                        )
+                                    })}
                                 </tr>
                             ))
                         )}

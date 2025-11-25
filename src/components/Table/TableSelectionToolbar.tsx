@@ -1,28 +1,13 @@
 import React from 'react'
 import clsx from 'clsx'
-import {
-    ShareIcon,
-    LinkIcon,
-    TrashIcon,
-    ArrowDownTrayIcon,
-    FolderIcon,
-    DocumentDuplicateIcon,
-    PencilIcon,
-    InformationCircleIcon,
-    EllipsisHorizontalIcon,
-    XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon, PencilIcon, XMarkIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import type { TableToolbarAction } from './types'
 
 const DEFAULT_ACTIONS: TableToolbarAction[] = [
-    { id: 'share', label: 'Share', icon: <ShareIcon className="w-4 h-4" /> },
-    { id: 'copyLink', label: 'Copy link', icon: <LinkIcon className="w-4 h-4" /> },
-    { id: 'delete', label: 'Delete', icon: <TrashIcon className="w-4 h-4" /> },
-    { id: 'download', label: 'Download', icon: <ArrowDownTrayIcon className="w-4 h-4" /> },
-    { id: 'moveTo', label: 'Move to', icon: <FolderIcon className="w-4 h-4" /> },
-    { id: 'copyTo', label: 'Copy to', icon: <DocumentDuplicateIcon className="w-4 h-4" /> },
-    { id: 'rename', label: 'Rename', icon: <PencilIcon className="w-4 h-4" />, requireSingle: true },
-    { id: 'details', label: 'Details', icon: <InformationCircleIcon className="w-4 h-4" />, requireSingle: true },
+    { id: 'deselect', label: 'Bỏ chọn', icon: <XMarkIcon className="w-4 h-4" /> },
+    { id: 'add', label: 'Thêm', icon: <PlusIcon className="w-4 h-4" /> },
+    { id: 'edit', label: 'Sửa', icon: <PencilIcon className="w-4 h-4" />, requireSingle: true },
+    { id: 'delete', label: 'Xoá', icon: <TrashIcon className="w-4 h-4" /> },
 ]
 
 export type TableSelectionToolbarProps<T> = {

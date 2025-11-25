@@ -1,5 +1,5 @@
 import React from 'react'
-import { useUpdateAdminUser } from '@/api/features/users/admin-user-update.mutations'
+import { useUpdateAdminUser } from '@/api/features/users/users.mutations'
 
 export default function AdminUserUpdateTestPage() {
   const [userId, setUserId] = React.useState<string>('12')

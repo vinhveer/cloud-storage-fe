@@ -1,5 +1,5 @@
 import React from 'react'
-import { useCreateAdminUser } from '@/api/features/users/admin-user-create.mutations'
+import { useCreateAdminUser } from '@/api/features/users/users.mutations'
 
 export default function AdminUserCreateTestPage() {
   const [name, setName] = React.useState<string>('user 1111')

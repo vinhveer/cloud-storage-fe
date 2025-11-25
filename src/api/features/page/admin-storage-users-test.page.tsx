@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAdminStorageUsers } from '@/api/features/storage/storage-users.queries'
+import { useAdminStorageUsers } from '@/api/features/storage/storage.queries'
 
 export default function AdminStorageUsersTestPage() {
   const [search, setSearch] = React.useState<string>('')
@@ -170,7 +170,7 @@ export default function AdminStorageUsersTestPage() {
             cursor: 'pointer',
           }}
         >
-        Quick: unauthenticated (hướng dẫn)
+          Quick: unauthenticated (hướng dẫn)
         </button>
         <button
           type="button"
