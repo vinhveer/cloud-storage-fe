@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import { useEmptyTrash } from '@/api/features/trash/trash.mutations'
 
 export default function TrashEmptyTestPage() {
@@ -9,7 +9,7 @@ export default function TrashEmptyTestPage() {
     emptyTrashMutation.mutate()
   }
 
-  const runQuick = (mode: 'success' | 'unauth') => {
+  const runQuick = (_mode: 'success' | 'unauth') => {
     // Just a helper to indicate which test case
     // The actual test depends on authentication state
   }

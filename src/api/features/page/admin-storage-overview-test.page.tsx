@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAdminStorageOverview } from '@/api/features/storage/storage.queries'
 
 export default function AdminStorageOverviewTestPage() {

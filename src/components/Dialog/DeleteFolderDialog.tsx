@@ -1,4 +1,3 @@
-import React from 'react'
 import Dialog from '@/components/Dialog/Dialog'
 import type { DialogProps } from '@/components/Dialog/types'
 import { useDeleteFolder } from '@/api/features/folder/folder.mutations'

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { createApiResponseSchema } from '../../core/guards'
 
-export const RolesSchema = z.record(z.number())
+export const RolesSchema = z.record(z.string(), z.number())
 
 export const StorageUsageBucketSchema = z.object({
   range: z.string().min(1),

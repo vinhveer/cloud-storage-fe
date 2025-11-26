@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import { useStorageLimit } from '@/api/features/storage/storage.queries'
 
 export default function StorageLimitTestPage() {
@@ -9,7 +9,7 @@ export default function StorageLimitTestPage() {
     query.refetch()
   }
 
-  const runQuick = (mode: 'unauth' | 'authenticated') => {
+  const runQuick = (_mode: 'unauth' | 'authenticated') => {
     // không cần set state, chỉ dùng để gợi ý cách test:
     // - unauth: mở tab chưa đăng nhập
     // - authenticated: tab đã đăng nhập

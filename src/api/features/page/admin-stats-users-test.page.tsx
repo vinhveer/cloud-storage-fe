@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAdminUserStats } from '@/api/features/stats/stats.queries'
 
 export default function AdminStatsUsersTestPage() {

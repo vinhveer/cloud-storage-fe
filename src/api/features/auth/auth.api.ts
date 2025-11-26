@@ -1,4 +1,4 @@
-import { get, post, put, patch } from '../../core/fetcher'
+import { get, post, put } from '../../core/fetcher'
 import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
 import { setCachedUserRole } from '@/utils/roleGuard'

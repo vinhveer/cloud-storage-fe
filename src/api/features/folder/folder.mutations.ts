@@ -6,7 +6,6 @@ import type {
   CopyFolderRequest,
   CopyFolderSuccess,
   DeleteFolderSuccess,
-  MoveFolderRequest,
   MoveFolderSuccess,
   UpdateFolderRequest,
   UpdateFolderSuccess,

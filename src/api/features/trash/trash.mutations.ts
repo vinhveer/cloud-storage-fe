@@ -1,12 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { restoreTrashItem, deleteTrashItem, emptyTrash } from './trash.api'
-import type {
-  RestoreTrashItemRequest,
-  RestoreTrashItemSuccess,
-  DeleteTrashItemRequest,
-  DeleteTrashItemSuccess,
-  EmptyTrashSuccess,
-} from './trash.types'
+import type { RestoreTrashItemSuccess, DeleteTrashItemSuccess, EmptyTrashSuccess } from './trash.types'
 import type { AppError } from '../../core/error'
 
 export type RestoreTrashItemVariables = {

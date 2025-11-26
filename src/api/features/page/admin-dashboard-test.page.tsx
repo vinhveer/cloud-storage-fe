@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAdminDashboard } from '@/api/features/dashboard/dashboard.queries'
 
 export default function AdminDashboardTestPage() {

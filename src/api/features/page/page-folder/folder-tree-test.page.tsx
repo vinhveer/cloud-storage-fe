@@ -1,4 +1,3 @@
-import React from 'react'
 import { useFolderTree } from '@/api/features/folder/folder.queries'
 
 export default function FolderTreeTestPage() {

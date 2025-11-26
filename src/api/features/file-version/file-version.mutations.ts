@@ -1,10 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { restoreFileVersion, uploadFileVersion } from './file-version.api'
-import type {
-  RestoreFileVersionSuccess,
-  UploadFileVersionRequest,
-  UploadFileVersionSuccess,
-} from './file-version.types'
+import type { RestoreFileVersionSuccess, UploadFileVersionSuccess } from './file-version.types'
 import type { AppError } from '../../core/error'
 
 export type UploadFileVersionVariables = {

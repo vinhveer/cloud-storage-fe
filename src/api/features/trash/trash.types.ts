@@ -34,5 +34,3 @@ export type DeleteTrashItemSuccess = z.infer<typeof DeleteTrashItemSuccessSchema
 
 export type EmptyTrashDeletedCount = z.infer<typeof EmptyTrashDeletedCountSchema>
 export type EmptyTrashSuccess = z.infer<typeof EmptyTrashSuccessSchema>
-
-export default TrashItem

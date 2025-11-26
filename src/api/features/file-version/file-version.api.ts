@@ -72,7 +72,10 @@ export async function getFileVersionDetail(fileId: number, versionId: number): P
 const restoreFileVersionEnvelope = RestoreFileVersionEnvelopeSchema
 
 export async function restoreFileVersion(fileId: number, versionId: number): Promise<RestoreFileVersionSuccess> {
-  const response = await post<unknown, undefined>(`/api/files/${fileId}/versions/${versionId}/restore`)
+  const response = await post<unknown, Record<string, never>>(
+    `/api/files/${fileId}/versions/${versionId}/restore`,
+    {},
+  )
   const parsed = parseWithZod<RestoreFileVersionEnvelope>(restoreFileVersionEnvelope, response)
   return parsed.data
 }

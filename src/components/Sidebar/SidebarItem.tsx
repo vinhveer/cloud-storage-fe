@@ -16,11 +16,18 @@ export default function SidebarItem({ title, href, to, isActive = false, icon }:
   const baseIcon = icon ?? <Squares2X2Icon className="w-5 h-5" />
   const merge = (...cs: (string | undefined)[]) => cs.filter(Boolean).join(' ')
   const renderedIcon = React.isValidElement(baseIcon)
-    ? React.cloneElement(baseIcon as React.ReactElement, {
-        className: merge('w-5 h-5', (baseIcon as React.ReactElement<{ className?: string }>).props?.className),
-        'aria-hidden': true,
-        focusable: false,
-      })
+    ? (() => {
+        const iconElement = baseIcon as React.ReactElement<{
+          className?: string
+          'aria-hidden'?: boolean
+          focusable?: boolean
+        }>
+        return React.cloneElement(iconElement, {
+          className: merge('w-5 h-5', iconElement.props?.className),
+          'aria-hidden': true,
+          focusable: false,
+        })
+      })()
     : baseIcon
 
   if (isInternal && internalTo) {

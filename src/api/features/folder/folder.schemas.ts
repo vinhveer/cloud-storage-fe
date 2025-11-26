@@ -54,13 +54,19 @@ export const MoveFolderSuccessSchema = z.object({
 
 export const MoveFolderEnvelopeSchema = createApiResponseSchema(MoveFolderSuccessSchema)
 
-export const FolderTreeNodeSchema = z.object({
-  folder_id: z.number(),
-  folder_name: z.string(),
-  children: z.array(
-    z.lazy(() => FolderTreeNodeSchema),
-  ),
-})
+export type FolderTreeNode = {
+  folder_id: number
+  folder_name: string
+  children: FolderTreeNode[]
+}
+
+export const FolderTreeNodeSchema: z.ZodType<FolderTreeNode> = z.lazy(() =>
+  z.object({
+    folder_id: z.number(),
+    folder_name: z.string(),
+    children: z.array(FolderTreeNodeSchema),
+  }),
+)
 
 export const FolderTreeSuccessSchema = z.object({
   folders: z.array(FolderTreeNodeSchema),
