@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { Squares2X2Icon } from '@heroicons/react/24/outline'
 import type { SidebarItemProps } from '@/components/Sidebar/types'
 
-export default function SidebarItem({ title, href, to, isActive = false, icon }: SidebarItemProps) {
+export default function SidebarItem({ title, href, to, isActive = false, icon, onClick }: SidebarItemProps) {
   const internalTo = to ?? href
   const isInternal = typeof internalTo === 'string' && internalTo.startsWith('/')
   const className =
@@ -32,7 +32,7 @@ export default function SidebarItem({ title, href, to, isActive = false, icon }:
 
   if (isInternal && internalTo) {
     return (
-      <Link to={internalTo} className={className}>
+      <Link to={internalTo} className={className} onClick={onClick}>
         <span className="mr-3 shrink-0 grid place-items-center w-5 h-5 text-gray-500 dark:text-gray-400">{renderedIcon}</span>
         {title}
       </Link>
@@ -40,7 +40,7 @@ export default function SidebarItem({ title, href, to, isActive = false, icon }:
   }
 
   return (
-    <a href={href ?? '#'} className={className}>
+    <a href={href ?? '#'} className={className} onClick={onClick}>
       <span className="mr-3 shrink-0 grid place-items-center w-5 h-5 text-gray-500 dark:text-gray-400">{renderedIcon}</span>
       {title}
     </a>

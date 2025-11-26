@@ -182,7 +182,7 @@ export default function AccountSettingsPage() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-8">
-      <header className="sticky top-0 z-10 bg-white dark:bg-[#0D1117] pt-1 pb-4">
+      <header className="top-0 z-10 bg-white dark:bg-[#0D1117] pt-1 pb-4">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Account settings</h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Update your profile information and security preferences.

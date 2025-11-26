@@ -14,6 +14,7 @@ export type NavbarProps = {
   searchPlaceholder?: string
   className?: string
   currentFolderId?: number | null
+  onToggleSidebar?: () => void
 }
 
 

@@ -18,12 +18,18 @@ export type SidebarProviderProps = Readonly<{
   children: React.ReactNode
 }>
 
+export type SidebarProps = {
+  mobileOpen?: boolean
+  onMobileClose?: () => void
+}
+
 export type SidebarItemProps = {
   title: string
   href?: string
   to?: string
   isActive?: boolean
   icon?: React.ReactNode
+  onClick?: () => void
 }
 
 
