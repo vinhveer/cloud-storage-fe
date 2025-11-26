@@ -1,12 +1,12 @@
 import React from 'react'
-import { useUpdateAdminUser } from '@/api/features/users/users.mutations'
+import { useUpdateUser } from '@/api/features/users/users.mutations'
 
 export default function AdminUserUpdateTestPage() {
   const [userId, setUserId] = React.useState<string>('12')
   const [name, setName] = React.useState<string>('Updated Name')
   const [storageLimit, setStorageLimit] = React.useState<string>('1000000')
 
-  const mutation = useUpdateAdminUser()
+  const mutation = useUpdateUser()
 
   const runQuick = (mode: 'success' | 'not-found' | 'unauthenticated' | 'unauthorized') => {
     if (mode === 'success') {

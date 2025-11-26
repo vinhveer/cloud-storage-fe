@@ -1,9 +1,9 @@
 import React from 'react'
-import { useDeleteAdminUser } from '@/api/features/users/users.mutations'
+import { useDeleteUser } from '@/api/features/users/users.mutations'
 
 export default function AdminUserDeleteTestPage() {
   const [userId, setUserId] = React.useState<string>('7')
-  const mutation = useDeleteAdminUser()
+  const mutation = useDeleteUser()
 
   const runQuick = (mode: 'success' | 'unauthenticated' | 'unauthorized' | 'self' | 'admin' | 'not-found') => {
     if (mode === 'success') {

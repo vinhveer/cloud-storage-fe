@@ -1,5 +1,5 @@
 import React from 'react'
-import { useCreateAdminUser } from '@/api/features/users/users.mutations'
+import { useCreateUser } from '@/api/features/users/users.mutations'
 
 export default function AdminUserCreateTestPage() {
   const [name, setName] = React.useState<string>('user 1111')
@@ -7,7 +7,7 @@ export default function AdminUserCreateTestPage() {
   const [password, setPassword] = React.useState<string>('12345678')
   const [role, setRole] = React.useState<'user' | 'admin'>('user')
 
-  const mutation = useCreateAdminUser()
+  const mutation = useCreateUser()
 
   const runQuick = (mode: 'success' | 'unauthenticated' | 'unauthorized' | 'missing') => {
     if (mode === 'success') {

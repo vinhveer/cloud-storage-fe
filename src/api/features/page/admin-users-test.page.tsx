@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAdminUsers } from '@/api/features/users/users.queries'
+import { useUsers } from '@/api/features/users/users.queries'
 
 export default function AdminUsersTestPage() {
   const [search, setSearch] = React.useState<string>('')
@@ -15,7 +15,7 @@ export default function AdminUsersTestPage() {
     [search, page, perPage],
   )
 
-  const query = useAdminUsers(params)
+  const query = useUsers(params)
 
   const runQuick = (mode: 'default' | 'search' | 'pagination' | 'unauthenticated' | 'unauthorized') => {
     if (mode === 'default') {

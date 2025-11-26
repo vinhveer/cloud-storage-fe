@@ -1,11 +1,11 @@
 import React from 'react'
-import { useUpdateAdminUserRole } from '@/api/features/users/users.mutations'
+import { useUpdateUserRole } from '@/api/features/users/users.mutations'
 
 export default function AdminUserRoleUpdateTestPage() {
   const [userId, setUserId] = React.useState<string>('12')
   const [role, setRole] = React.useState<'user' | 'admin'>('admin')
 
-  const mutation = useUpdateAdminUserRole()
+  const mutation = useUpdateUserRole()
 
   const runQuick = (
     mode: 'success' | 'unauthenticated' | 'unauthorized' | 'missing' | 'invalid' | 'not-found' | 'self-demotion',
