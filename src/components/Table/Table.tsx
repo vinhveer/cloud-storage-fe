@@ -4,12 +4,13 @@ import Loading from '@/components/Loading/Loading'
 import TableSelectionToolbar from './TableSelectionToolbar'
 import TableContextMenu from './TableContextMenu'
 import type { TableProps, TableColumn, TableContextMenuAction } from './types'
-import { PlusIcon, TrashIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon, PencilIcon, XMarkIcon, EyeIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 
 const DEFAULT_CONTEXT_MENU_ACTIONS: TableContextMenuAction[] = [
     { id: 'deselect', label: 'Bỏ chọn', icon: <XMarkIcon className="w-4 h-4" /> },
     { id: 'add', label: 'Thêm', icon: <PlusIcon className="w-4 h-4" /> },
     { id: 'edit', label: 'Sửa', icon: <PencilIcon className="w-4 h-4" /> },
+    { id: 'detail', label: 'Chi tiết', icon: <EyeIcon className="w-4 h-4" /> },
     { id: 'delete', label: 'Xoá', icon: <TrashIcon className="w-4 h-4" /> },
 ]
 
@@ -39,6 +40,7 @@ export default function Table<T extends { id: string | number }>({
     className,
     rowClassName,
     headerClassName,
+    maxBodyHeight,
     loading = false,
     emptyMessage = 'Không có dữ liệu',
     onRowClick,
@@ -151,16 +153,22 @@ export default function Table<T extends { id: string | number }>({
 
     const deselectAll = () => setSelection([])
 
+    const openContextMenu = React.useCallback(
+        (row: T, clientX: number, clientY: number) => {
+            if (!enableContextMenu) return
+            const containerEl = containerRef.current
+            if (!containerEl) return
+            // Không thay đổi selection, chỉ mở context menu
+            setContextMenu({ row, x: clientX, y: clientY, container: containerEl })
+        },
+        [enableContextMenu]
+    )
+
     const handleRowContextMenu = (row: T, e: React.MouseEvent<HTMLTableRowElement>) => {
         if (!enableContextMenu) return
         e.preventDefault()
         e.stopPropagation()
-        const containerEl = containerRef.current
-        if (!containerEl) return
-        if (selectable) {
-            setSelection([row.id])
-        }
-        setContextMenu({ row, x: e.clientX, y: e.clientY, container: containerEl })
+        openContextMenu(row, e.clientX, e.clientY)
     }
 
     const handleContextMenuAction = (actionId: string, row: T) => {
@@ -172,6 +180,8 @@ export default function Table<T extends { id: string | number }>({
         }
         setContextMenu(null)
     }
+
+    const contextMenuRowId = contextMenu?.row.id
 
     if (loading) {
         return (
@@ -193,18 +203,33 @@ export default function Table<T extends { id: string | number }>({
                 />
             )}
 
-            <div ref={containerRef} className={clsx('relative overflow-x-auto h-full rounded-lg border border-gray-200 dark:border-gray-700', className)}>
+            <div
+                ref={containerRef}
+                className={clsx(
+                    'relative overflow-x-auto h-full rounded-lg border border-gray-200 dark:border-gray-700',
+                    maxBodyHeight && 'overflow-y-auto',
+                    className,
+                )}
+                style={maxBodyHeight ? { maxHeight: typeof maxBodyHeight === 'number' ? `${maxBodyHeight}px` : maxBodyHeight } : undefined}
+            >
                 <table className={clsx('mt-0 mb-0 min-w-full h-full divide-y divide-gray-200 dark:divide-gray-700')}>
                     {/* Header */}
-                    <thead className={clsx('bg-gray-50 dark:bg-gray-800', headerClassName)}>
+                    <thead className={clsx('bg-gray-100 dark:bg-gray-800', headerClassName)}>
                         <tr>
                             {showSelectionControls && (
-                                <th className="px-6 py-3 text-left">
+                                <th className="px-6 py-3 text-left sticky top-0 z-10 bg-gray-50 dark:bg-gray-800">
                                     <input
                                         type="checkbox"
                                         checked={allSelected}
                                         onChange={handleSelectAll}
-                                        className="rounded border-gray-300 dark:border-gray-600 text-blue-600"
+                                        className="w-5 h-5 rounded-md border-2 border-gray-300 dark:border-gray-600 bg-transparent dark:bg-transparent text-blue-600 appearance-none"
+                                        style={allSelected ? {
+                                            backgroundColor: '#2563eb',
+                                            borderColor: 'transparent',
+                                            backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5L6.5 11.5L12.5 4.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+                                            backgroundPosition: 'center',
+                                            backgroundRepeat: 'no-repeat',
+                                        } : undefined}
                                         aria-label="Select all rows"
                                     />
                                 </th>
@@ -213,7 +238,7 @@ export default function Table<T extends { id: string | number }>({
                                 <th
                                     key={String(col.key)}
                                     className={clsx(
-                                        'px-6 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300',
+                                        'px-6 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 sticky top-0 z-10 bg-gray-50 dark:bg-gray-800',
                                         col.sortable && 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
                                         col.align === 'center' && 'text-center',
                                         col.align === 'right' && 'text-right'
@@ -229,6 +254,9 @@ export default function Table<T extends { id: string | number }>({
                                     </div>
                                 </th>
                             ))}
+                            {enableContextMenu && (
+                                <th className="px-3 py-3 text-right sticky top-0 z-10 bg-gray-50 dark:bg-gray-800" />
+                            )}
                         </tr>
                     </thead>
                     {/* Body */}
@@ -236,7 +264,7 @@ export default function Table<T extends { id: string | number }>({
                         {sortedData.length === 0 ? (
                             <tr>
                                 <td
-                                    colSpan={columns.length + (selectable ? 1 : 0)}
+                                    colSpan={columns.length + (selectable ? 1 : 0) + (enableContextMenu ? 1 : 0)}
                                     className="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400"
                                 >
                                     {emptyMessage}
@@ -249,20 +277,35 @@ export default function Table<T extends { id: string | number }>({
                                     onClick={() => onRowClick?.(row)}
                                     onContextMenu={event => handleRowContextMenu(row, event)}
                                     className={clsx(
-                                        'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors',
+                                        // Stronger hover color
+                                        'transition-colors hover:bg-gray-100 dark:hover:bg-gray-800',
+                                        // Highlight row when context menu is open for it
+                                        contextMenuRowId === row.id && 'bg-gray-100 dark:bg-gray-800',
                                         onRowClick && 'cursor-pointer',
                                         rowClassName
                                     )}
                                 >
                                     {showSelectionControls && (
                                         <td className="px-6 py-4 text-left">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedIds.has(row.id)}
-                                                onChange={e => handleSelectRow(row.id, e as any)}
-                                                className="rounded border-gray-300 dark:border-gray-600 text-blue-600"
-                                                aria-label={`Select row ${row.id}`}
-                                            />
+                                            {(() => {
+                                                const isSelected = selectedIds.has(row.id)
+                                                return (
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={isSelected}
+                                                        onChange={e => handleSelectRow(row.id, e as any)}
+                                                        className="w-5 h-5 rounded-md border-2 border-gray-300 dark:border-gray-700 bg-transparent dark:bg-transparent text-blue-600 appearance-none"
+                                                        style={isSelected ? {
+                                                            backgroundColor: '#2563eb',
+                                                            borderColor: 'transparent',
+                                                            backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5L6.5 11.5L12.5 4.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+                                                            backgroundPosition: 'center',
+                                                            backgroundRepeat: 'no-repeat',
+                                                        } : undefined}
+                                                        aria-label={`Select row ${row.id}`}
+                                                    />
+                                                )
+                                            })()}
                                         </td>
                                     )}
                                     {columns.map(col => {
@@ -280,6 +323,22 @@ export default function Table<T extends { id: string | number }>({
                                             </td>
                                         )
                                     })}
+                                    {enableContextMenu && (
+                                        <td className="px-3 py-4 text-right">
+                                            <button
+                                                type="button"
+                                                onClick={e => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    openContextMenu(row, e.clientX, e.clientY)
+                                                }}
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400"
+                                                aria-label="Mở menu hành động"
+                                            >
+                                                <EllipsisHorizontalIcon className="w-5 h-5" />
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))
                         )}

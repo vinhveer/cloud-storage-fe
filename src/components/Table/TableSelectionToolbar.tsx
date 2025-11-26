@@ -18,7 +18,8 @@ export type TableSelectionToolbarProps<T> = {
     onDeselectAll: () => void
 }
 
-const MAX_PRIMARY_ACTIONS = 4
+// Số lượng action hiển thị trực tiếp sẽ phụ thuộc kích thước viewport.
+// Màn nhỏ: ít action hơn (dồn bớt vào nút 3 chấm), màn lớn: hiện được nhiều action hơn.
 
 export default function TableSelectionToolbar<T>({
     selectedRows,
@@ -28,6 +29,7 @@ export default function TableSelectionToolbar<T>({
     onDeselectAll,
 }: TableSelectionToolbarProps<T>) {
     const [moreOpen, setMoreOpen] = React.useState(false)
+    const [maxPrimaryActions, setMaxPrimaryActions] = React.useState(4)
     const dropdownRef = React.useRef<HTMLDivElement | null>(null)
 
     React.useEffect(() => {
@@ -48,8 +50,33 @@ export default function TableSelectionToolbar<T>({
         }
     }, [moreOpen])
 
-    const primaryActions = actions.slice(0, MAX_PRIMARY_ACTIONS)
-    const secondaryActions = actions.slice(MAX_PRIMARY_ACTIONS)
+    React.useEffect(() => {
+        const updateMaxActions = () => {
+            if (typeof window === 'undefined') return
+            const width = window.innerWidth
+
+            // Heuristic theo breakpoint:
+            // - < 640px (mobile): 2 action chính
+            // - 640px - 1024px (tablet): 3 action chính
+            // - >= 1024px (desktop): 4 action chính
+            if (width < 640) {
+                setMaxPrimaryActions(2)
+            } else if (width < 1024) {
+                setMaxPrimaryActions(3)
+            } else {
+                setMaxPrimaryActions(4)
+            }
+        }
+
+        updateMaxActions()
+        window.addEventListener('resize', updateMaxActions)
+        return () => {
+            window.removeEventListener('resize', updateMaxActions)
+        }
+    }, [])
+
+    const primaryActions = actions.slice(0, maxPrimaryActions)
+    const secondaryActions = actions.slice(maxPrimaryActions)
 
     const handleAction = (actionId: string) => {
         onAction?.(actionId, selectedRows)

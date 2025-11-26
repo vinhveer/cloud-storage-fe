@@ -3,39 +3,39 @@ import { parseWithZod } from '../../core/guards'
 import { z } from 'zod'
 import { AppError } from '../../core/error'
 import {
-    AdminUsersResponseSchema,
-    AdminUserCreateRequestSchema,
-    AdminUserCreateResponseSchema,
-    AdminUserUpdateRequestSchema,
-    AdminUserUpdateResponseSchema,
-    AdminUserDeleteResponseSchema,
-    AdminUserDeleteSuccessSchema,
-    AdminUserDetailResponseSchema,
-    AdminUserRoleUpdateRequestSchema,
-    AdminUserRoleUpdateResponseSchema,
-    AdminUserStorageUsageResponseSchema,
+    UsersResponseSchema,
+    UserCreateRequestSchema,
+    UserCreateResponseSchema,
+    UserUpdateRequestSchema,
+    UserUpdateResponseSchema,
+    UserDeleteResponseSchema,
+    UserDeleteSuccessSchema,
+    UserDetailResponseSchema,
+    UserRoleUpdateRequestSchema,
+    UserRoleUpdateResponseSchema,
+    UserStorageUsageResponseSchema,
 } from './users.schemas'
 import type {
-    AdminUsersListParams,
-    AdminUsersResponse,
-    AdminUsersSuccess,
-    AdminUserCreateRequest,
-    AdminUserCreateResponse,
-    AdminUserItem,
-    AdminUserUpdateRequest,
-    AdminUserUpdateResponse,
-    AdminUserDeleteResponse,
-    AdminUserDeleteSuccess,
-    AdminUser,
-    AdminUserDetailResponse,
-    AdminUserRoleUpdateRequest,
-    AdminUserRoleUpdateResponse,
+    UsersListParams,
+    UsersResponse,
+    UsersSuccess,
+    UserCreateRequest,
+    UserCreateResponse,
+    UserItem,
+    UserUpdateRequest,
+    UserUpdateResponse,
+    UserDeleteResponse,
+    UserDeleteSuccess,
+    User,
+    UserDetailResponse,
+    UserRoleUpdateRequest,
+    UserRoleUpdateResponse,
     UpdatedUserRole,
-    AdminUserStorageUsage,
-    AdminUserStorageUsageResponse,
+    UserStorageUsage,
+    UserStorageUsageResponse,
 } from './users.types'
 
-export async function getAdminUsers(params: AdminUsersListParams = {}): Promise<AdminUsersSuccess> {
+export async function getUsers(params: UsersListParams = {}): Promise<UsersSuccess> {
     const response = await get<unknown>('/api/admin/users', {
         params: {
             search: params.search,
@@ -43,83 +43,83 @@ export async function getAdminUsers(params: AdminUsersListParams = {}): Promise<
             per_page: params.per_page,
         },
     })
-    const parsed = AdminUsersResponseSchema.safeParse(response)
+    const parsed = UsersResponseSchema.safeParse(response)
     if (!parsed.success) {
         throw new AppError('Invalid response format', { code: 'INVALID_RESPONSE', details: parsed.error.issues })
     }
-    const value: AdminUsersResponse = parsed.data as z.infer<typeof AdminUsersResponseSchema>
+    const value: UsersResponse = parsed.data as z.infer<typeof UsersResponseSchema>
     if ('success' in value && 'data' in value) {
         return value.data
     }
-    return value as AdminUsersSuccess
+    return value as UsersSuccess
 }
 
-export async function createAdminUser(payload: AdminUserCreateRequest): Promise<AdminUserItem> {
-    const valid = AdminUserCreateRequestSchema.parse(payload)
-    const response = await post<unknown, AdminUserCreateRequest>('/api/admin/users', valid)
-    const parsed = AdminUserCreateResponseSchema.safeParse(response)
+export async function createUser(payload: UserCreateRequest): Promise<UserItem> {
+    const valid = UserCreateRequestSchema.parse(payload)
+    const response = await post<unknown, UserCreateRequest>('/api/admin/users', valid)
+    const parsed = UserCreateResponseSchema.safeParse(response)
     if (!parsed.success) {
         throw new AppError('Invalid response format', { code: 'INVALID_RESPONSE', details: parsed.error.issues })
     }
-    const value: AdminUserCreateResponse = parsed.data as z.infer<typeof AdminUserCreateResponseSchema>
+    const value: UserCreateResponse = parsed.data as z.infer<typeof UserCreateResponseSchema>
     if ('success' in value && 'data' in value) {
         return value.data.user
     }
     return value.user
 }
 
-export async function updateAdminUser(userId: number, payload: AdminUserUpdateRequest): Promise<AdminUserItem> {
-    const valid = AdminUserUpdateRequestSchema.parse(payload)
-    const response = await put<unknown, AdminUserUpdateRequest>(`/api/admin/users/${userId}`, valid)
-    const parsed = AdminUserUpdateResponseSchema.safeParse(response)
+export async function updateUser(userId: number, payload: UserUpdateRequest): Promise<UserItem> {
+    const valid = UserUpdateRequestSchema.parse(payload)
+    const response = await put<unknown, UserUpdateRequest>(`/api/admin/users/${userId}`, valid)
+    const parsed = UserUpdateResponseSchema.safeParse(response)
     if (!parsed.success) {
         throw new AppError('Invalid response format', { code: 'INVALID_RESPONSE', details: parsed.error.issues })
     }
-    const value: AdminUserUpdateResponse = parsed.data as z.infer<typeof AdminUserUpdateResponseSchema>
+    const value: UserUpdateResponse = parsed.data as z.infer<typeof UserUpdateResponseSchema>
     if ('success' in value && 'data' in value) {
         return value.data.user
     }
     return value.user
 }
 
-const deleteResponseSchema = AdminUserDeleteResponseSchema
+const deleteResponseSchema = UserDeleteResponseSchema
 
-export async function deleteAdminUser(userId: number): Promise<AdminUserDeleteSuccess> {
+export async function deleteUser(userId: number): Promise<UserDeleteSuccess> {
     const response = await deleteRequest<unknown>(`/api/admin/users/${userId}`)
-    const parsed = parseWithZod<AdminUserDeleteResponse>(deleteResponseSchema, response)
+    const parsed = parseWithZod<UserDeleteResponse>(deleteResponseSchema, response)
 
     if (parsed && typeof parsed === 'object' && 'data' in parsed) {
         const dataObj = (parsed as { data: unknown }).data
-        return parseWithZod(AdminUserDeleteSuccessSchema, dataObj)
+        return parseWithZod(UserDeleteSuccessSchema, dataObj)
     }
 
-    return parseWithZod(AdminUserDeleteSuccessSchema, parsed)
+    return parseWithZod(UserDeleteSuccessSchema, parsed)
 }
 
-export async function getAdminUserById(userId: number): Promise<AdminUser> {
+export async function getUserById(userId: number): Promise<User> {
     const response = await get<unknown>(`/api/admin/users/${userId}`)
-    const parsed = AdminUserDetailResponseSchema.safeParse(response)
+    const parsed = UserDetailResponseSchema.safeParse(response)
     if (!parsed.success) {
         throw new AppError('Invalid response format', { code: 'INVALID_RESPONSE', details: parsed.error.issues })
     }
-    const value: AdminUserDetailResponse = parsed.data as z.infer<typeof AdminUserDetailResponseSchema>
+    const value: UserDetailResponse = parsed.data as z.infer<typeof UserDetailResponseSchema>
     if ('success' in value && 'data' in value) {
         return value.data.user
     }
     return value.user
 }
 
-export async function updateAdminUserRole(
+export async function updateUserRole(
     userId: number,
-    payload: AdminUserRoleUpdateRequest,
+    payload: UserRoleUpdateRequest,
 ): Promise<UpdatedUserRole> {
-    const valid = AdminUserRoleUpdateRequestSchema.parse(payload)
-    const response = await put<unknown, AdminUserRoleUpdateRequest>(`/api/admin/users/${userId}/role`, valid)
-    const parsed = AdminUserRoleUpdateResponseSchema.safeParse(response)
+    const valid = UserRoleUpdateRequestSchema.parse(payload)
+    const response = await put<unknown, UserRoleUpdateRequest>(`/api/admin/users/${userId}/role`, valid)
+    const parsed = UserRoleUpdateResponseSchema.safeParse(response)
     if (!parsed.success) {
         throw new AppError('Invalid response format', { code: 'INVALID_RESPONSE', details: parsed.error.issues })
     }
-    const value: AdminUserRoleUpdateResponse = parsed.data as z.infer<typeof AdminUserRoleUpdateResponseSchema>
+    const value: UserRoleUpdateResponse = parsed.data as z.infer<typeof UserRoleUpdateResponseSchema>
     if ('success' in value && 'data' in value) {
         if (!value.data.user) {
             throw new AppError('Missing user in response', { code: 'INVALID_RESPONSE' })
@@ -132,13 +132,13 @@ export async function updateAdminUserRole(
     return value.user
 }
 
-export async function getAdminUserStorageUsage(userId: number): Promise<AdminUserStorageUsage> {
+export async function getUserStorageUsage(userId: number): Promise<UserStorageUsage> {
     const response = await get<unknown>(`/api/admin/users/${userId}/storage-usage`)
-    const parsed = AdminUserStorageUsageResponseSchema.safeParse(response)
+    const parsed = UserStorageUsageResponseSchema.safeParse(response)
     if (!parsed.success) {
         throw new AppError('Invalid response format', { code: 'INVALID_RESPONSE', details: parsed.error.issues })
     }
-    const value: AdminUserStorageUsageResponse = parsed.data as z.infer<typeof AdminUserStorageUsageResponseSchema>
+    const value: UserStorageUsageResponse = parsed.data as z.infer<typeof UserStorageUsageResponseSchema>
     if ('success' in value && 'data' in value) {
         return value.data
     }

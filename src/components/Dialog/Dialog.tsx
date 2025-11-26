@@ -45,6 +45,9 @@ export default function Dialog({
 
   if (!isOpen) return null
 
+  const hasBodyContent = Boolean(children) || Boolean(confirmText)
+  const bodyId = hasBodyContent ? `${modalId}-desc` : undefined
+
   return (
     <div
       id={modalId}
