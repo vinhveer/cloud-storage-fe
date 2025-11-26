@@ -1,53 +1,29 @@
 import FileCard from '@/components/FileCard/FileCard'
-import StorageUsage from '@/components/StorageUsage/StorageUsage'
+import type { IconName } from '@/components/FileCard/types'
+import { useRecentFiles } from '@/api/features/file/file.queries'
 
-type HomeFileCard = {
-  id: string
-  icon: 'folder' | 'file' | 'file-word' | 'file-excel' | 'file-image' | 'file-pdf'
-  title: string
-  subtitle: string
-  href?: string
+function pickIconFromFileName(name: string): IconName {
+  const lower = name.toLowerCase()
+  if (lower.endsWith('.doc') || lower.endsWith('.docx')) return 'file-word'
+  if (lower.endsWith('.xls') || lower.endsWith('.xlsx') || lower.endsWith('.csv')) return 'file-excel'
+  if (lower.endsWith('.pdf')) return 'file-pdf'
+  if (/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(lower)) return 'file-image'
+  return 'file'
 }
 
-const homeCards: HomeFileCard[] = [
-  {
-    id: 'designer',
-    icon: 'folder',
-    title: 'Designer',
-    subtitle: 'Folder · 3 items',
-    href: '/my-files',
-  },
-  {
-    id: 'reports',
-    icon: 'file-excel',
-    title: 'Reports Q4',
-    subtitle: 'Excel · 5 files',
-    href: '/my-files',
-  },
-  {
-    id: 'proposal',
-    icon: 'file-word',
-    title: 'Proposal.docx',
-    subtitle: 'Word · Last edited yesterday',
-    href: '/my-files',
-  },
-  {
-    id: 'spec',
-    icon: 'file-pdf',
-    title: 'API-spec.pdf',
-    subtitle: 'PDF · 1.2 MB',
-    href: '/my-files',
-  },
-  {
-    id: 'preview',
-    icon: 'file-image',
-    title: 'Preview.png',
-    subtitle: 'Image · 2.3 MB',
-    href: '/my-files',
-  },
-]
+function formatLastOpened(iso: string) {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return iso
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date)
+}
 
 export default function HomePage() {
+  const { data, isLoading } = useRecentFiles(8)
+  const recentFiles = data?.data ?? []
+
   return (
     <div className="space-y-6">
 
@@ -58,24 +34,26 @@ export default function HomePage() {
         </p>
       </header>
 
-      <section>
-        <StorageUsage used={128} total={256} precision={1} />
-      </section>
-
       <section className="space-y-3">
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Recent files & folders</h3>
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-          {homeCards.map((card) => (
-            <div key={card.id}>
-              <FileCard
-                icon={card.icon}
-                title={card.title}
-                subtitle={card.subtitle}
-                detailsHref={card.href}
-              />
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">Đang tải file gần đây...</p>
+        ) : recentFiles.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có file nào được mở gần đây.</p>
+        ) : (
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+            {recentFiles.map((file) => (
+              <div key={file.file_id}>
+                <FileCard
+                  icon={pickIconFromFileName(file.display_name)}
+                  title={file.display_name}
+                  subtitle={`Last opened ${formatLastOpened(file.last_opened_at)}`}
+                  detailsHref={`/my-files?fileId=${file.file_id}`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   )
