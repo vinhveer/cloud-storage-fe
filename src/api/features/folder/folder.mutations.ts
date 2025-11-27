@@ -19,6 +19,8 @@ export function useCreateFolder() {
     mutationFn: createFolder,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['folder-tree'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'], exact: false })
     },
   })
 }
@@ -38,6 +40,8 @@ export function useMoveFolder() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['folder-tree'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'], exact: false })
     },
   })
 }
@@ -57,6 +61,8 @@ export function useUpdateFolder() {
       } as UpdateFolderRequest),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['folder-tree'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'], exact: false })
     },
   })
 }
@@ -68,6 +74,8 @@ export function useDeleteFolder() {
     mutationFn: folderId => deleteFolder(folderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['folder-tree'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'], exact: false })
     },
   })
 }
@@ -78,11 +86,18 @@ export type CopyFolderVariables = {
 }
 
 export function useCopyFolder() {
+  const queryClient = useQueryClient()
+
   return useMutation<CopyFolderSuccess, AppError, CopyFolderVariables>({
     mutationFn: variables =>
       copyFolder(variables.folderId, {
         target_folder_id: variables.target_folder_id,
       } as CopyFolderRequest),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['folder-tree'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'], exact: false })
+    },
   })
 }
 

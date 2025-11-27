@@ -29,6 +29,12 @@ export type FileListProps = {
   toolbarRight?: React.ReactNode
   /** If true, tiles view will align items to the left (useful when few items) */
   tilesAlignLeft?: boolean
+  /** Callback khi danh sách selection thay đổi (dùng cho page my-files để ẩn/hiện breadcrumb hoặc toolbar ngoài) */
+  onSelectionChange?: (selectedItems: FileItem[]) => void
+  /** Nếu true, FileList sẽ không render SelectionToolbar nội bộ; page cha tự hiển thị toolbar dựa trên onSelectionChange + onSelectionToolbarAction. */
+  externalSelectionToolbar?: boolean
+  /** Callback khi user click action trong SelectionToolbar (khi externalSelectionToolbar=true). */
+  onSelectionToolbarAction?: (action: string, items: FileItem[]) => void
 }
 
 export type MenuItem = {

@@ -18,6 +18,7 @@ export function useUploadFile() {
     mutationFn: uploadFile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['files'], exact: false })
     },
   })
 }
@@ -37,6 +38,7 @@ export function useMoveFile() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['files'], exact: false })
     },
   })
 }
@@ -64,6 +66,8 @@ export function useUpdateFile() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['files'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['file'], exact: false })
     },
   })
 }
@@ -75,6 +79,7 @@ export function useDeleteFile() {
     mutationFn: fileId => deleteFile(fileId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['files'], exact: false })
     },
   })
 }
@@ -96,6 +101,7 @@ export function useCopyFile() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['files'], exact: false })
     },
   })
 }
@@ -112,6 +118,7 @@ export function useDeleteFileVersion() {
     mutationFn: variables => deleteFileVersion(variables.fileId, variables.versionId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
+      queryClient.invalidateQueries({ queryKey: ['file'], exact: false })
     },
   })
 }

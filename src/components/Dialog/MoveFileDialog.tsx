@@ -4,6 +4,7 @@ import type { DialogProps } from '@/components/Dialog/types'
 import { useMoveFile } from '@/api/features/file/file.mutations'
 import { useFolderTree } from '@/api/features/folder/folder.queries'
 import type { FolderTreeNode } from '@/api/features/folder/folder.types'
+import { useAlert } from '@/components/Alert/AlertProvider'
 
 export type MoveFileDialogProps = Omit<DialogProps, 'onConfirm' | 'children'> & {
   fileId: number
@@ -29,17 +30,21 @@ function flattenFolderTree(nodes: FolderTreeNode[] | undefined, depth = 0): Flat
 export default function MoveFileDialog({ fileId, destinationFolderId, onSuccess, title = 'Move', confirmButtonText = 'Move', cancelButtonText = 'Cancel', confirmType = 'primary', ...dialogProps }: Readonly<MoveFileDialogProps>) {
   const moveFileMutation = useMoveFile()
   const { data: folderTree, isLoading } = useFolderTree()
+  const { showAlert } = useAlert()
 
-  const [targetFolderId, setTargetFolderId] = React.useState<number | undefined>(destinationFolderId)
+  const [targetFolderId, setTargetFolderId] = React.useState<number | null>(destinationFolderId ?? null)
 
   const folders = React.useMemo(() => flattenFolderTree(folderTree?.folders ?? []), [folderTree])
 
   const handleConfirm = React.useCallback(async () => {
-    await moveFileMutation.mutateAsync({ fileId, destinationFolderId: targetFolderId })
-    onSuccess?.()
-  }, [fileId, moveFileMutation, onSuccess, targetFolderId])
-
-  const isMoveDisabled = moveFileMutation.isPending || typeof targetFolderId !== 'number'
+    try {
+      await moveFileMutation.mutateAsync({ fileId, destinationFolderId: targetFolderId ?? undefined })
+      showAlert({ type: 'success', message: 'File moved successfully.' })
+      onSuccess?.()
+    } catch {
+      showAlert({ type: 'error', message: 'Failed to move file. Please try again.' })
+    }
+  }, [fileId, moveFileMutation, onSuccess, targetFolderId, showAlert])
 
   return (
     <Dialog
@@ -48,7 +53,7 @@ export default function MoveFileDialog({ fileId, destinationFolderId, onSuccess,
       confirmButtonText={confirmButtonText}
       cancelButtonText={cancelButtonText}
       confirmType={confirmType}
-      onConfirm={isMoveDisabled ? undefined : handleConfirm}
+      onConfirm={moveFileMutation.isPending ? undefined : handleConfirm}
     >
       <div className="space-y-3">
         <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -56,6 +61,21 @@ export default function MoveFileDialog({ fileId, destinationFolderId, onSuccess,
         </p>
 
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg max-h-64 overflow-y-auto bg-gray-50 dark:bg-gray-900/40">
+          {/* Root folder option */}
+          <button
+            type="button"
+            className={
+              'w-full flex items-center px-4 py-2 text-sm transition-colors border-b border-gray-200 dark:border-gray-800 ' +
+              (targetFolderId === null
+                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200'
+                : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800')
+            }
+            onClick={() => setTargetFolderId(null)}
+          >
+            <span className="mr-2 text-gray-400 dark:text-gray-500">🏠</span>
+            <span>My Files (Root)</span>
+          </button>
+
           {isLoading && (
             <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
               Loading folders...
