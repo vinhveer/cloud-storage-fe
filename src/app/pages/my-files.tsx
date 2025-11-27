@@ -1,9 +1,12 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
+
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 
 import FileList from '@/components/FileList'
 import type { FileItem } from '@/components/FileList'
+import SelectionToolbar, { type SelectionToolbarAction } from '@/components/FileList/SelectionToolbar'
+
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import { getFolderContents } from '@/api/features/folder/folder.api'
 import { getFolderBreadcrumb } from '@/api/features/folder/folder.api'
@@ -11,8 +14,12 @@ import { qk } from '@/api/query/keys'
 
 export default function MyFilesPage() {
   const navigate = useNavigate()
+
   const search = useSearch({ strict: false }) as { folderId?: string }
   const currentFolderId = search.folderId ? parseInt(search.folderId, 10) : null
+  const [hasSelection, setHasSelection] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<FileItem[]>([])
+  const actionRef = useRef<((action: SelectionToolbarAction, items: FileItem[]) => void) | null>(null)
 
   // Fetch folder contents
   const { data: contents, isLoading } = useQuery({
@@ -22,6 +29,7 @@ export default function MyFilesPage() {
         // Root folder - fetch folders and files without folder_id
         return getFolderContents(0) // Using 0 or null for root
       }
+
       return getFolderContents(currentFolderId)
     },
   })
@@ -112,6 +120,11 @@ export default function MyFilesPage() {
     }
   }
 
+  const handleSelectionChange = useCallback((selected: FileItem[]) => {
+    setSelectedItems(selected)
+    setHasSelection(selected.length > 0)
+  }, [])
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -122,11 +135,27 @@ export default function MyFilesPage() {
 
   return (
     <div className="h-full flex flex-col gap-6">
-      <header>
-        <Breadcrumb
-          items={breadcrumbItems}
-          onItemClick={handleBreadcrumbClick}
-        />
+      <header className="min-h-[28px] flex items-center">
+        {hasSelection ? (
+          <SelectionToolbar
+            selectedItems={selectedItems}
+            selectedCount={selectedItems.length}
+            onAction={(action, items) => {
+              actionRef.current?.(action, items)
+            }}
+            onDeselectAll={() => {
+              // Clear both parent state and FileList's internal selection
+              actionRef.current?.('deselectAll', [])
+              setSelectedItems([])
+              setHasSelection(false)
+            }}
+          />
+        ) : (
+          <Breadcrumb className="mb-6"
+            items={breadcrumbItems}
+            onItemClick={handleBreadcrumbClick}
+          />
+        )}
       </header>
 
       <section className="flex-1 min-h-0 flex flex-col">
@@ -135,8 +164,13 @@ export default function MyFilesPage() {
           viewMode="details"
           className="flex-1 min-h-0"
           onItemOpen={handleItemOpen}
+          onSelectionChange={handleSelectionChange}
+          externalSelectionToolbar
+          actionRef={actionRef}
         />
+
       </section>
+
     </div>
   )
 }

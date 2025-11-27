@@ -6,8 +6,9 @@ import ListView from '@/components/FileList/views/ListView'
 import GridView from '@/components/FileList/views/GridView'
 import TilesView from '@/components/FileList/views/TilesView'
 import DetailsView from '@/components/FileList/views/DetailsView'
-import FilterButton from '@/components/FileList/FilterButton'
-import SortButton from '@/components/FileList/SortButton'
+import SortDropdown, { type SortOption } from '@/components/FileList/SortDropdown'
+import FilterDropdown, { type FilterState } from '@/components/FileList/FilterDropdown'
+import { sortFiles, filterFiles } from '@/components/FileList/fileListUtils'
 import SelectionToolbar from '@/components/FileList/SelectionToolbar'
 import ContextMenu from '@/components/FileList/ContextMenu'
 import { useMockMenuItems } from '@/components/FileList/mockMenuItems'
@@ -18,9 +19,16 @@ import RenameFolderDialog from '@/components/Dialog/RenameFolderDialog'
 import ShareFolderDialog from '@/components/Dialog/ShareFolderDialog'
 import MoveFileDialog from '@/components/Dialog/MoveFileDialog'
 import CopyFileDialog from '@/components/Dialog/CopyFileDialog'
+import MoveFolderDialog from '@/components/Dialog/MoveFolderDialog'
+import CopyFolderDialog from '@/components/Dialog/CopyFolderDialog'
 import ShareFileDialog from '@/components/Dialog/ShareFileDialog'
+import ManageAccessDialog from '@/components/Dialog/ManageAccessDialog'
+import MoveMultipleFilesDialog from '@/components/Dialog/MoveMultipleFilesDialog'
+import CopyMultipleFilesDialog from '@/components/Dialog/CopyMultipleFilesDialog'
+import DeleteMultipleFilesDialog from '@/components/Dialog/DeleteMultipleFilesDialog'
 import FileDetailPanel from '@/components/FileList/FileDetailPanel'
 import { useAlert } from '@/components/Alert/AlertProvider'
+import { useDownloadFile } from '@/api/features/file/file.mutations'
 import type { FileListProps, ViewMode, FileItem } from '@/components/FileList/types'
 import type { SelectionToolbarAction } from './SelectionToolbar'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
@@ -35,6 +43,10 @@ export default function FileList({
   onItemContext,
   toolbarRight,
   tilesAlignLeft,
+  onSelectionChange,
+  externalSelectionToolbar,
+  onSelectionToolbarAction,
+  actionRef,
 }: Readonly<FileListProps>) {
   const {
     dropdownOpen,
@@ -133,7 +145,80 @@ export default function FileList({
     folder: null,
   })
 
+  const [moveFolderDialog, setMoveFolderDialog] = React.useState<{
+    open: boolean
+    folder: FileItem | null
+  }>({
+    open: false,
+    folder: null,
+  })
+
+  const [copyFolderDialog, setCopyFolderDialog] = React.useState<{
+    open: boolean
+    folder: FileItem | null
+  }>({
+    open: false,
+    folder: null,
+  })
+
+  const [manageAccessDialog, setManageAccessDialog] = React.useState<{
+    open: boolean
+    item: FileItem | null
+    type: 'file' | 'folder'
+  }>({
+    open: false,
+    item: null,
+    type: 'file',
+  })
+
+  const [moveMultipleDialog, setMoveMultipleDialog] = React.useState<{
+    open: boolean
+    items: FileItem[]
+  }>({
+    open: false,
+    items: [],
+  })
+
+  const [copyMultipleDialog, setCopyMultipleDialog] = React.useState<{
+    open: boolean
+    items: FileItem[]
+  }>({
+    open: false,
+    items: [],
+  })
+
+  const [deleteMultipleDialog, setDeleteMultipleDialog] = React.useState<{
+    open: boolean
+    items: FileItem[]
+  }>({
+    open: false,
+    items: [],
+  })
+
+  // Sort and filter state
+  const [sortOption, setSortOption] = React.useState<SortOption>('name-asc')
+  const [filterState, setFilterState] = React.useState<FilterState>({
+    fileType: 'all',
+    date: 'all',
+    size: 'all',
+  })
+
+  // Apply filtering and sorting to files
+  const processedFiles = React.useMemo(() => {
+    const filtered = filterFiles(files, filterState)
+    return sortFiles(filtered, sortOption)
+  }, [files, filterState, sortOption])
+
+  // Notify parent when selection changes (for external toolbar/breadcrumb visibility)
+  // Note: selectedItems contains indices into processedFiles (after sort/filter), not files
+  React.useEffect(() => {
+    if (!onSelectionChange) return
+    const selected = selectedItems.map(idx => processedFiles[idx]).filter(Boolean)
+    onSelectionChange(selected)
+  }, [processedFiles, onSelectionChange, selectedItems])
+
   const { folderContextMenuItem, fileContextMenuItem } = useMockMenuItems()
+  const downloadFileMutation = useDownloadFile()
 
   React.useEffect(() => {
     setViewMode(viewMode)
@@ -157,7 +242,7 @@ export default function FileList({
               if (!folder.id) return
               const link = `${window.location.origin}/share/folder/${folder.id}`
               void navigator.clipboard.writeText(link)
-              showAlert({ type: 'success', message: 'Đã sao chép liên kết' })
+              showAlert({ type: 'success', message: 'Link copied to clipboard.' })
             },
           }
         }
@@ -186,10 +271,44 @@ export default function FileList({
             },
           }
         }
-        // Move to / Copy to / Details for folder: keep as is (no implementation yet)
+        if (item.label === 'Move to') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              setMoveFolderDialog({ open: true, folder })
+            },
+          }
+        }
+        if (item.label === 'Copy to') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              setCopyFolderDialog({ open: true, folder })
+            },
+          }
+        }
+        if (item.label === 'Manage access') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              setManageAccessDialog({ open: true, item: folder, type: 'folder' })
+            },
+          }
+        }
+        if (item.label === 'Details') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              setDetailFile(folder)
+            },
+          }
+        }
         return item
       }),
-    [folderContextMenuItem]
+    [folderContextMenuItem, showAlert]
   )
 
   const enhancedFileContextMenuItem = React.useMemo(
@@ -202,7 +321,7 @@ export default function FileList({
               if (!file.id) return
               const link = `${window.location.origin}/share/file/${file.id}`
               void navigator.clipboard.writeText(link)
-              showAlert({ type: 'success', message: 'Đã sao chép liên kết' })
+              showAlert({ type: 'success', message: 'Link copied to clipboard.' })
             },
           }
         }
@@ -259,52 +378,180 @@ export default function FileList({
             },
           }
         }
+        if (item.label === 'Download') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              downloadFileMutation.mutate(Number(file.id), {
+                onSuccess: (blob) => {
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = file.name
+                  document.body.appendChild(a)
+                  a.click()
+                  document.body.removeChild(a)
+                  URL.revokeObjectURL(url)
+                  showAlert({ type: 'success', message: `Downloaded "${file.name}" successfully.` })
+                },
+                onError: () => {
+                  showAlert({ type: 'error', message: `Failed to download "${file.name}".` })
+                },
+              })
+            },
+          }
+        }
+        if (item.label === 'Manage access') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              setManageAccessDialog({ open: true, item: file, type: 'file' })
+            },
+          }
+        }
         return item
       }),
-    [fileContextMenuItem]
+    [fileContextMenuItem, downloadFileMutation, showAlert]
   )
 
   const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
-    // On right-click, only open context menu without toggling selection mode
+    // On right-click, only open context menu without changing current selection/toolbar state
     setContextMenu({ file, x: clientX, y: clientY })
     onItemContext?.(file, index, clientX, clientY)
   }
 
   const handleToolbarAction = (action: SelectionToolbarAction, items: FileItem[]) => {
-    // Dispatch action - in real app, these would call actual APIs
-    // For now, just log and show placeholder behavior
-    // eslint-disable-next-line no-console
-    console.log('Toolbar action:', action, 'items:', items)
+    // If external toolbar is controlling actions, just notify parent
+    if (externalSelectionToolbar && onSelectionToolbarAction) {
+      onSelectionToolbarAction(action, items)
+      return
+    }
+    if (items.length === 0) return
+
+    const firstItem = items[0]
+    const isFolder = (firstItem.type ?? '').toLowerCase() === 'folder'
 
     switch (action) {
       case 'open':
         if (items.length === 1) {
-          onItemOpen?.(items[0], 0) // Index 0 is placeholder, logic usually depends on ID
+          onItemOpen?.(firstItem, 0)
         }
         break
       case 'share':
-        // TODO: show share dialog
+        if (items.length === 1 && firstItem.id) {
+          if (isFolder) {
+            setShareFolderDialog({ open: true, folder: firstItem })
+          } else {
+            setShareFileDialog({ open: true, file: firstItem })
+          }
+        }
         break
-      case 'copyLink':
-        // TODO: copy to clipboard
+      case 'copyLink': {
+        if (items.length === 1 && firstItem.id) {
+          const type = isFolder ? 'folder' : 'file'
+          const link = `${window.location.origin}/share/${type}/${firstItem.id}`
+          void navigator.clipboard.writeText(link)
+          showAlert({ type: 'success', message: 'Link copied to clipboard.' })
+        }
         break
+      }
       case 'delete':
-        // TODO: delete items via API
+        if (items.length > 1) {
+          // Multiple items - use batch dialog
+          setDeleteMultipleDialog({ open: true, items })
+        } else if (items.length === 1 && firstItem.id) {
+          // Single item - use specific dialog
+          if (isFolder) {
+            setDeleteFolderDialog({ open: true, folder: firstItem })
+          } else {
+            setDeleteFileDialog({ open: true, file: firstItem })
+          }
+        }
         break
-      case 'download':
-        // TODO: download items
+      case 'download': {
+        // Download files (folders not supported)
+        const filesToDownload = items.filter(item => item.id && (item.type ?? '').toLowerCase() !== 'folder')
+        if (filesToDownload.length === 0) {
+          showAlert({ type: 'warning', message: 'No files to download (folders are not supported).' })
+          break
+        }
+
+        // Download files sequentially to avoid mutation conflicts
+        const downloadFiles = async () => {
+          let downloadedCount = 0
+          let errorCount = 0
+
+          for (const item of filesToDownload) {
+            try {
+              const blob = await downloadFileMutation.mutateAsync(Number(item.id))
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = item.name
+              document.body.appendChild(a)
+              a.click()
+              document.body.removeChild(a)
+              URL.revokeObjectURL(url)
+              downloadedCount++
+            } catch {
+              errorCount++
+            }
+          }
+
+          // Show summary
+          if (errorCount === 0) {
+            showAlert({ type: 'success', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully.` })
+          } else if (downloadedCount === 0) {
+            showAlert({ type: 'error', message: 'Failed to download the selected files.' })
+          } else {
+            showAlert({ type: 'warning', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully, ${errorCount} failed.` })
+          }
+        }
+
+        void downloadFiles()
         break
+      }
       case 'moveTo':
-        // TODO: show move dialog
+        if (items.length > 1) {
+          // Multiple items - use batch dialog
+          setMoveMultipleDialog({ open: true, items })
+        } else if (items.length === 1 && firstItem.id) {
+          // Single item - use specific dialog
+          if (isFolder) {
+            setMoveFolderDialog({ open: true, folder: firstItem })
+          } else {
+            setMoveFileDialog({ open: true, file: firstItem })
+          }
+        }
         break
       case 'copyTo':
-        // TODO: show copy dialog
+        if (items.length > 1) {
+          // Multiple items - use batch dialog
+          setCopyMultipleDialog({ open: true, items })
+        } else if (items.length === 1 && firstItem.id) {
+          // Single item - use specific dialog
+          if (isFolder) {
+            setCopyFolderDialog({ open: true, folder: firstItem })
+          } else {
+            setCopyFileDialog({ open: true, file: firstItem, destinationFolderId: null, onlyLatest: true })
+          }
+        }
         break
       case 'rename':
-        // TODO: show rename dialog (single item only)
+        if (items.length === 1 && firstItem.id) {
+          if (isFolder) {
+            setRenameFolderDialog({ open: true, folder: firstItem })
+          } else {
+            setRenameFileDialog({ open: true, file: firstItem })
+          }
+        }
         break
       case 'details':
-        // TODO: show details panel
+        if (items.length === 1) {
+          setDetailFile(firstItem)
+        }
         break
       case 'deselectAll':
         deselectAll()
@@ -312,10 +559,17 @@ export default function FileList({
     }
   }
 
+  // Expose handleToolbarAction to parent via actionRef
+  React.useEffect(() => {
+    if (actionRef) {
+      actionRef.current = handleToolbarAction
+    }
+  }, [actionRef, handleToolbarAction])
+
   // No explicit action handler needed; actions are embedded in menu item callbacks
 
   const getSelectedFilesForToolbar = (): FileItem[] => {
-    return selectedItems.map(idx => files[idx]).filter(Boolean)
+    return selectedItems.map(idx => processedFiles[idx]).filter(Boolean)
   }
 
   React.useEffect(() => {
@@ -340,8 +594,8 @@ export default function FileList({
   return (
     <>
       {/* Floating Selection Toolbar */}
-      {selectionMode && selectedItems.length > 0 && !contextMenu && (
-        <div className="mb-4">{/* Thêm margin-bottom */}
+      {!externalSelectionToolbar && selectionMode && selectedItems.length > 0 && (
+        <div className="">{/* Thêm margin-bottom */}
           <SelectionToolbar
             selectedItems={getSelectedFilesForToolbar()}
             selectedCount={selectedItems.length}
@@ -442,10 +696,10 @@ export default function FileList({
               {toolbarRight ?? (
                 <>
                   <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">
-                    {files.length} items
+                    {processedFiles.length}{processedFiles.length !== files.length ? `/${files.length}` : ''} items
                   </div>
-                  <FilterButton />
-                  <SortButton />
+                  <FilterDropdown value={filterState} onChange={setFilterState} />
+                  <SortDropdown value={sortOption} onChange={setSortOption} />
                 </>
               )}
             </div>
@@ -456,7 +710,7 @@ export default function FileList({
         <div className="overflow-x-auto overflow-y-auto flex-1">
           {currentViewMode === 'list' && (
             <ListView
-              files={files}
+              files={processedFiles}
               selectionMode={selectionMode}
               isSelected={isSelected}
               toggleItem={toggleItem}
@@ -467,7 +721,7 @@ export default function FileList({
 
           {currentViewMode === 'grid' && (
             <GridView
-              files={files}
+              files={processedFiles}
               selectionMode={selectionMode}
               isSelected={isSelected}
               toggleItem={toggleItem}
@@ -478,7 +732,7 @@ export default function FileList({
 
           {currentViewMode === 'tiles' && (
             <TilesView
-              files={files}
+              files={processedFiles}
               selectionMode={selectionMode}
               isSelected={isSelected}
               toggleItem={toggleItem}
@@ -490,7 +744,7 @@ export default function FileList({
 
           {currentViewMode === 'details' && (
             <DetailsView
-              files={files}
+              files={processedFiles}
               selectionMode={selectionMode}
               isSelected={isSelected}
               toggleItem={toggleItem}
@@ -601,6 +855,82 @@ export default function FileList({
           onlyLatest={copyFileDialog.onlyLatest}
           onSuccess={() => {
             setCopyFileDialog(prev => ({ ...prev, open: false }))
+          }}
+        />
+      )}
+      {moveFolderDialog.open && moveFolderDialog.folder?.id && (
+        <MoveFolderDialog
+          open={moveFolderDialog.open}
+          onOpenChange={open => {
+            if (!open) setMoveFolderDialog({ open: false, folder: null })
+          }}
+          folderId={Number(moveFolderDialog.folder.id)}
+          folderName={moveFolderDialog.folder.name}
+          onSuccess={() => {
+            setMoveFolderDialog({ open: false, folder: null })
+          }}
+        />
+      )}
+      {copyFolderDialog.open && copyFolderDialog.folder?.id && (
+        <CopyFolderDialog
+          open={copyFolderDialog.open}
+          onOpenChange={open => {
+            if (!open) setCopyFolderDialog({ open: false, folder: null })
+          }}
+          folderId={Number(copyFolderDialog.folder.id)}
+          folderName={copyFolderDialog.folder.name}
+          onSuccess={() => {
+            setCopyFolderDialog({ open: false, folder: null })
+          }}
+        />
+      )}
+      {manageAccessDialog.open && manageAccessDialog.item?.id && (
+        <ManageAccessDialog
+          open={manageAccessDialog.open}
+          onOpenChange={open => {
+            if (!open) setManageAccessDialog({ open: false, item: null, type: 'file' })
+          }}
+          shareableType={manageAccessDialog.type}
+          shareableId={Number(manageAccessDialog.item.id)}
+          shareableName={manageAccessDialog.item.name}
+        />
+      )}
+      {moveMultipleDialog.open && moveMultipleDialog.items.length > 0 && (
+        <MoveMultipleFilesDialog
+          open={moveMultipleDialog.open}
+          onOpenChange={open => {
+            if (!open) setMoveMultipleDialog({ open: false, items: [] })
+          }}
+          items={moveMultipleDialog.items}
+          onSuccess={() => {
+            setMoveMultipleDialog({ open: false, items: [] })
+            deselectAll()
+          }}
+        />
+      )}
+      {copyMultipleDialog.open && copyMultipleDialog.items.length > 0 && (
+        <CopyMultipleFilesDialog
+          open={copyMultipleDialog.open}
+          onOpenChange={open => {
+            if (!open) setCopyMultipleDialog({ open: false, items: [] })
+          }}
+          items={copyMultipleDialog.items}
+          onSuccess={() => {
+            setCopyMultipleDialog({ open: false, items: [] })
+            deselectAll()
+          }}
+        />
+      )}
+      {deleteMultipleDialog.open && deleteMultipleDialog.items.length > 0 && (
+        <DeleteMultipleFilesDialog
+          open={deleteMultipleDialog.open}
+          onOpenChange={open => {
+            if (!open) setDeleteMultipleDialog({ open: false, items: [] })
+          }}
+          items={deleteMultipleDialog.items}
+          onSuccess={() => {
+            setDeleteMultipleDialog({ open: false, items: [] })
+            deselectAll()
           }}
         />
       )}

@@ -60,7 +60,7 @@ export default function TrashPage() {
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Trash</h2>
         <p className="text-gray-600 dark:text-gray-400">
-          Các tệp đã xóa gần đây. Sau 30 ngày, chúng sẽ bị xóa vĩnh viễn khỏi tài khoản của bạn.
+          Recently deleted files. After 30 days, they will be permanently removed from your account.
         </p>
       </header>
 

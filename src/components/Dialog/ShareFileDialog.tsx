@@ -67,13 +67,18 @@ export default function ShareFileDialog({
       return
     }
 
-    await createShareMutation.mutateAsync({
-      shareable_type: 'file',
-      shareable_id: fileId,
-      user_ids: userIds,
-      permission,
-    })
-    dialogProps.onOpenChange?.(false)
+    try {
+      await createShareMutation.mutateAsync({
+        shareable_type: 'file',
+        shareable_id: fileId,
+        user_ids: userIds,
+        permission,
+      })
+      showAlert({ type: 'success', message: 'File shared successfully.' })
+      dialogProps.onOpenChange?.(false)
+    } catch {
+      showAlert({ type: 'error', message: 'Failed to share file. Please try again.' })
+    }
   }
 
   return (

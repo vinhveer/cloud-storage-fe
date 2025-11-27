@@ -30,16 +30,16 @@ export default function HomePage() {
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Home</h2>
         <p className="text-gray-600 dark:text-gray-400">
-          Tổng quan nhanh về dung lượng và các tệp gần đây.
+          A quick overview of your storage usage and recently opened files.
         </p>
       </header>
 
       <section className="space-y-3">
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Recent files & folders</h3>
         {isLoading ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">Đang tải file gần đây...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Loading recent files...</p>
         ) : recentFiles.length === 0 ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có file nào được mở gần đây.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">No files have been opened recently.</p>
         ) : (
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
             {recentFiles.map((file) => (

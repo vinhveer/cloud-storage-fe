@@ -75,7 +75,7 @@ export default function SharedPage() {
 
       <header className="space-y-1">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Shared</h2>
-        <p className="text-gray-600 dark:text-gray-400">Các tệp được chia sẻ liên quan đến bạn.</p>
+        <p className="text-gray-600 dark:text-gray-400">Files that are shared with you or shared by you.</p>
       </header>
 
       <div className="flex items-center justify-between gap-4">
