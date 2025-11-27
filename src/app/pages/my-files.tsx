@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 
 import FileList from '@/components/FileList'
 import type { FileItem } from '@/components/FileList'
-import SelectionToolbar from '@/components/FileList/SelectionToolbar'
+import SelectionToolbar, { type SelectionToolbarAction } from '@/components/FileList/SelectionToolbar'
 
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import { getFolderContents } from '@/api/features/folder/folder.api'
@@ -19,6 +19,7 @@ export default function MyFilesPage() {
   const currentFolderId = search.folderId ? parseInt(search.folderId, 10) : null
   const [hasSelection, setHasSelection] = useState(false)
   const [selectedItems, setSelectedItems] = useState<FileItem[]>([])
+  const actionRef = useRef<((action: SelectionToolbarAction, items: FileItem[]) => void) | null>(null)
 
   // Fetch folder contents
   const { data: contents, isLoading } = useQuery({
@@ -140,10 +141,11 @@ export default function MyFilesPage() {
             selectedItems={selectedItems}
             selectedCount={selectedItems.length}
             onAction={(action, items) => {
-              // For now, delegate back to FileList via externalSelectionToolbar actions if needed.
-              // MyFilesPage primarily uses move/copy/delete/share which are already wired in FileList.
+              actionRef.current?.(action, items)
             }}
             onDeselectAll={() => {
+              // Clear both parent state and FileList's internal selection
+              actionRef.current?.('deselectAll', [])
               setSelectedItems([])
               setHasSelection(false)
             }}
@@ -164,6 +166,7 @@ export default function MyFilesPage() {
           onItemOpen={handleItemOpen}
           onSelectionChange={handleSelectionChange}
           externalSelectionToolbar
+          actionRef={actionRef}
         />
 
       </section>

@@ -25,6 +25,7 @@ import ShareFileDialog from '@/components/Dialog/ShareFileDialog'
 import ManageAccessDialog from '@/components/Dialog/ManageAccessDialog'
 import MoveMultipleFilesDialog from '@/components/Dialog/MoveMultipleFilesDialog'
 import CopyMultipleFilesDialog from '@/components/Dialog/CopyMultipleFilesDialog'
+import DeleteMultipleFilesDialog from '@/components/Dialog/DeleteMultipleFilesDialog'
 import FileDetailPanel from '@/components/FileList/FileDetailPanel'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import { useDownloadFile } from '@/api/features/file/file.mutations'
@@ -45,6 +46,7 @@ export default function FileList({
   onSelectionChange,
   externalSelectionToolbar,
   onSelectionToolbarAction,
+  actionRef,
 }: Readonly<FileListProps>) {
   const {
     dropdownOpen,
@@ -62,13 +64,6 @@ export default function FileList({
   } = useFileList({ initialViewMode: viewMode, fileCount: files.length })
 
   const { showAlert } = useAlert()
-
-  // Notify parent when selection changes (for external toolbar/breadcrumb visibility)
-  React.useEffect(() => {
-    if (!onSelectionChange) return
-    const selected = selectedItems.map(idx => files[idx]).filter(Boolean)
-    onSelectionChange(selected)
-  }, [files, onSelectionChange, selectedItems])
 
   const [contextMenu, setContextMenu] = React.useState<{
     file: FileItem
@@ -192,6 +187,14 @@ export default function FileList({
     items: [],
   })
 
+  const [deleteMultipleDialog, setDeleteMultipleDialog] = React.useState<{
+    open: boolean
+    items: FileItem[]
+  }>({
+    open: false,
+    items: [],
+  })
+
   // Sort and filter state
   const [sortOption, setSortOption] = React.useState<SortOption>('name-asc')
   const [filterState, setFilterState] = React.useState<FilterState>({
@@ -205,6 +208,14 @@ export default function FileList({
     const filtered = filterFiles(files, filterState)
     return sortFiles(filtered, sortOption)
   }, [files, filterState, sortOption])
+
+  // Notify parent when selection changes (for external toolbar/breadcrumb visibility)
+  // Note: selectedItems contains indices into processedFiles (after sort/filter), not files
+  React.useEffect(() => {
+    if (!onSelectionChange) return
+    const selected = selectedItems.map(idx => processedFiles[idx]).filter(Boolean)
+    onSelectionChange(selected)
+  }, [processedFiles, onSelectionChange, selectedItems])
 
   const { folderContextMenuItem, fileContextMenuItem } = useMockMenuItems()
   const downloadFileMutation = useDownloadFile()
@@ -284,6 +295,14 @@ export default function FileList({
             action: (folder: FileItem) => {
               if (!folder.id) return
               setManageAccessDialog({ open: true, item: folder, type: 'folder' })
+            },
+          }
+        }
+        if (item.label === 'Details') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              setDetailFile(folder)
             },
           }
         }
@@ -374,10 +393,10 @@ export default function FileList({
                   a.click()
                   document.body.removeChild(a)
                   URL.revokeObjectURL(url)
-                  showAlert({ type: 'success', message: `Đã tải xuống "${file.name}"` })
+                  showAlert({ type: 'success', message: `Downloaded "${file.name}" successfully.` })
                 },
                 onError: () => {
-                  showAlert({ type: 'error', message: `Không thể tải xuống "${file.name}"` })
+                  showAlert({ type: 'error', message: `Failed to download "${file.name}".` })
                 },
               })
             },
@@ -434,12 +453,16 @@ export default function FileList({
           const type = isFolder ? 'folder' : 'file'
           const link = `${window.location.origin}/share/${type}/${firstItem.id}`
           void navigator.clipboard.writeText(link)
-          showAlert({ type: 'success', message: 'Đã sao chép liên kết' })
+          showAlert({ type: 'success', message: 'Link copied to clipboard.' })
         }
         break
       }
       case 'delete':
-        if (items.length === 1 && firstItem.id) {
+        if (items.length > 1) {
+          // Multiple items - use batch dialog
+          setDeleteMultipleDialog({ open: true, items })
+        } else if (items.length === 1 && firstItem.id) {
+          // Single item - use specific dialog
           if (isFolder) {
             setDeleteFolderDialog({ open: true, folder: firstItem })
           } else {
@@ -455,13 +478,14 @@ export default function FileList({
           break
         }
 
-        let downloadedCount = 0
-        let errorCount = 0
-        const totalFiles = filesToDownload.length
+        // Download files sequentially to avoid mutation conflicts
+        const downloadFiles = async () => {
+          let downloadedCount = 0
+          let errorCount = 0
 
-        filesToDownload.forEach(item => {
-          downloadFileMutation.mutate(Number(item.id), {
-            onSuccess: (blob) => {
+          for (const item of filesToDownload) {
+            try {
+              const blob = await downloadFileMutation.mutateAsync(Number(item.id))
               const url = URL.createObjectURL(blob)
               const a = document.createElement('a')
               a.href = url
@@ -471,28 +495,22 @@ export default function FileList({
               document.body.removeChild(a)
               URL.revokeObjectURL(url)
               downloadedCount++
-
-              // Show summary when all downloads complete
-              if (downloadedCount + errorCount === totalFiles) {
-                if (errorCount === 0) {
-                  showAlert({ type: 'success', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully.` })
-                } else {
-                  showAlert({ type: 'warning', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully, ${errorCount} failed.` })
-                }
-              }
-            },
-            onError: () => {
+            } catch {
               errorCount++
-              if (downloadedCount + errorCount === totalFiles) {
-                if (downloadedCount === 0) {
-                  showAlert({ type: 'error', message: 'Failed to download the selected files.' })
-                } else {
-                  showAlert({ type: 'warning', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully, ${errorCount} failed.` })
-                }
-              }
-            },
-          })
-        })
+            }
+          }
+
+          // Show summary
+          if (errorCount === 0) {
+            showAlert({ type: 'success', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully.` })
+          } else if (downloadedCount === 0) {
+            showAlert({ type: 'error', message: 'Failed to download the selected files.' })
+          } else {
+            showAlert({ type: 'warning', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully, ${errorCount} failed.` })
+          }
+        }
+
+        void downloadFiles()
         break
       }
       case 'moveTo':
@@ -531,7 +549,7 @@ export default function FileList({
         }
         break
       case 'details':
-        if (items.length === 1 && !isFolder) {
+        if (items.length === 1) {
           setDetailFile(firstItem)
         }
         break
@@ -540,6 +558,13 @@ export default function FileList({
         break
     }
   }
+
+  // Expose handleToolbarAction to parent via actionRef
+  React.useEffect(() => {
+    if (actionRef) {
+      actionRef.current = handleToolbarAction
+    }
+  }, [actionRef, handleToolbarAction])
 
   // No explicit action handler needed; actions are embedded in menu item callbacks
 
@@ -892,6 +917,19 @@ export default function FileList({
           items={copyMultipleDialog.items}
           onSuccess={() => {
             setCopyMultipleDialog({ open: false, items: [] })
+            deselectAll()
+          }}
+        />
+      )}
+      {deleteMultipleDialog.open && deleteMultipleDialog.items.length > 0 && (
+        <DeleteMultipleFilesDialog
+          open={deleteMultipleDialog.open}
+          onOpenChange={open => {
+            if (!open) setDeleteMultipleDialog({ open: false, items: [] })
+          }}
+          items={deleteMultipleDialog.items}
+          onSuccess={() => {
+            setDeleteMultipleDialog({ open: false, items: [] })
             deselectAll()
           }}
         />

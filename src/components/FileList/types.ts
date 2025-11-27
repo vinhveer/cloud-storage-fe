@@ -1,4 +1,5 @@
 import type React from 'react'
+import type { SelectionToolbarAction } from './SelectionToolbar'
 
 export type ViewMode = 'list' | 'grid' | 'tiles' | 'details'
 
@@ -35,6 +36,8 @@ export type FileListProps = {
   externalSelectionToolbar?: boolean
   /** Callback khi user click action trong SelectionToolbar (khi externalSelectionToolbar=true). */
   onSelectionToolbarAction?: (action: string, items: FileItem[]) => void
+  /** Ref để expose handleToolbarAction cho parent gọi từ external toolbar. */
+  actionRef?: React.MutableRefObject<((action: SelectionToolbarAction, items: FileItem[]) => void) | null>
 }
 
 export type MenuItem = {
