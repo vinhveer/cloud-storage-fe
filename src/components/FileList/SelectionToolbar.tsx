@@ -25,6 +25,7 @@ export type SelectionToolbarAction =
     | 'details'
     | 'deselectAll'
     | 'open'
+    | 'restore'
 
 export interface SelectionToolbarProps {
     selectedItems: FileItem[]

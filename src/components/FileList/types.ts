@@ -38,6 +38,8 @@ export type FileListProps = {
   onSelectionToolbarAction?: (action: string, items: FileItem[]) => void
   /** Ref để expose handleToolbarAction cho parent gọi từ external toolbar. */
   actionRef?: React.MutableRefObject<((action: SelectionToolbarAction, items: FileItem[]) => void) | null>
+  /** Chế độ context menu đặc biệt, ví dụ trang Trash sẽ ẩn bớt action và chỉ giữ một số mục cơ bản. */
+  contextMenuMode?: 'default' | 'trash'
 }
 
 export type MenuItem = {

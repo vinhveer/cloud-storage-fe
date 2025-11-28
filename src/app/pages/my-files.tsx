@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
@@ -11,15 +11,46 @@ import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import { getFolderContents } from '@/api/features/folder/folder.api'
 import { getFolderBreadcrumb } from '@/api/features/folder/folder.api'
 import { qk } from '@/api/query/keys'
+import { useFileDetail } from '@/api/features/file/file.queries'
 
 export default function MyFilesPage() {
   const navigate = useNavigate()
 
-  const search = useSearch({ strict: false }) as { folderId?: string }
+  const search = useSearch({ strict: false }) as { folderId?: string; fileId?: string }
   const currentFolderId = search.folderId ? parseInt(search.folderId, 10) : null
+  const fileId = search.fileId ? parseInt(search.fileId, 10) : undefined
   const [hasSelection, setHasSelection] = useState(false)
   const [selectedItems, setSelectedItems] = useState<FileItem[]>([])
   const actionRef = useRef<((action: SelectionToolbarAction, items: FileItem[]) => void) | null>(null)
+
+  const { data: fileDetail } = useFileDetail(fileId)
+  const hasRedirectedRef = useRef(false)
+
+  useEffect(() => {
+    if (!search.fileId) return
+    if (hasRedirectedRef.current) return
+    if (!fileDetail) return
+
+    const targetFolderId = fileDetail.folder_id
+
+    // Nếu file nằm ở root (folder_id null) thì không cần redirect
+    if (targetFolderId == null) {
+      hasRedirectedRef.current = true
+      return
+    }
+
+    // Nếu đã ở đúng folder thì không cần điều hướng nữa
+    if (currentFolderId === targetFolderId) {
+      hasRedirectedRef.current = true
+      return
+    }
+
+    hasRedirectedRef.current = true
+    navigate({
+      to: '/my-files',
+      search: { folderId: targetFolderId.toString() },
+    })
+  }, [search.fileId, fileDetail, currentFolderId, navigate])
 
   // Fetch folder contents
   const { data: contents, isLoading } = useQuery({

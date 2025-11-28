@@ -1,7 +1,8 @@
 import React from 'react'
 import clsx from 'clsx'
 import { useFileList } from './useFileList'
-import { ChevronDownIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, CheckCircleIcon, ArrowUturnRightIcon } from '@heroicons/react/24/outline'
+import { useQueryClient } from '@tanstack/react-query'
 import ListView from '@/components/FileList/views/ListView'
 import GridView from '@/components/FileList/views/GridView'
 import TilesView from '@/components/FileList/views/TilesView'
@@ -29,6 +30,7 @@ import DeleteMultipleFilesDialog from '@/components/Dialog/DeleteMultipleFilesDi
 import FileDetailPanel from '@/components/FileList/FileDetailPanel'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import { useDownloadFile } from '@/api/features/file/file.mutations'
+import { useRestoreTrashItem, useDeleteTrashItem } from '@/api/features/trash/trash.mutations'
 import type { FileListProps, ViewMode, FileItem } from '@/components/FileList/types'
 import type { SelectionToolbarAction } from './SelectionToolbar'
 import { viewModeConfigs } from '@/components/FileList/file-list.constants'
@@ -47,6 +49,7 @@ export default function FileList({
   externalSelectionToolbar,
   onSelectionToolbarAction,
   actionRef,
+  contextMenuMode = 'default',
 }: Readonly<FileListProps>) {
   const {
     dropdownOpen,
@@ -64,6 +67,7 @@ export default function FileList({
   } = useFileList({ initialViewMode: viewMode, fileCount: files.length })
 
   const { showAlert } = useAlert()
+  const queryClient = useQueryClient()
 
   const [contextMenu, setContextMenu] = React.useState<{
     file: FileItem
@@ -218,7 +222,10 @@ export default function FileList({
   }, [processedFiles, onSelectionChange, selectedItems])
 
   const { folderContextMenuItem, fileContextMenuItem } = useMockMenuItems()
+  const isTrashContextMenu = contextMenuMode === 'trash'
   const downloadFileMutation = useDownloadFile()
+  const restoreTrashItemMutation = useRestoreTrashItem()
+  const deleteTrashItemMutation = useDeleteTrashItem()
 
   React.useEffect(() => {
     setViewMode(viewMode)
@@ -233,8 +240,40 @@ export default function FileList({
   const currentView = viewModeConfigs[currentViewMode]
 
   const enhancedFolderContextMenuItem = React.useMemo(
-    () =>
-      folderContextMenuItem.map(item => {
+    () => {
+      const baseItems = isTrashContextMenu
+        ? folderContextMenuItem.filter(item => ['Delete', 'Download', 'Details'].includes(item.label))
+        : folderContextMenuItem
+
+      const itemsWithRestore = isTrashContextMenu
+        ? [
+            {
+              label: 'Restore',
+              icon: ArrowUturnRightIcon,
+              action: (folder: FileItem) => {
+                if (!folder.id) return
+                const id = Number(folder.id)
+                if (Number.isNaN(id)) return
+                const type: 'file' | 'folder' = (folder.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+                restoreTrashItemMutation.mutate(
+                  { id, type },
+                  {
+                    onSuccess: () => {
+                      showAlert({ type: 'success', message: `Restored "${folder.name}" successfully.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
+                    },
+                    onError: () => {
+                      showAlert({ type: 'error', message: `Failed to restore "${folder.name}".` })
+                    },
+                  },
+                )
+              },
+            },
+            ...baseItems,
+          ]
+        : baseItems
+
+      return itemsWithRestore.map(item => {
         if (item.label === 'Copy link') {
           return {
             ...item,
@@ -259,6 +298,25 @@ export default function FileList({
           return {
             ...item,
             action: (folder: FileItem) => {
+              if (isTrashContextMenu) {
+                if (!folder.id) return
+                const id = Number(folder.id)
+                if (Number.isNaN(id)) return
+                const type: 'file' | 'folder' = (folder.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+                deleteTrashItemMutation.mutate(
+                  { id, type },
+                  {
+                    onSuccess: () => {
+                      showAlert({ type: 'success', message: `Deleted "${folder.name}" permanently.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
+                    },
+                    onError: () => {
+                      showAlert({ type: 'error', message: `Failed to delete "${folder.name}".` })
+                    },
+                  },
+                )
+                return
+              }
               setDeleteFolderDialog({ open: true, folder })
             },
           }
@@ -307,13 +365,52 @@ export default function FileList({
           }
         }
         return item
-      }),
-    [folderContextMenuItem, showAlert]
+      })
+    },
+    [
+      deleteTrashItemMutation,
+      folderContextMenuItem,
+      isTrashContextMenu,
+      restoreTrashItemMutation,
+      showAlert,
+    ]
   )
 
   const enhancedFileContextMenuItem = React.useMemo(
-    () =>
-      fileContextMenuItem.map(item => {
+    () => {
+      const baseItems = isTrashContextMenu
+        ? fileContextMenuItem.filter(item => ['Delete', 'Download', 'Details'].includes(item.label))
+        : fileContextMenuItem
+
+      const itemsWithRestore = isTrashContextMenu
+        ? [
+            {
+              label: 'Restore',
+              icon: ArrowUturnRightIcon,
+              action: (file: FileItem) => {
+                if (!file.id) return
+                const id = Number(file.id)
+                if (Number.isNaN(id)) return
+                const type: 'file' | 'folder' = (file.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+                restoreTrashItemMutation.mutate(
+                  { id, type },
+                  {
+                    onSuccess: () => {
+                      showAlert({ type: 'success', message: `Restored "${file.name}" successfully.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
+                    },
+                    onError: () => {
+                      showAlert({ type: 'error', message: `Failed to restore "${file.name}".` })
+                    },
+                  },
+                )
+              },
+            },
+            ...baseItems,
+          ]
+        : baseItems
+
+      return itemsWithRestore.map(item => {
         if (item.label === 'Copy link') {
           return {
             ...item,
@@ -338,6 +435,25 @@ export default function FileList({
           return {
             ...item,
             action: (file: FileItem) => {
+              if (isTrashContextMenu) {
+                if (!file.id) return
+                const id = Number(file.id)
+                if (Number.isNaN(id)) return
+                const type: 'file' | 'folder' = (file.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+                deleteTrashItemMutation.mutate(
+                  { id, type },
+                  {
+                    onSuccess: () => {
+                      showAlert({ type: 'success', message: `Deleted "${file.name}" permanently.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
+                    },
+                    onError: () => {
+                      showAlert({ type: 'error', message: `Failed to delete "${file.name}".` })
+                    },
+                  },
+                )
+                return
+              }
               if (!file.id) return
               setDeleteFileDialog({ open: true, file })
             },
@@ -412,8 +528,16 @@ export default function FileList({
           }
         }
         return item
-      }),
-    [fileContextMenuItem, downloadFileMutation, showAlert]
+      })
+    },
+    [
+      deleteTrashItemMutation,
+      downloadFileMutation,
+      fileContextMenuItem,
+      isTrashContextMenu,
+      restoreTrashItemMutation,
+      showAlert,
+    ]
   )
 
   const handleContextMenu = (file: FileItem, index: number, clientX: number, clientY: number) => {
@@ -458,6 +582,24 @@ export default function FileList({
         break
       }
       case 'delete':
+        if (isTrashContextMenu) {
+          // Permanent delete from Trash using trash API
+          for (const item of items) {
+            if (!item.id) continue
+            const id = Number(item.id)
+            if (Number.isNaN(id)) continue
+            const type: 'file' | 'folder' = (item.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+            deleteTrashItemMutation.mutate(
+              { id, type },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ['trash'] })
+                },
+              },
+            )
+          }
+          break
+        }
         if (items.length > 1) {
           // Multiple items - use batch dialog
           setDeleteMultipleDialog({ open: true, items })
@@ -551,6 +693,23 @@ export default function FileList({
       case 'details':
         if (items.length === 1) {
           setDetailFile(firstItem)
+        }
+        break
+      case 'restore':
+        if (!isTrashContextMenu) break
+        for (const item of items) {
+          if (!item.id) continue
+          const id = Number(item.id)
+          if (Number.isNaN(id)) continue
+          const type: 'file' | 'folder' = (item.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+          restoreTrashItemMutation.mutate(
+            { id, type },
+            {
+              onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['trash'] })
+              },
+            },
+          )
         }
         break
       case 'deselectAll':
