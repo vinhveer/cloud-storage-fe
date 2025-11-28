@@ -2,6 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { useFileList } from './useFileList'
 import { ChevronDownIcon, CheckCircleIcon, ArrowUturnRightIcon } from '@heroicons/react/24/outline'
+import { useQueryClient } from '@tanstack/react-query'
 import ListView from '@/components/FileList/views/ListView'
 import GridView from '@/components/FileList/views/GridView'
 import TilesView from '@/components/FileList/views/TilesView'
@@ -66,6 +67,7 @@ export default function FileList({
   } = useFileList({ initialViewMode: viewMode, fileCount: files.length })
 
   const { showAlert } = useAlert()
+  const queryClient = useQueryClient()
 
   const [contextMenu, setContextMenu] = React.useState<{
     file: FileItem
@@ -258,6 +260,7 @@ export default function FileList({
                   {
                     onSuccess: () => {
                       showAlert({ type: 'success', message: `Restored "${folder.name}" successfully.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
                     },
                     onError: () => {
                       showAlert({ type: 'error', message: `Failed to restore "${folder.name}".` })
@@ -305,6 +308,7 @@ export default function FileList({
                   {
                     onSuccess: () => {
                       showAlert({ type: 'success', message: `Deleted "${folder.name}" permanently.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
                     },
                     onError: () => {
                       showAlert({ type: 'error', message: `Failed to delete "${folder.name}".` })
@@ -393,6 +397,7 @@ export default function FileList({
                   {
                     onSuccess: () => {
                       showAlert({ type: 'success', message: `Restored "${file.name}" successfully.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
                     },
                     onError: () => {
                       showAlert({ type: 'error', message: `Failed to restore "${file.name}".` })
@@ -440,6 +445,7 @@ export default function FileList({
                   {
                     onSuccess: () => {
                       showAlert({ type: 'success', message: `Deleted "${file.name}" permanently.` })
+                      queryClient.invalidateQueries({ queryKey: ['trash'] })
                     },
                     onError: () => {
                       showAlert({ type: 'error', message: `Failed to delete "${file.name}".` })
@@ -583,7 +589,14 @@ export default function FileList({
             const id = Number(item.id)
             if (Number.isNaN(id)) continue
             const type: 'file' | 'folder' = (item.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
-            deleteTrashItemMutation.mutate({ id, type })
+            deleteTrashItemMutation.mutate(
+              { id, type },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ['trash'] })
+                },
+              },
+            )
           }
           break
         }
@@ -689,7 +702,14 @@ export default function FileList({
           const id = Number(item.id)
           if (Number.isNaN(id)) continue
           const type: 'file' | 'folder' = (item.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
-          restoreTrashItemMutation.mutate({ id, type })
+          restoreTrashItemMutation.mutate(
+            { id, type },
+            {
+              onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['trash'] })
+              },
+            },
+          )
         }
         break
       case 'deselectAll':
