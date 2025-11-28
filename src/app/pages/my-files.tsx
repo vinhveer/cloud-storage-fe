@@ -10,6 +10,7 @@ import SelectionToolbar, { type SelectionToolbarAction } from '@/components/File
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import { getFolderContents } from '@/api/features/folder/folder.api'
 import { getFolderBreadcrumb } from '@/api/features/folder/folder.api'
+import { getFilePreview } from '@/api/features/file/file.api'
 import { qk } from '@/api/query/keys'
 
 export default function MyFilesPage() {
@@ -98,12 +99,22 @@ export default function MyFilesPage() {
     return items
   }, [breadcrumbData])
 
-  const handleItemOpen = (file: FileItem) => {
+  const handleItemOpen = async (file: FileItem) => {
     if (file.type === 'Folder' && file.id) {
       navigate({
         to: '/my-files',
         search: { folderId: file.id.toString() }
       })
+    } else if (file.id) {
+      // Open file in new tab using preview URL
+      try {
+        const preview = await getFilePreview(Number(file.id))
+        if (preview.preview_url) {
+          window.open(preview.preview_url, '_blank')
+        }
+      } catch (error) {
+        console.error('Failed to get file preview:', error)
+      }
     }
   }
 
