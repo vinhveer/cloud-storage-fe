@@ -19,6 +19,8 @@ export function useUploadFile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
       queryClient.invalidateQueries({ queryKey: ['files'], exact: false })
+      // Dispatch event to notify MyFilesPage to refresh
+      window.dispatchEvent(new CustomEvent('file-uploaded'))
     },
   })
 }
