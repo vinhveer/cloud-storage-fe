@@ -50,7 +50,7 @@ export default function FileList({
   onSelectionToolbarAction,
   actionRef,
   contextMenuMode = 'default',
-}: Readonly<FileListProps>) {
+}: Readonly<FileListProps & { contextMenuMode?: 'default' | 'trash' }>) {
   const {
     dropdownOpen,
     setDropdownOpen,
@@ -79,6 +79,14 @@ export default function FileList({
   const dropdownRef = React.useRef<HTMLDivElement | null>(null)
 
   const [detailFile, setDetailFile] = React.useState<FileItem | null>(null)
+
+  // Highlighted item index (single click highlight, not selection mode)
+  const [highlightedIndex, setHighlightedIndex] = React.useState<number | null>(null)
+
+  // Handle single click to highlight an item
+  const handleItemClick = React.useCallback((_file: FileItem, index: number) => {
+    setHighlightedIndex(index)
+  }, [])
 
   const [shareFileDialog, setShareFileDialog] = React.useState<{
     open: boolean
@@ -247,30 +255,30 @@ export default function FileList({
 
       const itemsWithRestore = isTrashContextMenu
         ? [
-            {
-              label: 'Restore',
-              icon: ArrowUturnRightIcon,
-              action: (folder: FileItem) => {
-                if (!folder.id) return
-                const id = Number(folder.id)
-                if (Number.isNaN(id)) return
-                const type: 'file' | 'folder' = (folder.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
-                restoreTrashItemMutation.mutate(
-                  { id, type },
-                  {
-                    onSuccess: () => {
-                      showAlert({ type: 'success', message: `Restored "${folder.name}" successfully.` })
-                      queryClient.invalidateQueries({ queryKey: ['trash'] })
-                    },
-                    onError: () => {
-                      showAlert({ type: 'error', message: `Failed to restore "${folder.name}".` })
-                    },
+          {
+            label: 'Restore',
+            icon: ArrowUturnRightIcon,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              const id = Number(folder.id)
+              if (Number.isNaN(id)) return
+              const type: 'file' | 'folder' = (folder.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+              restoreTrashItemMutation.mutate(
+                { id, type },
+                {
+                  onSuccess: () => {
+                    showAlert({ type: 'success', message: `Restored "${folder.name}" successfully.` })
+                    queryClient.invalidateQueries({ queryKey: ['trash'] })
                   },
-                )
-              },
+                  onError: () => {
+                    showAlert({ type: 'error', message: `Failed to restore "${folder.name}".` })
+                  },
+                },
+              )
             },
-            ...baseItems,
-          ]
+          },
+          ...baseItems,
+        ]
         : baseItems
 
       return itemsWithRestore.map(item => {
@@ -384,30 +392,30 @@ export default function FileList({
 
       const itemsWithRestore = isTrashContextMenu
         ? [
-            {
-              label: 'Restore',
-              icon: ArrowUturnRightIcon,
-              action: (file: FileItem) => {
-                if (!file.id) return
-                const id = Number(file.id)
-                if (Number.isNaN(id)) return
-                const type: 'file' | 'folder' = (file.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
-                restoreTrashItemMutation.mutate(
-                  { id, type },
-                  {
-                    onSuccess: () => {
-                      showAlert({ type: 'success', message: `Restored "${file.name}" successfully.` })
-                      queryClient.invalidateQueries({ queryKey: ['trash'] })
-                    },
-                    onError: () => {
-                      showAlert({ type: 'error', message: `Failed to restore "${file.name}".` })
-                    },
+          {
+            label: 'Restore',
+            icon: ArrowUturnRightIcon,
+            action: (file: FileItem) => {
+              if (!file.id) return
+              const id = Number(file.id)
+              if (Number.isNaN(id)) return
+              const type: 'file' | 'folder' = (file.type ?? '').toLowerCase() === 'folder' ? 'folder' : 'file'
+              restoreTrashItemMutation.mutate(
+                { id, type },
+                {
+                  onSuccess: () => {
+                    showAlert({ type: 'success', message: `Restored "${file.name}" successfully.` })
+                    queryClient.invalidateQueries({ queryKey: ['trash'] })
                   },
-                )
-              },
+                  onError: () => {
+                    showAlert({ type: 'error', message: `Failed to restore "${file.name}".` })
+                  },
+                },
+              )
             },
-            ...baseItems,
-          ]
+          },
+          ...baseItems,
+        ]
         : baseItems
 
       return itemsWithRestore.map(item => {
@@ -874,7 +882,9 @@ export default function FileList({
               isSelected={isSelected}
               toggleItem={toggleItem}
               onItemOpen={onItemOpen}
+              onItemClick={handleItemClick}
               onItemContext={handleContextMenu}
+              highlightedIndex={highlightedIndex}
             />
           )}
 
@@ -885,7 +895,9 @@ export default function FileList({
               isSelected={isSelected}
               toggleItem={toggleItem}
               onItemOpen={onItemOpen}
+              onItemClick={handleItemClick}
               onItemContext={handleContextMenu}
+              highlightedIndex={highlightedIndex}
             />
           )}
 
@@ -896,8 +908,10 @@ export default function FileList({
               isSelected={isSelected}
               toggleItem={toggleItem}
               onItemOpen={onItemOpen}
+              onItemClick={handleItemClick}
               onItemContext={handleContextMenu}
               tilesAlignLeft={tilesAlignLeft}
+              highlightedIndex={highlightedIndex}
             />
           )}
 
@@ -908,7 +922,9 @@ export default function FileList({
               isSelected={isSelected}
               toggleItem={toggleItem}
               onItemOpen={onItemOpen}
+              onItemClick={handleItemClick}
               onItemContext={handleContextMenu}
+              highlightedIndex={highlightedIndex}
             />
           )}
         </div>
