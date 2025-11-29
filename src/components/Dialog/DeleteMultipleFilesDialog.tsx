@@ -5,7 +5,6 @@ import { useDeleteFile } from '@/api/features/file/file.mutations'
 import { useDeleteFolder } from '@/api/features/folder/folder.mutations'
 import type { FileItem } from '@/components/FileList/types'
 import { useAlert } from '@/components/Alert/AlertProvider'
-import { useQueryClient } from '@tanstack/react-query'
 
 export type DeleteMultipleFilesDialogProps = Omit<DialogProps, 'onConfirm' | 'children' | 'title'> & {
     title?: string
@@ -25,7 +24,6 @@ export default function DeleteMultipleFilesDialog({
     const deleteFileMutation = useDeleteFile()
     const deleteFolderMutation = useDeleteFolder()
     const { showAlert } = useAlert()
-    const queryClient = useQueryClient()
 
     const [isDeleting, setIsDeleting] = React.useState(false)
     const [progress, setProgress] = React.useState({ current: 0, total: 0 })
@@ -60,8 +58,6 @@ export default function DeleteMultipleFilesDialog({
 
         setIsDeleting(false)
 
-        queryClient.invalidateQueries({ queryKey: ['trash'], exact: false })
-
         if (errorCount === 0) {
             showAlert({ type: 'success', message: `Deleted ${successCount} item${successCount > 1 ? 's' : ''} successfully.` })
         } else if (successCount === 0) {
@@ -71,7 +67,7 @@ export default function DeleteMultipleFilesDialog({
         }
 
         onSuccess?.()
-    }, [deleteFileMutation, deleteFolderMutation, items, onSuccess, queryClient, showAlert])
+    }, [items, deleteFileMutation, deleteFolderMutation, onSuccess, showAlert])
 
     return (
         <Dialog
