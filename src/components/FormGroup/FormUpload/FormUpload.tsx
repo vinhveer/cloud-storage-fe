@@ -15,8 +15,9 @@ export default function FormUpload({
   onFilesChange,
   files,
   id,
+  hideLabel = false,
   ...rest
-}: FormUploadProps) {
+}: FormUploadProps & { hideLabel?: boolean }) {
   const [internalFiles, setInternalFiles] = React.useState<File[]>([])
   const filesView = files ?? internalFiles
 
@@ -88,6 +89,13 @@ export default function FormUpload({
     return map[ext] ?? { bg: 'bg-gray-100', text: 'text-gray-700' }
   }
 
+  const getDisplayExt = (ext: string) => {
+    if (!ext) return 'FILE'
+    if (ext.length <= 4) return ext.toUpperCase()
+    // For uncommon or very long extensions (e.g. .crdownload), show generic label
+    return 'FILE'
+  }
+
   const removeAt = (idx: number) => {
     const next = filesView.filter((_, i) => i !== idx)
     setInternalFiles(next)
@@ -96,7 +104,7 @@ export default function FormUpload({
 
   return (
     <div className={clsx('formupload-root w-full', className)}>
-      {label && (
+      {label && !hideLabel && (
         <label className="formupload-label">
           {label}
           {required && <span className="formupload-required">*</span>}
@@ -141,23 +149,32 @@ export default function FormUpload({
       </button>
 
       {filesView.length > 0 && (
-        <div className="mt-3 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <div className="mt-3 space-y-2">
           {filesView.map((f, idx) => {
             const ext = getExtension(f.name)
             const style = getExtStyle(ext)
             return (
-              <div key={`${f.name}-${idx}`} className="rounded-md border border-gray-200 bg-white p-3 flex items-center gap-3">
-                <div className={clsx('flex items-center justify-center rounded-md w-12 h-12 font-semibold', style.bg, style.text)}>
-                  {ext ? ext.toUpperCase() : 'FILE'}
+              <div
+                key={`${f.name}-${idx}`}
+                className="rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-3 flex items-center gap-3"
+              >
+                <div
+                  className={clsx(
+                    'flex items-center justify-center rounded-md w-12 h-12 font-semibold text-sm',
+                    style.bg,
+                    style.text
+                  )}
+                >
+                  {getDisplayExt(ext)}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm text-gray-900">{f.name}</div>
-                  <div className="text-xs text-gray-500">{formatSize(f.size)}</div>
+                  <div className="truncate text-sm text-gray-900 dark:text-gray-100">{f.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{formatSize(f.size)}</div>
                 </div>
                 <button
                   type="button"
                   aria-label={`Remove ${f.name}`}
-                  className="shrink-0 rounded p-1 hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                  className="shrink-0 rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                   onClick={() => removeAt(idx)}
                 >
                   <XMarkIcon className="h-5 w-5" aria-hidden="true" />

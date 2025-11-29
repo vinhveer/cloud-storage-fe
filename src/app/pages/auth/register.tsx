@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import FormCard from '@/components/FormCard/FormCard'
 import FormGroup from '@/components/FormGroup/FormGroup'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
@@ -14,6 +15,8 @@ export default function RegisterPage() {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
+  const [showPassword, setShowPassword] = React.useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
   const registerMutation = useRegister()
   const { showAlert } = useAlert()
   const navigate = useNavigate()
@@ -107,23 +110,51 @@ export default function RegisterPage() {
         </FormGroup>
 
         <FormGroup label="Password">
-          <FormInput
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <FormInput
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="w-5 h-5" />
+              ) : (
+                <EyeIcon className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </FormGroup>
 
         <FormGroup label="Confirm Password">
-          <FormInput
-            type="password"
-            placeholder="••••••••"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <FormInput
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              tabIndex={-1}
+            >
+              {showConfirmPassword ? (
+                <EyeSlashIcon className="w-5 h-5" />
+              ) : (
+                <EyeIcon className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </FormGroup>
 
         <div className="pt-2">

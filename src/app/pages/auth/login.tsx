@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import FormCard from '@/components/FormCard/FormCard'
 import FormGroup from '@/components/FormGroup/FormGroup'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
@@ -11,6 +12,7 @@ import { useAlert } from '@/components/Alert'
 export default function LoginPage() {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [showPassword, setShowPassword] = React.useState(false)
   const [showForgotPassword, setShowForgotPassword] = React.useState(false)
   const navigate = useNavigate()
   const loginMutation = useLogin()
@@ -86,13 +88,27 @@ export default function LoginPage() {
         </FormGroup>
 
         <FormGroup label="Password">
-          <FormInput
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <FormInput
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="w-5 h-5" />
+              ) : (
+                <EyeIcon className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </FormGroup>
 
         <div className="pt-2">
