@@ -3,11 +3,22 @@ import FileList from '@/components/FileList'
 import { Button } from '@/components/Button/Button'
 import type { FileItem } from '@/components/FileList'
 import type { SelectionToolbarAction } from '@/components/FileList/SelectionToolbar'
-import { TrashIcon, ArrowDownTrayIcon, InformationCircleIcon, ArrowUturnRightIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, InformationCircleIcon, ArrowUturnRightIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '@/components/Alert'
 import { useEmptyTrash } from '@/api/features/trash/trash.mutations'
 import { useTrash } from '@/api/features/trash/trash.queries'
 import { useQueryClient } from '@tanstack/react-query'
+
+const formatFileSize = (bytes: number): string => {
+  if (Number.isNaN(bytes) || bytes < 0) return '0 B'
+  if (bytes < 1024) return `${bytes} B`
+  const kb = bytes / 1024
+  if (kb < 1024) return `${kb.toFixed(2)} KB`
+  const mb = kb / 1024
+  if (mb < 1024) return `${mb.toFixed(2)} MB`
+  const gb = mb / 1024
+  return `${gb.toFixed(2)} GB`
+}
 
 export default function TrashPage() {
   const { showAlert } = useAlert()
@@ -21,9 +32,9 @@ export default function TrashPage() {
     return trashQuery.data.items.map(item => ({
       id: item.id,
       name: item.title,
-      type: item.type === 'folder' ? 'Folder' : 'File',
+      type: item.type === 'folder' ? 'Folder' : (item.file_extension ?? 'file').toUpperCase(),
       modified: item.deleted_at,
-      size: item.file_size != null ? `${item.file_size} B` : undefined,
+      size: item.file_size != null ? formatFileSize(item.file_size) : undefined,
     }))
   }, [trashQuery.data])
 
@@ -79,15 +90,7 @@ export default function TrashPage() {
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-lg transition-colors"
               >
                 <TrashIcon className="w-4 h-4" />
-                <span className="hidden sm:inline">Delete permanently</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => selectionActionRef.current?.('download', selectedItems)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                <ArrowDownTrayIcon className="w-4 h-4" />
-                <span className="hidden sm:inline">Download</span>
+                <span className="hidden sm:inline">Delete</span>
               </button>
               <button
                 type="button"
