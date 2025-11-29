@@ -21,6 +21,12 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
 
     if (!open) return null
 
+    const handleClose = () => {
+        // Clear selected files when closing modal so next open starts clean
+        setFiles([])
+        onClose()
+    }
+
     const beginUpload = async () => {
         if (files.length === 0) return
         setStarting(true)
@@ -49,7 +55,7 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
         })
 
         setStarting(false)
-        onClose()
+        handleClose()
     }
 
     // Helper action creators using file identity
@@ -57,14 +63,21 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
 
     return (
         <div className="fixed inset-0 z-[70] flex items-center justify-center">
-            <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={onClose} />
-            <div className="relative w-full max-w-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg p-6 mx-4">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Upload files</h2>
-                <FormUpload multiple files={files} onFilesChange={setFiles} label="Chọn hoặc kéo thả tệp" />
-                <div className="mt-6 flex justify-end gap-3">
+            <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={handleClose} />
+            <div className="relative w-full max-w-lg max-h-[80vh] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg flex flex-col mx-4">
+                <div className="p-6 pb-3">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Upload files</h2>
+                </div>
+                <div className="px-6 pb-3 flex-1 min-h-0 overflow-y-auto">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Chọn hoặc kéo thả tệp
+                    </p>
+                    <FormUpload multiple files={files} onFilesChange={setFiles} hideLabel />
+                </div>
+                <div className="px-6 pt-3 pb-6 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="px-4 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                         Hủy
