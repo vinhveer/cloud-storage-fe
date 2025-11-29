@@ -59,6 +59,7 @@ export default function FileList({
     changeViewMode,
     selectionMode,
     toggleSelectionMode,
+    enableSelectionMode,
     selected: selectedItems,
     isSelected,
     toggleItem,
@@ -83,10 +84,12 @@ export default function FileList({
   // Highlighted item index (single click highlight, not selection mode)
   const [highlightedIndex, setHighlightedIndex] = React.useState<number | null>(null)
 
-  // Handle single click to highlight an item
-  const handleItemClick = React.useCallback((_file: FileItem, index: number) => {
-    setHighlightedIndex(index)
-  }, [])
+  // Handle single click to open/view an item
+  const handleItemClick = React.useCallback((file: FileItem, index: number) => {
+    if (!selectionMode) {
+      onItemOpen?.(file, index)
+    }
+  }, [selectionMode, onItemOpen])
 
   const [shareFileDialog, setShareFileDialog] = React.useState<{
     open: boolean

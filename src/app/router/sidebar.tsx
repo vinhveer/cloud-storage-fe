@@ -1,4 +1,4 @@
-import { HomeIcon, FolderIcon, ShareIcon, TrashIcon, Squares2X2Icon, UsersIcon, EyeIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, FolderIcon, ShareIcon, TrashIcon, Squares2X2Icon, UsersIcon, EyeIcon, CircleStackIcon } from '@heroicons/react/24/outline'
 import type { SidebarItemData } from '@/components/Sidebar/types'
 import { sampleMenuItems } from '@/components/MDX/sample-data.mock'
 import { isAdmin as readAdminFromGuard } from '@/utils/roleGuard'
@@ -17,6 +17,7 @@ function getAdminItems(isAdminUser: boolean): SidebarItemData[] {
   return [
     { key: 'admin-overview', title: 'Overview', href: '/samples/admin/overview', icon: <EyeIcon className="w-5 h-5" />, },
     { key: 'admin-user-management', title: 'User Management', href: '/samples/admin/user-management', icon: <UsersIcon className="w-5 h-5" />, },
+    { key: 'admin-storage-users', title: 'Storage Users', href: '/samples/admin/storage-users', icon: <CircleStackIcon className="w-5 h-5" />, },
   ]
 }
 

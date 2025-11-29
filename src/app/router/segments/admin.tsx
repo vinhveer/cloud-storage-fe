@@ -3,6 +3,7 @@ import { rootRoute } from '../root'
 import AppLayout from '@/app/layout/AppLayout'
 import AdminOverviewPage from '@/app/pages/samples/admin/overview'
 import AdminUserManagementPage from '@/app/pages/samples/admin/user-management'
+import AdminStorageUsersPage from '@/app/pages/samples/admin/storage-users'
 import { isAdmin } from '@/utils/roleGuard'
 import { redirect } from '@tanstack/react-router'
 
@@ -37,9 +38,17 @@ const adminUserManagementRoute = createAccessRoute({
     access: 'protected',
 })
 
+const adminStorageUsersRoute = createAccessRoute({
+    getParentRoute: () => adminRoute,
+    path: '/storage-users',
+    component: AdminStorageUsersPage,
+    access: 'protected',
+})
+
 export function getAdminRoutes() {
     return adminRoute.addChildren([
         adminOverviewRoute,
         adminUserManagementRoute,
+        adminStorageUsersRoute,
     ])
 }
