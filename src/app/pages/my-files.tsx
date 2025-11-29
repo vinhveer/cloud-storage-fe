@@ -14,6 +14,17 @@ import { getFilePreview } from '@/api/features/file/file.api'
 import { qk } from '@/api/query/keys'
 import { useFileDetail } from '@/api/features/file/file.queries'
 
+const formatFileSize = (bytes: number): string => {
+  if (Number.isNaN(bytes) || bytes < 0) return '0 B'
+  if (bytes < 1024) return `${bytes} B`
+  const kb = bytes / 1024
+  if (kb < 1024) return `${kb.toFixed(2)} KB`
+  const mb = kb / 1024
+  if (mb < 1024) return `${mb.toFixed(2)} MB`
+  const gb = mb / 1024
+  return `${gb.toFixed(2)} GB`
+}
+
 export default function MyFilesPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -90,17 +101,11 @@ export default function MyFilesPage() {
     }))
 
     const files = contents.files.map((file) => {
-      // Format file size
-      const sizeInKB = file.file_size / 1024
-      const sizeInMB = sizeInKB / 1024
-      const formattedSize = sizeInMB >= 1
-        ? `${sizeInMB.toFixed(1)} MB`
-        : `${sizeInKB.toFixed(0)} KB`
-
       return {
         id: file.file_id,
         name: file.display_name,
         type: file.file_extension.toUpperCase(),
+
         modified: file.last_opened_at
           ? new Date(file.last_opened_at).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -108,7 +113,7 @@ export default function MyFilesPage() {
             day: 'numeric',
           })
           : 'Never opened',
-        size: formattedSize,
+        size: file.file_size != null ? formatFileSize(file.file_size) : undefined,
       }
     })
 

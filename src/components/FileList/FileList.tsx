@@ -250,7 +250,7 @@ export default function FileList({
   const enhancedFolderContextMenuItem = React.useMemo(
     () => {
       const baseItems = isTrashContextMenu
-        ? folderContextMenuItem.filter(item => ['Delete', 'Download', 'Details'].includes(item.label))
+        ? folderContextMenuItem.filter(item => ['Delete', 'Details'].includes(item.label))
         : folderContextMenuItem
 
       const itemsWithRestore = isTrashContextMenu
@@ -269,6 +269,7 @@ export default function FileList({
                   onSuccess: () => {
                     showAlert({ type: 'success', message: `Restored "${folder.name}" successfully.` })
                     queryClient.invalidateQueries({ queryKey: ['trash'] })
+                    queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
                   },
                   onError: () => {
                     showAlert({ type: 'error', message: `Failed to restore "${folder.name}".` })
@@ -387,7 +388,7 @@ export default function FileList({
   const enhancedFileContextMenuItem = React.useMemo(
     () => {
       const baseItems = isTrashContextMenu
-        ? fileContextMenuItem.filter(item => ['Delete', 'Download', 'Details'].includes(item.label))
+        ? fileContextMenuItem.filter(item => ['Delete', 'Details'].includes(item.label))
         : fileContextMenuItem
 
       const itemsWithRestore = isTrashContextMenu
@@ -406,6 +407,7 @@ export default function FileList({
                   onSuccess: () => {
                     showAlert({ type: 'success', message: `Restored "${file.name}" successfully.` })
                     queryClient.invalidateQueries({ queryKey: ['trash'] })
+                    queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
                   },
                   onError: () => {
                     showAlert({ type: 'error', message: `Failed to restore "${file.name}".` })
@@ -715,6 +717,7 @@ export default function FileList({
             {
               onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['trash'] })
+                queryClient.invalidateQueries({ queryKey: ['folder'], exact: false })
               },
             },
           )
