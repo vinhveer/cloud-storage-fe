@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function TilesView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext, tilesAlignLeft }: FileListViewProps) {
+export default function TilesView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, tilesAlignLeft, highlightedIndex }: FileListViewProps) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -22,6 +22,11 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                     if (selectionMode) {
                       toggleItem(index)
                     } else {
+                      onItemClick?.(file, index)
+                    }
+                  }}
+                  onDoubleClick={() => {
+                    if (!selectionMode) {
                       onItemOpen?.(file, index)
                     }
                   }}
@@ -30,7 +35,11 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                     onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
                   }}
                   aria-pressed={selectionMode ? isSelected(index) : undefined}
-                  className={clsx('relative flex items-center justify-start p-4 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer w-full', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-gray-50 dark:bg-gray-900 border-transparent')}
+                  className={clsx(
+                    'relative flex items-center justify-start p-4 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer w-full',
+                    selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-gray-50 dark:bg-gray-900 border-transparent',
+                    !selectionMode && highlightedIndex === index && 'bg-blue-50 dark:bg-blue-900/30 border-blue-500'
+                  )}
                 >
                   {selectionMode && (
                     <div className="absolute top-2 left-2">
@@ -60,6 +69,11 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                   if (selectionMode) {
                     toggleItem(index)
                   } else {
+                    onItemClick?.(file, index)
+                  }
+                }}
+                onDoubleClick={() => {
+                  if (!selectionMode) {
                     onItemOpen?.(file, index)
                   }
                 }}
@@ -68,7 +82,11 @@ export default function TilesView({ files, selectionMode, isSelected, toggleItem
                   onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
                 }}
                 aria-pressed={selectionMode ? isSelected(index) : undefined}
-                className={clsx('relative flex items-center justify-start p-4 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-gray-50 dark:bg-gray-900 border-transparent')}
+                className={clsx(
+                  'relative flex items-center justify-start p-4 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer',
+                  selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-gray-50 dark:bg-gray-900 border-transparent',
+                  !selectionMode && highlightedIndex === index && 'bg-blue-50 dark:bg-blue-900/30 border-blue-500'
+                )}
               >
                 {selectionMode && (
                   <div className="absolute top-2 left-2">

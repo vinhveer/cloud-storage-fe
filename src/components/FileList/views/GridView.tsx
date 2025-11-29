@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext }: FileListViewProps) {
+export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, highlightedIndex }: FileListViewProps) {
   return (
     <div className="p-6">
       {files.length === 0 ? (
@@ -20,6 +20,11 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
                 if (selectionMode) {
                   toggleItem(index)
                 } else {
+                  onItemClick?.(file, index)
+                }
+              }}
+              onDoubleClick={() => {
+                if (!selectionMode) {
                   onItemOpen?.(file, index)
                 }
               }}
@@ -29,7 +34,11 @@ export default function GridView({ files, selectionMode, isSelected, toggleItem,
               }}
               type="button"
               aria-pressed={selectionMode ? isSelected(index) : undefined}
-              className={clsx('relative flex flex-col items-center p-3 rounded-lg border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer', selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-white dark:bg-gray-900 border-transparent')}
+              className={clsx(
+                'relative flex flex-col items-center p-3 rounded-lg border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer',
+                selectionMode && isSelected(index) ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500' : 'bg-white dark:bg-gray-900 border-transparent',
+                !selectionMode && highlightedIndex === index && 'bg-blue-50 dark:bg-blue-900/30 border-blue-500'
+              )}
             >
               {selectionMode && (
                 <div className="absolute top-1 right-1">

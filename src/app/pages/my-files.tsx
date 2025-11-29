@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 
 import FileList from '@/components/FileList'
@@ -10,11 +10,13 @@ import SelectionToolbar, { type SelectionToolbarAction } from '@/components/File
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import { getFolderContents } from '@/api/features/folder/folder.api'
 import { getFolderBreadcrumb } from '@/api/features/folder/folder.api'
+import { getFilePreview } from '@/api/features/file/file.api'
 import { qk } from '@/api/query/keys'
 import { useFileDetail } from '@/api/features/file/file.queries'
 
 export default function MyFilesPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const search = useSearch({ strict: false }) as { folderId?: string; fileId?: string }
   const currentFolderId = search.folderId ? parseInt(search.folderId, 10) : null
@@ -129,14 +131,34 @@ export default function MyFilesPage() {
     return items
   }, [breadcrumbData])
 
-  const handleItemOpen = (file: FileItem) => {
-    if (file.type === 'Folder' && file.id) {
+  const handleItemOpen = useCallback(async (file: FileItem) => {
+    if (file.type === 'Folder' && file.id != null) {
       navigate({
         to: '/my-files',
         search: { folderId: file.id.toString() }
       })
+    } else if (file.id != null && file.type !== 'Folder') {
+      // Open file in new tab using preview URL
+      try {
+        const preview = await getFilePreview(Number(file.id))
+        if (preview.preview_url) {
+          window.open(preview.preview_url, '_blank')
+        }
+      } catch (error) {
+        console.error('Failed to get file preview:', error)
+      }
     }
-  }
+  }, [navigate])
+
+  // Listen for file upload events to refresh the list
+  useEffect(() => {
+    const handleFileUploaded = () => {
+      queryClient.invalidateQueries({ queryKey: qk.folders.contents(currentFolderId ?? 'root') })
+    }
+
+    window.addEventListener('file-uploaded', handleFileUploaded)
+    return () => window.removeEventListener('file-uploaded', handleFileUploaded)
+  }, [queryClient, currentFolderId])
 
   const handleBreadcrumbClick = (item: { id?: string; label: string }) => {
     if (!item.id) return

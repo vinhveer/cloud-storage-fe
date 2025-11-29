@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon } from '@heroicons/reac
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function ListView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemContext }: FileListViewProps) {
+export default function ListView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, highlightedIndex }: FileListViewProps) {
   return (
     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0 ">
       <thead className="bg-gray-0 dark:bg-gray-800">
@@ -30,6 +30,11 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
               if (selectionMode) {
                 toggleItem(index)
               } else {
+                onItemClick?.(file, index)
+              }
+            }}
+            onDoubleClick={() => {
+              if (!selectionMode) {
                 onItemOpen?.(file, index)
               }
             }}
@@ -37,7 +42,11 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
               e.preventDefault()
               onItemContext?.(file, index, e.clientX, e.clientY, e.currentTarget as HTMLElement)
             }}
-            className={clsx('group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer', selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30')}
+            className={clsx(
+              'group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer',
+              selectionMode && isSelected(index) && 'bg-blue-50 dark:bg-blue-900/30',
+              !selectionMode && highlightedIndex === index && 'bg-blue-50 dark:bg-blue-900/30'
+            )}
           >
             <td className="px-6 py-4 whitespace-nowrap">
               <div className="flex items-center">
