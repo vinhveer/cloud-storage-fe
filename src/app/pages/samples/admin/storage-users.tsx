@@ -21,7 +21,7 @@ function formatBytes(bytes: number): string {
 export default function AdminStorageUsersPage() {
   const [search, setSearch] = React.useState<string>('')
   const [page, setPage] = React.useState<number>(1)
-  const [perPage, setPerPage] = React.useState<number>(15)
+  const [perPage] = React.useState<number>(15)
 
   const params = React.useMemo(
     () => ({
@@ -50,23 +50,26 @@ export default function AdminStorageUsersPage() {
 
   columns.forEach(col => {
     if (col.key === 'storage_limit' || col.key === 'storage_used') {
-      col.render = (value: number) => formatBytes(value)
+      col.render = (value: string | number) => formatBytes(value as number)
     }
     if (col.key === 'usage_percent') {
-      col.render = (value: number) => (
-        <span className={`font-medium ${value >= 90 ? 'text-red-600 dark:text-red-400' : value >= 70 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600 dark:text-gray-400'}`}>
-          {value.toFixed(1)}%
-        </span>
-      )
+      col.render = (value: string | number) => {
+        const numValue = value as number
+        return (
+          <span className={`font-medium ${numValue >= 90 ? 'text-red-600 dark:text-red-400' : numValue >= 70 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600 dark:text-gray-400'}`}>
+            {numValue.toFixed(1)}%
+          </span>
+        )
+      }
     }
     if (col.key === 'role') {
-      col.render = (value: string) => (
+      col.render = (value: string | number) => (
         <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
           value === 'admin'
             ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
             : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
         }`}>
-          {value}
+          {String(value)}
         </span>
       )
     }
