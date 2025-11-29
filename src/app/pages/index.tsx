@@ -1,6 +1,8 @@
 import FileCard from '@/components/FileCard/FileCard'
 import type { IconName } from '@/components/FileCard/types'
 import { useRecentFiles } from '@/api/features/file/file.queries'
+import { useStorageLimit } from '@/api/features/storage/storage.queries'
+import StorageUsage from '@/components/StorageUsage/StorageUsage'
 
 function pickIconFromFileName(name: string): IconName {
   const lower = name.toLowerCase()
@@ -24,6 +26,10 @@ export default function HomePage() {
   const { data, isLoading } = useRecentFiles(8)
   const recentFiles = data?.data ?? []
 
+  const { data: storageData, isLoading: storageLoading } = useStorageLimit()
+  const usedGB = storageData ? storageData.storage_used / (1024 ** 3) : 0
+  const totalGB = storageData ? storageData.storage_limit / (1024 ** 3) : 0
+
   return (
     <div className="space-y-6">
 
@@ -33,6 +39,15 @@ export default function HomePage() {
           A quick overview of your storage usage and recently opened files.
         </p>
       </header>
+
+      <section className="space-y-3">
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Storage</h3>
+        {storageLoading ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">Loading storage info...</p>
+        ) : (
+          <StorageUsage used={usedGB} total={totalGB} precision={2} />
+        )}
+      </section>
 
       <section className="space-y-3">
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Recent files & folders</h3>
