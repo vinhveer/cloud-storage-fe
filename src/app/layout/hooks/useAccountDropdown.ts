@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { UseAccountDropdownOptions } from '@/components/Navbar/AccountDropdown/types'
+import type { UseAccountDropdownOptions } from '@/app/layout/components/Navbar/AccountDropdown/types'
 
 export function useAccountDropdown({ userName, open, defaultOpen = false, onOpenChange }: UseAccountDropdownOptions) {
   const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen)

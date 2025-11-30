@@ -4,14 +4,8 @@ import StorageBreakdownTab from './components/StorageBreakdownTab'
 
 export default function HomePage() {
   return (
-    <div className="space-y-6">
-      <header className="space-y-1">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Home</h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          A quick overview of your storage usage and recently opened files.
-        </p>
-      </header>
-
+    <div className="space-y-2">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Home</h2>
       <Tabs
         tabs={[
           {

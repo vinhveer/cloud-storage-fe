@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouterState } from '@tanstack/react-router'
-import { useSidebar } from '@/components/Sidebar/SidebarContext'
+import { useSidebar } from '@/app/layout/components/Sidebar/SidebarContext'
 import { getItemsForPath, pickActiveKey } from '../sidebar'
 import { useQuery } from '@tanstack/react-query'
 import { getProfile } from '@/api/features/auth/auth.api'

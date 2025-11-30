@@ -1,6 +1,6 @@
 import SidebarItem from './SidebarItem'
-import { useSidebar } from '@/components/Sidebar/SidebarContext'
-import type { SidebarProps } from '@/components/Sidebar/types'
+import { useSidebar } from './SidebarContext'
+import type { SidebarProps } from './types'
 import StorageUsage from '@/components/StorageUsage/StorageUsage'
 import { useStorageLimit } from '@/api/features/storage/storage.queries'
 
@@ -15,10 +15,45 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
   const storageUsedGB = storageLimit ? bytesToGB(storageLimit.storage_used) : 0
   const storageLimitGB = storageLimit ? bytesToGB(storageLimit.storage_limit) : 0
 
+  // Separate base items and admin items
+  const baseItems = items.filter((it) => !it.key.startsWith('admin-'))
+  const adminItems = items.filter((it) => it.key.startsWith('admin-'))
+  const hasAdminItems = adminItems.length > 0
+
   const renderNav = (onItemClick?: () => void) => (
     <div className="p-2 pt-6">
       <nav className="space-y-1">
-        {items.map((it) => (
+        {/* Base items */}
+        {baseItems.map((it) => (
+          <SidebarItem
+            key={it.key}
+            title={it.title}
+            to={it.href}
+            href={it.href}
+            isActive={activeKey === it.key}
+            icon={it.icon}
+            onClick={onItemClick}
+          />
+        ))}
+
+        {/* Storage Usage */}
+        {!isLoadingStorage && storageLimit && (
+          <div className="px-4 py-5">
+            <StorageUsage used={storageUsedGB} total={storageLimitGB} />
+          </div>
+        )}
+
+        {/* Admin section title */}
+        {hasAdminItems && (
+          <div className="px-4 pt-4 pb-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              Admin
+            </h3>
+          </div>
+        )}
+
+        {/* Admin items */}
+        {adminItems.map((it) => (
           <SidebarItem
             key={it.key}
             title={it.title}
@@ -30,14 +65,8 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
           />
         ))}
       </nav>
-      {!isLoadingStorage && storageLimit && (
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 px-2">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
-            Storage Usage
-          </h3>
-          <StorageUsage used={storageUsedGB} total={storageLimitGB} />
-        </div>
-      )}
+
+      
     </div>
   )
 

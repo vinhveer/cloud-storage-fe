@@ -209,7 +209,7 @@
 /* Alert component styles */
 @layer components {
   .alert-root {
-    @apply border rounded-lg px-4 py-1 mb-3;
+    @apply border rounded-lg px-4 py-3 mb-3;
   }
 
   .alert-root--dismissible {

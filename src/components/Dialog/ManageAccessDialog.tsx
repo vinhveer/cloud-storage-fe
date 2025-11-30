@@ -50,12 +50,12 @@ export default function ManageAccessDialog({
                 shareId: shareItem.share_id,
                 userId,
             })
-            showAlert({ type: 'success', message: `Đã xóa quyền truy cập của "${userName}"` })
+            showAlert({ type: 'success', heading: 'Access Removed', message: `Removed access for "${userName}"` })
             // Invalidate queries to refresh data
             await queryClient.invalidateQueries({ queryKey: ['shares'] })
             await queryClient.invalidateQueries({ queryKey: ['share-detail', shareItem.share_id] })
         } catch {
-            showAlert({ type: 'error', message: `Không thể xóa quyền truy cập` })
+            showAlert({ type: 'error', heading: 'Remove Failed', message: `Failed to remove access` })
         }
     }
 

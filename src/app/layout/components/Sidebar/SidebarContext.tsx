@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState, useCallback } from 'react'
-import type { SidebarContextValue, SidebarItemData, SidebarProviderProps } from '@/components/Sidebar/types'
+import type { SidebarContextValue, SidebarItemData, SidebarProviderProps } from './types'
 
 const SidebarContext = createContext<SidebarContextValue | undefined>(undefined)
 

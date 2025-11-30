@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import AccountDropdown from '@/components/Navbar/AccountDropdown/AccountDropdown'
+import AccountDropdown from '@/app/layout/components/Navbar/AccountDropdown/AccountDropdown'
 
 export function AccountDropdownDemoControlled() {
   const [open, setOpen] = useState(false)

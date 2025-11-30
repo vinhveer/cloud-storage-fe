@@ -17,9 +17,9 @@ export type ButtonContentProps = Pick<
 >
 
 export const buttonToSpinnerSize: Record<ControlSize, ControlSize> = {
-  sm: 'md',
-  md: 'lg',
-  lg: 'xl',
-  xl: '2xl',
-  '2xl': '2xl',
+  sm: 'sm',
+  md: 'sm',
+  lg: 'md',
+  xl: 'md',
+  '2xl': 'lg',
 }

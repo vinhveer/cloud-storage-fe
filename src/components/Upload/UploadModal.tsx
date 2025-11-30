@@ -1,4 +1,6 @@
 import React from 'react'
+import { useNavigate, useLocation } from '@tanstack/react-router'
+import { Button } from '@/components/Button/Button'
 import FormUpload from '@/components/FormGroup/FormUpload/FormUpload'
 import { useAppDispatch } from '@/state/store'
 import { startUploads, updateProgressByFile, markSuccessByFile, markErrorByFile } from '@/state/uploads/uploads.slice'
@@ -16,6 +18,8 @@ interface UploadModalProps {
 export default function UploadModal({ open, onClose, folderId = null }: UploadModalProps) {
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
+    const location = useLocation()
     const [files, setFiles] = React.useState<File[]>([])
     const [starting, setStarting] = React.useState(false)
 
@@ -30,15 +34,21 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
     const beginUpload = async () => {
         if (files.length === 0) return
         setStarting(true)
+        
+        // Determine target folder ID
+        // If on my-files page and has folderId, use it; otherwise use root (null)
+        const isMyFilesPage = location.pathname === '/my-files'
+        const targetFolderId = isMyFilesPage && folderId ? folderId : null
+        
         // Add tasks to store
-        dispatch(startUploads(files, folderId))
+        dispatch(startUploads(files, targetFolderId))
         // After dispatch we cannot directly get ids; re-map by file name+size is unreliable.
         // We'll create a local map (file index -> task id) by recreating tasks here.
         // NOTE: Hiện tại slice dùng nanoid nên không lấy trực tiếp id ở đây.
 
         for (const f of files) {
             try {
-                await upload('/api/files', toFormData({ file: f, folder_id: folderId ?? undefined } as any), {
+                await upload('/api/files', toFormData({ file: f, folder_id: targetFolderId ?? undefined } as any), {
                     onProgress: percent => {
                         dispatch(updateProgressByFile({ fileName: f.name, size: f.size, progress: percent }))
                     },
@@ -51,11 +61,16 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
 
         // Invalidate queries to refresh file list
         await queryClient.invalidateQueries({
-            queryKey: qk.folders.contents(folderId ?? 'root')
+            queryKey: qk.folders.contents(targetFolderId ?? 'root')
         })
 
         setStarting(false)
         handleClose()
+        
+        // If not on my-files page, navigate to my-files root after upload
+        if (!isMyFilesPage) {
+            navigate({ to: '/my-files' })
+        }
     }
 
     // Helper action creators using file identity
@@ -70,27 +85,28 @@ export default function UploadModal({ open, onClose, folderId = null }: UploadMo
                 </div>
                 <div className="px-6 pb-3 flex-1 min-h-0 overflow-y-auto">
                     <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Chọn hoặc kéo thả tệp
+                        Select or drag and drop files
                     </p>
                     <FormUpload multiple files={files} onFilesChange={setFiles} hideLabel />
                 </div>
                 <div className="px-6 pt-3 pb-6 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
-                    <button
-                        type="button"
+                    <Button
+                        variant="secondary"
+                        size="md"
                         onClick={handleClose}
-                        className="px-4 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
-                        Hủy
-                    </button>
-                    <button
-                        type="button"
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="md"
                         disabled={files.length === 0 || starting}
                         onClick={beginUpload}
-                        className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        isLoading={starting}
+                        loadingText={`Uploading... (${files.length})`}
                     >
-                        {starting && <span className="animate-spin h-4 w-4 border-2 border-white/60 border-t-transparent rounded-full" />}
-                        Tải lên ({files.length})
-                    </button>
+                        Upload ({files.length})
+                    </Button>
                 </div>
             </div>
         </div>

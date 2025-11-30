@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
 import { Squares2X2Icon } from '@heroicons/react/24/outline'
-import type { SidebarItemProps } from '@/components/Sidebar/types'
+import type { SidebarItemProps } from './types'
 
 export default function SidebarItem({ title, href, to, isActive = false, icon, onClick }: SidebarItemProps) {
   const internalTo = to ?? href

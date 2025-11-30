@@ -57,7 +57,7 @@ export default function TrashPage() {
       <header className="space-y-1">
         {selectedItems.length === 0 ? (
           <>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Trash</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Trash</h2>
             <p className="text-gray-600 dark:text-gray-400">
               Recently deleted files. After 30 days, they will be permanently removed from your account.
             </p>

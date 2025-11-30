@@ -269,11 +269,11 @@ export default function FileList({
                 { id, type },
                 {
                   onSuccess: () => {
-                    showAlert({ type: 'success', message: `Restored "${folder.name}" successfully.` })
+                    showAlert({ type: 'success', heading: 'Restored', message: `Restored "${folder.name}" successfully.` })
                     queryClient.invalidateQueries({ queryKey: ['trash'] })
                   },
                   onError: () => {
-                    showAlert({ type: 'error', message: `Failed to restore "${folder.name}".` })
+                    showAlert({ type: 'error', heading: 'Restore Failed', message: `Failed to restore "${folder.name}".` })
                   },
                 },
               )
@@ -291,7 +291,7 @@ export default function FileList({
               if (!folder.id) return
               const link = `${window.location.origin}/share/folder/${folder.id}`
               void navigator.clipboard.writeText(link)
-              showAlert({ type: 'success', message: 'Link copied to clipboard.' })
+              showAlert({ type: 'success', heading: 'Link Copied', message: 'Link copied to clipboard.' })
             },
           }
         }
@@ -317,11 +317,11 @@ export default function FileList({
                   { id, type },
                   {
                     onSuccess: () => {
-                      showAlert({ type: 'success', message: `Deleted "${folder.name}" permanently.` })
+                      showAlert({ type: 'success', heading: 'Deleted', message: `Deleted "${folder.name}" permanently.` })
                       queryClient.invalidateQueries({ queryKey: ['trash'] })
                     },
                     onError: () => {
-                      showAlert({ type: 'error', message: `Failed to delete "${folder.name}".` })
+                      showAlert({ type: 'error', heading: 'Delete Failed', message: `Failed to delete "${folder.name}".` })
                     },
                   },
                 )
@@ -406,11 +406,11 @@ export default function FileList({
                 { id, type },
                 {
                   onSuccess: () => {
-                    showAlert({ type: 'success', message: `Restored "${file.name}" successfully.` })
+                    showAlert({ type: 'success', heading: 'Restored', message: `Restored "${file.name}" successfully.` })
                     queryClient.invalidateQueries({ queryKey: ['trash'] })
                   },
                   onError: () => {
-                    showAlert({ type: 'error', message: `Failed to restore "${file.name}".` })
+                    showAlert({ type: 'error', heading: 'Restore Failed', message: `Failed to restore "${file.name}".` })
                   },
                 },
               )
@@ -428,7 +428,7 @@ export default function FileList({
               if (!file.id) return
               const link = `${window.location.origin}/share/file/${file.id}`
               void navigator.clipboard.writeText(link)
-              showAlert({ type: 'success', message: 'Link copied to clipboard.' })
+              showAlert({ type: 'success', heading: 'Link Copied', message: 'Link copied to clipboard.' })
             },
           }
         }
@@ -454,11 +454,11 @@ export default function FileList({
                   { id, type },
                   {
                     onSuccess: () => {
-                      showAlert({ type: 'success', message: `Deleted "${file.name}" permanently.` })
+                      showAlert({ type: 'success', heading: 'Deleted', message: `Deleted "${file.name}" permanently.` })
                       queryClient.invalidateQueries({ queryKey: ['trash'] })
                     },
                     onError: () => {
-                      showAlert({ type: 'error', message: `Failed to delete "${file.name}".` })
+                      showAlert({ type: 'error', heading: 'Delete Failed', message: `Failed to delete "${file.name}".` })
                     },
                   },
                 )
@@ -519,10 +519,10 @@ export default function FileList({
                   a.click()
                   document.body.removeChild(a)
                   URL.revokeObjectURL(url)
-                  showAlert({ type: 'success', message: `Downloaded "${file.name}" successfully.` })
+                  showAlert({ type: 'success', heading: 'Downloaded', message: `Downloaded "${file.name}" successfully.` })
                 },
                 onError: () => {
-                  showAlert({ type: 'error', message: `Failed to download "${file.name}".` })
+                  showAlert({ type: 'error', heading: 'Download Failed', message: `Failed to download "${file.name}".` })
                 },
               })
             },
@@ -626,7 +626,7 @@ export default function FileList({
         // Download files (folders not supported)
         const filesToDownload = items.filter(item => item.id && (item.type ?? '').toLowerCase() !== 'folder')
         if (filesToDownload.length === 0) {
-          showAlert({ type: 'warning', message: 'No files to download (folders are not supported).' })
+          showAlert({ type: 'warning', heading: 'Download Warning', message: 'No files to download (folders are not supported).' })
           break
         }
 
@@ -654,11 +654,11 @@ export default function FileList({
 
           // Show summary
           if (errorCount === 0) {
-            showAlert({ type: 'success', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully.` })
+            showAlert({ type: 'success', heading: 'Downloaded', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully.` })
           } else if (downloadedCount === 0) {
-            showAlert({ type: 'error', message: 'Failed to download the selected files.' })
+            showAlert({ type: 'error', heading: 'Download Failed', message: 'Failed to download the selected files.' })
           } else {
-            showAlert({ type: 'warning', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully, ${errorCount} failed.` })
+            showAlert({ type: 'warning', heading: 'Download Warning', message: `Downloaded ${downloadedCount} file${downloadedCount > 1 ? 's' : ''} successfully, ${errorCount} failed.` })
           }
         }
 

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import clsx from 'clsx'
+import { Link } from '@tanstack/react-router'
 import { Cog6ToothIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import Dialog from '@/components/Dialog/Dialog'
-import { useAccountDropdown } from '@/components/Navbar/AccountDropdown/useAccountDropdown'
-import type { AccountDropdownProps } from '@/components/Navbar/AccountDropdown/types'
+import { useAccountDropdown } from '@/app/layout/hooks/useAccountDropdown'
+import type { AccountDropdownProps } from './types'
 
 export function AccountDropdown({
   userName = 'User',
@@ -63,22 +64,34 @@ export function AccountDropdown({
           </div>
 
           <div className="py-1">
-            <a
-              href={settingsHref}
-              className="flex items-center px-5 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              role="menuitem"
-            >
-              <Cog6ToothIcon className="mr-3 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-              Account Settings
-            </a>
+            {settingsHref.startsWith('/') ? (
+              <Link
+                to={settingsHref}
+                className="flex items-center px-5 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                role="menuitem"
+                onClick={toggle}
+              >
+                <Cog6ToothIcon className="mr-3 w-5 h-5 flex-shrink-0 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+                Account Settings
+              </Link>
+            ) : (
+              <a
+                href={settingsHref}
+                className="flex items-center px-5 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                role="menuitem"
+              >
+                <Cog6ToothIcon className="mr-3 w-5 h-5 flex-shrink-0 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+                Account Settings
+              </a>
+            )}
 
             <button
               type="button"
               onClick={() => setLogoutOpen(true)}
-              className="w-full flex items-center px-5 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              className="w-full flex items-center px-5 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               role="menuitem"
             >
-              <ArrowRightStartOnRectangleIcon className="mr-3 w-4 h-4" aria-hidden="true" />
+              <ArrowRightStartOnRectangleIcon className="mr-3 w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Logout
             </button>
           </div>

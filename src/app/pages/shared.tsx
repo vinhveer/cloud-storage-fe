@@ -11,16 +11,12 @@ import Loading from '@/components/Loading/Loading'
 import { useListShares, useReceivedShares, useShareDetail } from '@/api/features/share/share.queries'
 import { useDeleteShare, useRemoveShareUser } from '@/api/features/share/share.mutations'
 import {
-  // ShieldCheckIcon,
   UserGroupIcon,
   InformationCircleIcon,
-  // LinkSlashIcon,
   TrashIcon,
   EllipsisVerticalIcon,
   FolderIcon,
   DocumentIcon,
-  // CalendarIcon,
-  // UserIcon,
 } from '@heroicons/react/24/outline'
 
 type SharedItem = FileItem & {
@@ -197,10 +193,7 @@ export default function SharedPage() {
   return (
     <div className="space-y-4" ref={containerRef}>
 
-      <header className="space-y-1">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Shared</h2>
-        <p className="text-gray-600 dark:text-gray-400">Files that are shared with you or shared by you.</p>
-      </header>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Shared</h2>
 
       <div className="flex items-center justify-between gap-4">
         <Subnav

@@ -1,5 +1,5 @@
 import { HomeIcon, FolderIcon, ShareIcon, TrashIcon, Squares2X2Icon, UsersIcon, EyeIcon, CircleStackIcon } from '@heroicons/react/24/outline'
-import type { SidebarItemData } from '@/components/Sidebar/types'
+import type { SidebarItemData } from '@/app/layout/components/Sidebar/types'
 import { sampleMenuItems } from '@/components/MDX/sample-data.mock'
 import { isAdmin as readAdminFromGuard } from '@/utils/roleGuard'
 

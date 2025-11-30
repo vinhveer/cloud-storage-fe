@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { store } from './state/store'
 import { ThemeProvider } from './app/providers/ThemeProvider'
 import QueryProvider from './app/providers/QueryProvider'
-import { SidebarProvider } from './components/Sidebar/SidebarContext'
+import { SidebarProvider } from './app/layout/components/Sidebar/SidebarContext'
 import UploadTray from './components/Upload/UploadTray'
 
 createRoot(document.getElementById('root')!).render(
