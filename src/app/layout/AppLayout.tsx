@@ -1,10 +1,14 @@
-import { useState } from 'react'
-import Navbar from '@/components/Navbar/Navbar'
+import { useState, type ReactNode } from 'react'
 import { Outlet } from '@tanstack/react-router'
+import Navbar from '@/components/Navbar/Navbar'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import SidebarSync from '@/app/router/components/SidebarSync'
 
-export default function AppLayout() {
+type AppLayoutProps = {
+  children?: ReactNode
+}
+
+export default function AppLayout({ children }: AppLayoutProps = {} as AppLayoutProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   return (
@@ -16,7 +20,7 @@ export default function AppLayout() {
           <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
           <main className="flex-1 lg:ml-64 overflow-y-auto">
             <div className="container mx-auto p-4 h-full">
-              <Outlet />
+              {children ?? <Outlet />}
             </div>
           </main>
         </div>

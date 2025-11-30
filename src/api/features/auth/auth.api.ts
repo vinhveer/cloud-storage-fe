@@ -1,7 +1,6 @@
 import { get, post, put } from '../../core/fetcher'
 import { clearTokens, setAccessToken } from '../../core/auth-key'
 import { createApiResponseSchema, createNullableApiResponseSchema, parseWithZod } from '../../core/guards'
-import { setCachedUserRole } from '@/utils/roleGuard'
 import {
   AuthSuccessSchema,
   LoginRequestSchema,
@@ -57,9 +56,6 @@ function toLoginPayload(payload: LoginRequest) {
 
 function handleAuthSuccess(data: AuthSuccess): AuthSuccess {
   setAccessToken(data.token)
-  if (data.user?.role) {
-    setCachedUserRole(data.user.role)
-  }
   return data
 }
 
@@ -77,20 +73,13 @@ export async function login(payload: LoginRequest): Promise<AuthSuccess> {
   const response = await post<unknown, ReturnType<typeof toLoginPayload>>('/api/login', toLoginPayload(validPayload), {
     skipAuth: true,
   })
-  // eslint-disable-next-line no-console
-  console.log('[auth.api.login] raw response', response)
   const parsed = parseWithZod(authSuccessEnvelope, response)
   return handleAuthSuccess(parsed.data)
 }
 
 export async function getProfile(): Promise<AuthenticatedUser> {
   const response = await get<unknown>('/api/user')
-  // Debug log to inspect raw API response shape
-  // eslint-disable-next-line no-console
-  console.log('[auth.api.getProfile] raw response', response)
   const parsed = parseWithZod(profileEnvelope, response)
-  // eslint-disable-next-line no-console
-  console.log('[auth.api.getProfile] parsed data', parsed)
   return parsed.data.user
 }
 
@@ -104,6 +93,7 @@ export async function logout(): Promise<LogoutSuccess> {
 export async function logoutAll(): Promise<LogoutSuccess | null> {
   const response = await post<unknown, Record<string, never>>('/api/auth/logout-all', {})
   const parsed = parseWithZod(optionalLogoutEnvelope, response)
+  clearTokens()
   return parsed.data ?? null
 }
 

@@ -18,8 +18,6 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: shouldRetry,
-      staleTime: 60_000,
-      gcTime: 300_000,
       refetchOnWindowFocus: false,
     },
     mutations: {

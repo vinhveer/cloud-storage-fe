@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/Button/Button'
 
-export default function PublicHomePage() {
+export default function LandingPage() {
   return (
     <div className="min-h-dvh flex flex-col justify-center py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto w-full">
@@ -54,6 +54,4 @@ export default function PublicHomePage() {
     </div>
   )
 }
-
-
 

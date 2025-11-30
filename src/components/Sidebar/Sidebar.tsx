@@ -1,10 +1,19 @@
 import SidebarItem from './SidebarItem'
 import { useSidebar } from '@/components/Sidebar/SidebarContext'
 import type { SidebarProps } from '@/components/Sidebar/types'
+import StorageUsage from '@/components/StorageUsage/StorageUsage'
+import { useStorageLimit } from '@/api/features/storage/storage.queries'
+
+function bytesToGB(bytes: number): number {
+  return bytes / (1024 * 1024 * 1024)
+}
 
 export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const { items, activeKey } = useSidebar()
-  if (!items || items.length === 0) return null
+  const { data: storageLimit, isLoading: isLoadingStorage } = useStorageLimit()
+
+  const storageUsedGB = storageLimit ? bytesToGB(storageLimit.storage_used) : 0
+  const storageLimitGB = storageLimit ? bytesToGB(storageLimit.storage_limit) : 0
 
   const renderNav = (onItemClick?: () => void) => (
     <div className="p-2 pt-6">
@@ -21,6 +30,14 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
           />
         ))}
       </nav>
+      {!isLoadingStorage && storageLimit && (
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 px-2">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
+            Storage Usage
+          </h3>
+          <StorageUsage used={storageUsedGB} total={storageLimitGB} />
+        </div>
+      )}
     </div>
   )
 

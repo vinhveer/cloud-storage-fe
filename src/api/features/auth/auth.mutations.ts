@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   changePassword,
   forgotPassword,
-  getProfile,
   login,
   logout,
   register,
@@ -26,33 +25,10 @@ import type {
 } from './auth.types'
 import { qk } from '../../query/keys'
 import { AppError } from '../../core/error'
-import { setCachedUserRole } from '@/utils/roleGuard'
 
 export function useLogin() {
-  const queryClient = useQueryClient()
-
   return useMutation<AuthSuccess, AppError, LoginRequest>({
     mutationFn: login,
-    onSuccess: async response => {
-      queryClient.setQueryData(qk.auth.profile(), response.user)
-      if (response.user?.role) {
-        setCachedUserRole(response.user.role)
-        return
-      }
-
-      try {
-        const profile = await queryClient.fetchQuery({
-          queryKey: qk.auth.profile(),
-          queryFn: getProfile,
-        })
-        queryClient.setQueryData(qk.auth.profile(), profile)
-        if (profile.role) {
-          setCachedUserRole(profile.role)
-        }
-      } catch {
-        // ignore profile fetch errors; role guard will sync later via useSetupUserRole
-      }
-    },
   })
 }
 
@@ -93,13 +69,8 @@ export function useResetPassword() {
 }
 
 export function useUpdateProfile() {
-  const queryClient = useQueryClient()
-
   return useMutation<AuthenticatedUser, AppError, UpdateProfileRequest>({
     mutationFn: updateProfile,
-    onSuccess: (user) => {
-      queryClient.setQueryData(qk.auth.profile(), user)
-    },
   })
 }
 
