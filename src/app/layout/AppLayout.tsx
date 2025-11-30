@@ -25,7 +25,7 @@ export default function AppLayout({ children }: AppLayoutProps = {} as AppLayout
         <div className="flex flex-1 min-h-0">
           <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
           <main className="flex-1 lg:ml-64 overflow-y-auto">
-            <div className="container mx-auto p-4 h-full">
+            <div className="container mx-auto p-3 sm:p-4 lg:p-6 h-full">
               {children ?? <Outlet />}
             </div>
           </main>

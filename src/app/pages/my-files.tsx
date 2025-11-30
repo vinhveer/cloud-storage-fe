@@ -28,8 +28,8 @@ export default function MyFilesPage() {
   }
 
   return (
-    <div className="h-full flex flex-col gap-4">
-      <div className="min-h-[28px] flex items-center">
+    <div className="h-full flex flex-col gap-3 sm:gap-4">
+      <div className="min-h-[28px] flex items-center min-w-0">
         {hasSelection ? (
           <SelectionToolbar
             selectedItems={selectedItems}

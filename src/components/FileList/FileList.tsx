@@ -792,22 +792,22 @@ export default function FileList({
         style={heightVh ? { height: `${heightVh}dvh` } : undefined}
       >
         {/* Toolbar */}
-        <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+        <div className="px-3 sm:px-6 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center flex-wrap gap-2 sm:gap-3 min-w-0">
               {/* View mode dropdown */}
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative flex-shrink-0" ref={dropdownRef}>
                 <button
                   type="button"
                   onClick={() => setDropdownOpen((prev: boolean) => !prev)}
-                  className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
                   aria-haspopup="listbox"
                   aria-expanded={dropdownOpen}
                 >
                   <span className="text-sm">
                     <currentView.icon className="w-4 h-4" />
                   </span>
-                  <span>{currentView.label}</span>
+                  <span className="hidden sm:inline">{currentView.label}</span>
                   <ChevronDownIcon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
                 </button>
 
@@ -839,7 +839,7 @@ export default function FileList({
                 type="button"
                 onClick={toggleSelectionMode}
                 className={clsx(
-                  'flex items-center space-x-2 px-3 py-2 text-sm font-medium border rounded-lg focus:outline-none focus:ring-2 transition-colors duration-200',
+                  'flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 text-sm font-medium border rounded-lg focus:outline-none focus:ring-2 transition-colors duration-200 flex-shrink-0',
                   selectionMode
                     ? 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
                     : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-300 dark:border-gray-700'
@@ -847,24 +847,24 @@ export default function FileList({
                 aria-pressed={selectionMode}
               >
                 <CheckCircleIcon className="w-3.5 h-3.5" />
-                <span>{selectionMode ? 'Cancel' : 'Select'}</span>
+                <span className="hidden sm:inline">{selectionMode ? 'Cancel' : 'Select'}</span>
               </button>
 
               {selectionMode && (
-                <div className="flex items-center space-x-2">
-                  <button type="button" onClick={selectAll} className="px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200">Select All</button>
-                  <button type="button" onClick={deselectAll} className="px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200">Deselect All</button>
+                <div className="flex items-center flex-wrap gap-2 min-w-0">
+                  <button type="button" onClick={selectAll} className="px-2 sm:px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 whitespace-nowrap">Select All</button>
+                  <button type="button" onClick={deselectAll} className="px-2 sm:px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200 whitespace-nowrap">Deselect All</button>
                   {selectedItems.length > 0 && (
-                    <span className="text-sm text-gray-500">({selectedItems.length} selected)</span>
+                    <span className="text-sm text-gray-500 whitespace-nowrap">({selectedItems.length} selected)</span>
                   )}
                 </div>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               {toolbarRight ?? (
                 <>
-                  <div className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 mr-2">
+                  <div className="hidden md:block text-sm text-gray-500 dark:text-gray-400 mr-2 whitespace-nowrap">
                     {processedFiles.length}{processedFiles.length !== files.length ? `/${files.length}` : ''} items
                   </div>
                   <FilterDropdown value={filterState} onChange={setFilterState} />

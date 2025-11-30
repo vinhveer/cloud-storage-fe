@@ -76,13 +76,13 @@ export default function SelectionToolbar({
     }
 
     return (
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl px-4 py-2.5 flex items-center gap-3 justify-between" style={{ width: '100%', maxWidth: 'calc(100%)' }}>
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between" style={{ width: '100%', maxWidth: 'calc(100%)' }}>
             {/* Left side - Main actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center flex-wrap gap-2 min-w-0 flex-1">
                 {selectedCount === 1 && (
                     <button
                         onClick={() => handleAction('open')}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                        className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors flex-shrink-0"
                         title="Open"
                     >
                         <ArrowTopRightOnSquareIcon className="w-4 h-4" />
@@ -93,7 +93,7 @@ export default function SelectionToolbar({
                     <button
                         key={action.id}
                         onClick={() => handleAction(action.id)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                        className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors flex-shrink-0"
                         title={action.label}
                     >
                         {action.icon}
@@ -102,10 +102,10 @@ export default function SelectionToolbar({
                 ))}
 
                 {/* More actions dropdown */}
-                <div className="relative" ref={moreRef}>
+                <div className="relative flex-shrink-0" ref={moreRef}>
                     <button
                         onClick={() => setMoreOpen(!moreOpen)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                        className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                         title="More actions"
                     >
                         <EllipsisHorizontalIcon className="w-4 h-4" />
@@ -136,13 +136,13 @@ export default function SelectionToolbar({
             </div>
 
             {/* Right side - Selected count and clear button */}
-            <div className="flex items-center gap-3 ml-auto">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 sm:ml-auto">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
                     {selectedCount} selected
                 </span>
                 <button
                     onClick={onDeselectAll}
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors p-1"
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors p-1 flex-shrink-0"
                     title="Deselect all"
                 >
                     <XMarkIcon className="w-4 h-4" />

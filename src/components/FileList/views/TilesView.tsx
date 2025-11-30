@@ -5,7 +5,7 @@ import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
 export default function TilesView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, tilesAlignLeft, highlightedIndex }: FileListViewProps) {
   return (
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       {files.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-500 dark:text-gray-400">
           <FolderOpenIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-3" />

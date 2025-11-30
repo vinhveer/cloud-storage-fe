@@ -5,14 +5,14 @@ import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
 export default function GridView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, highlightedIndex }: FileListViewProps) {
   return (
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       {files.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-500 dark:text-gray-400">
           <FolderOpenIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-gray-500 dark:text-gray-400 text-lg">No files found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 sm:gap-3">
           {files.map((file, index) => (
             <button
               key={file.id ?? index}
