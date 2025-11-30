@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDashboardStats } from '@/api/features/dashboard/dashboard.queries'
+import { useUserDashboardStats } from '@/api/features/user-dashboard/user-dashboard.queries'
 
 export default function DashboardStatsTestPage() {
   const [startDate, setStartDate] = React.useState<string>('2025-11-01')
@@ -13,7 +13,7 @@ export default function DashboardStatsTestPage() {
     [startDate, endDate],
   )
 
-  const query = useDashboardStats(params)
+  const query = useUserDashboardStats(params)
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()

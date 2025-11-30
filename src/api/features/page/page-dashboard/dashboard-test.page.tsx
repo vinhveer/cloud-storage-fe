@@ -1,7 +1,7 @@
-import { useDashboardOverview } from '@/api/features/dashboard/dashboard.queries'
+import { useUserDashboardOverview } from '@/api/features/user-dashboard/user-dashboard.queries'
 
 export default function DashboardTestPage() {
-  const query = useDashboardOverview()
+  const query = useUserDashboardOverview()
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()

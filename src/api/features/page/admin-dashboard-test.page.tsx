@@ -1,7 +1,7 @@
-import { useAdminDashboard } from '@/api/features/dashboard/dashboard.queries'
+import { useAdminDashboardOverview } from '@/api/features/admin-dashboard/admin-dashboard.queries'
 
 export default function AdminDashboardTestPage() {
-  const query = useAdminDashboard()
+  const query = useAdminDashboardOverview()
 
   return (
     <div style={{ padding: 24, fontFamily: 'sans-serif' }}>

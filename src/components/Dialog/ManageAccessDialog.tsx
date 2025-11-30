@@ -5,6 +5,7 @@ import { useListShares, useShareDetail } from '@/api/features/share/share.querie
 import { useRemoveShareUser } from '@/api/features/share/share.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import { useQueryClient } from '@tanstack/react-query'
+import Loading from '@/components/Loading/Loading'
 
 export type ManageAccessDialogProps = {
     open: boolean
@@ -80,7 +81,7 @@ export default function ManageAccessDialog({
 
                 {isLoading && (
                     <div className="flex items-center justify-center py-8">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                        <Loading size="lg" />
                     </div>
                 )}
 

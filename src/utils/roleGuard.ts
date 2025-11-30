@@ -1,3 +1,7 @@
+import { queryClient } from '@/api/query/client'
+import { qk } from '@/api/query/keys'
+import type { AuthenticatedUser } from '@/api/features/auth/auth.types'
+
 /**
  * Role types
  */
@@ -19,22 +23,38 @@ export function getRoleVersion() {
 }
 
 /**
+ * Get user profile from React Query cache
+ */
+function getUserFromCache(): AuthenticatedUser | null {
+    try {
+        if (typeof window === 'undefined') return null
+        const user = queryClient.getQueryData<AuthenticatedUser>(qk.auth.profile())
+        return user ?? null
+    } catch {
+        return null
+    }
+}
+
+/**
  * Check if user has admin role
  */
 export function isAdmin(): boolean {
-    return false
+    const user = getUserFromCache()
+    return user?.role === 'admin'
 }
 
 /**
  * Check if user has specific role
  */
-export function hasRole(_role: UserRole): boolean {
-    return false
+export function hasRole(role: UserRole): boolean {
+    const user = getUserFromCache()
+    return user?.role === role
 }
 
 /**
  * Get user role
  */
 export function getUserRole(): UserRole {
-    return 'user'
+    const user = getUserFromCache()
+    return user?.role ?? 'user'
 }

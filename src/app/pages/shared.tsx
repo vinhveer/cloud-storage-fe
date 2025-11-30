@@ -7,6 +7,7 @@ import type { FileItem, MenuItem } from '@/components/FileList'
 import ContextMenu from '@/components/FileList/ContextMenu'
 import Dialog from '@/components/Dialog/Dialog'
 import Offcanvas from '@/components/Offcanvas/Offcanvas'
+import Loading from '@/components/Loading/Loading'
 import { useListShares, useReceivedShares, useShareDetail } from '@/api/features/share/share.queries'
 import { useDeleteShare, useRemoveShareUser } from '@/api/features/share/share.mutations'
 import {
@@ -224,7 +225,7 @@ export default function SharedPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
+            <Loading size="lg" />
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-gray-500 dark:text-gray-400">
@@ -303,7 +304,7 @@ export default function SharedPage() {
       >
         {isLoadingDetail ? (
           <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
+            <Loading size="lg" />
           </div>
         ) : shareDetail ? (
           <div className="space-y-6">
@@ -379,7 +380,7 @@ export default function SharedPage() {
       >
         {isLoadingDetail ? (
           <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
+            <Loading size="lg" />
           </div>
         ) : shareDetail ? (
           <div className="space-y-4">

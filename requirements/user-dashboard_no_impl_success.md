@@ -1,6 +1,7 @@
-## Dashboard
+## User Dashboard
 
 ### Dashboard Overview
+- API: GET /api/dashboard
 - Không có input parameters
 
 - Khi load dashboard overview, có hiển thị loading state không?
@@ -18,6 +19,7 @@
 - Có hỗ trợ phân quyền không (chỉ user đã đăng nhập mới xem được)?
 
 ### Dashboard Stats
+- API: GET /api/dashboard/stats
 - Start Date
     - Có thể để trống
     - Nếu có giá trị, phải là định dạng date hợp lệ (YYYY-MM-DD)

@@ -2,6 +2,7 @@ import { useStorageBreakdown } from '@/api/features/storage/storage.queries'
 import { bytesToGB } from '../hooks/useStorageUsage'
 import { DocumentIcon, PhotoIcon, FolderIcon, FilmIcon, MusicalNoteIcon } from '@heroicons/react/24/solid'
 import { useMemo } from 'react'
+import Loading from '@/components/Loading/Loading'
 
 function getFileTypeIcon(type: string) {
   const lower = type.toLowerCase()
@@ -48,7 +49,7 @@ export default function StorageBreakdownTab() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Loading storage breakdown...</p>
+        <Loading size="lg" />
       </div>
     )
   }

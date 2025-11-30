@@ -7,7 +7,7 @@ export const qk = {
   },
   admin: {
     root: () => ['admin'] as const,
-    dashboard: () => ['admin', 'dashboard'] as const,
+    dashboard: () => ['admin-dashboard', 'overview'] as const,
     statsUsers: () => ['admin', 'stats', 'users'] as const,
     statsFiles: () => ['admin', 'stats', 'files'] as const,
     statsStorage: (params?: { start_date?: string; end_date?: string }) =>
@@ -18,6 +18,12 @@ export const qk = {
     userById: (userId: string) => ['admin', 'user', userId] as const,
     userDelete: (userId: string) => ['admin', 'user', userId, 'delete'] as const,
     userStorageUsage: (userId: string) => ['admin', 'user', userId, 'storage-usage'] as const,
+  },
+  userDashboard: {
+    root: () => ['user-dashboard'] as const,
+    overview: () => ['user-dashboard', 'overview'] as const,
+    stats: (params?: { start_date?: string; end_date?: string }) =>
+      ['user-dashboard', 'stats', params ?? {}] as const,
   },
   config: {
     root: () => ['config'] as const,

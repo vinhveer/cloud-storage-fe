@@ -2,6 +2,7 @@ import FileList from '@/components/FileList'
 import SelectionToolbar from '@/components/FileList/SelectionToolbar'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import { useMyFiles } from '@/hooks/useMyFiles'
+import Loading from '@/components/Loading/Loading'
 
 export default function MyFilesPage() {
   const {
@@ -21,7 +22,7 @@ export default function MyFilesPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <Loading size="lg" />
       </div>
     )
   }

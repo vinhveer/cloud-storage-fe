@@ -1,6 +1,7 @@
 import FileCard from '@/components/FileCard/FileCard'
 import type { IconName } from '@/components/FileCard/types'
 import { useRecentFiles } from '../hooks/useRecentFiles'
+import Loading from '@/components/Loading/Loading'
 
 function pickIconFromFileName(name: string): IconName {
   const lower = name.toLowerCase()
@@ -24,7 +25,11 @@ export default function RecentFilesTab() {
   const { recentFiles, isLoading } = useRecentFiles(8)
 
   if (isLoading) {
-    return <p className="text-sm text-gray-500 dark:text-gray-400">Loading recent files...</p>
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loading size="lg" />
+      </div>
+    )
   }
 
   if (recentFiles.length === 0) {

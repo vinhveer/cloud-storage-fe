@@ -15,9 +15,9 @@ function getBaseAppItems(): SidebarItemData[] {
 function getAdminItems(isAdminUser: boolean): SidebarItemData[] {
   if (!isAdminUser) return []
   return [
-    { key: 'admin-overview', title: 'Overview', href: '/samples/admin/overview', icon: <EyeIcon className="w-5 h-5" />, },
-    { key: 'admin-user-management', title: 'User Management', href: '/samples/admin/user-management', icon: <UsersIcon className="w-5 h-5" />, },
-    { key: 'admin-storage-users', title: 'Storage Users', href: '/samples/admin/storage-users', icon: <CircleStackIcon className="w-5 h-5" />, },
+    { key: 'admin-overview', title: 'Overview', href: '/admin', icon: <EyeIcon className="w-5 h-5" />, },
+    { key: 'admin-user-management', title: 'User Management', href: '/admin/users', icon: <UsersIcon className="w-5 h-5" />, },
+    { key: 'admin-storage-users', title: 'Storage Users', href: '/admin/storage', icon: <CircleStackIcon className="w-5 h-5" />, },
   ]
 }
 
@@ -38,7 +38,7 @@ function prefixMatcher(prefixes: string[]): (pathname: string) => boolean {
 const SIDEBAR_CONFIGS: SidebarConfig[] = [
   {
     id: 'admin',
-    match: prefixMatcher(['/samples/admin']),
+    match: prefixMatcher(['/admin']),
     items: ({ isAdmin }) => {
       const items = getBaseAppItems()
       if (isAdmin) {
