@@ -1,92 +1,35 @@
-import React from 'react'
-import { Link } from '@tanstack/react-router'
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import FormCard from '@/components/FormCard/FormCard'
 import FormGroup from '@/components/FormGroup/FormGroup'
 import FormInput from '@/components/FormGroup/FormInput/FormInput'
 import { Button } from '@/components/Button/Button'
-import { useRegister } from '@/api/features/auth/auth.mutations'
-import { AppError } from '@/api/core/error'
-import { useAlert } from '@/components/Alert'
-import { useNavigate } from '@tanstack/react-router'
+import { useRegisterForm } from './hooks/useRegisterForm'
+import PasswordInput from './components/PasswordInput'
+import AuthFormFooter from './components/AuthFormFooter'
 
 export default function RegisterPage() {
-  const [name, setName] = React.useState('')
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [confirmPassword, setConfirmPassword] = React.useState('')
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
-  const registerMutation = useRegister()
-  const { showAlert } = useAlert()
-  const navigate = useNavigate()
-
-  function passwordsMatch() {
-    return password === confirmPassword
-  }
-
-  async function handleRegister() {
-    if (registerMutation.isPending) {
-      return
-    }
-
-    if (!passwordsMatch()) {
-      showAlert({
-        type: 'error',
-        message: 'Password confirmation does not match.',
-        duration: 5000
-      })
-      return
-    }
-
-    try {
-      const response = await registerMutation.mutateAsync({
-        name,
-        email,
-        password,
-        passwordConfirmation: confirmPassword,
-      })
-
-      // Save email to sessionStorage for verify-email page
-      if (globalThis.window) {
-        try {
-          globalThis.window.sessionStorage.setItem('cloud-storage.lastRegisterEmail', email)
-        } catch {
-          // ignore storage errors
-        }
-      }
-
-      showAlert({
-        type: 'success',
-        heading: 'Registration Successful',
-        message: response.message || 'Registration successful. Please check your email to verify your account.',
-        duration: 3000
-      })
-
-      // Redirect to verify-email page after short delay
-      setTimeout(() => {
-        navigate({ to: '/auth/verify-email' })
-      }, 1000)
-    } catch (unknownError) {
-      const applicationError = unknownError as AppError
-      showAlert({
-        type: 'error',
-        heading: 'Registration Failed',
-        message: applicationError.message || 'Registration failed, please try again.',
-        duration: 0
-      })
-    }
-  }
+  const {
+    name,
+    setName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    handleRegister,
+    isPending,
+  } = useRegisterForm()
 
   return (
     <FormCard
       title="Register"
       subtitle="Create a new account"
       footer={(
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Already have an account?{' '}
-          <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Login</Link>
-        </p>
+        <AuthFormFooter
+          text="Already have an account?"
+          linkText="Login"
+          linkTo="/auth/login"
+        />
       )}
     >
       <div className="space-y-4">
@@ -110,51 +53,21 @@ export default function RegisterPage() {
         </FormGroup>
 
         <FormGroup label="Password">
-          <div className="relative">
-            <FormInput
-              type={showPassword ? 'text' : 'password'}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              tabIndex={-1}
-            >
-              {showPassword ? (
-                <EyeSlashIcon className="w-5 h-5" />
-              ) : (
-                <EyeIcon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </FormGroup>
 
         <FormGroup label="Confirm Password">
-          <div className="relative">
-            <FormInput
-              type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              tabIndex={-1}
-            >
-              {showConfirmPassword ? (
-                <EyeSlashIcon className="w-5 h-5" />
-              ) : (
-                <EyeIcon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            placeholder="••••••••"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
         </FormGroup>
 
         <div className="pt-2">
@@ -162,15 +75,15 @@ export default function RegisterPage() {
             onClick={handleRegister}
             variant="primary"
             size="lg"
-            isLoading={registerMutation.isPending}
+            isLoading={isPending}
             loadingText="Registering..."
-            disabled={!name || !email || !password || !confirmPassword}
+            disabled={isPending}
           >
             Register
           </Button>
         </div>
       </div>
-    </FormCard >
+    </FormCard>
   )
 }
 

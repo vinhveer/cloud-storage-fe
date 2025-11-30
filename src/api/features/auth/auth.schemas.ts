@@ -8,12 +8,41 @@ const emailSchema = z
     message: 'Invalid email address',
   })
 
+const nameSchema = z
+  .string()
+  .trim()
+  .min(1, 'Name cannot be empty')
+  .max(100, 'Name must not exceed 100 characters')
+  .refine(value => !/^\d+$/.test(value), {
+    message: 'Name cannot contain only numbers',
+  })
+  .refine(value => /^[a-zA-ZÀ-ỹ0-9\s'-]+$/.test(value), {
+    message: 'Name can only contain letters, numbers, spaces, hyphens, and apostrophes',
+  })
+  .refine(value => /[a-zA-ZÀ-ỹ]/.test(value), {
+    message: 'Name must contain at least one letter',
+  })
+
+const passwordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters')
+  .max(16, 'Password must be at most 16 characters')
+  .refine(value => /[a-zA-Z]/.test(value), {
+    message: 'Password must contain at least one letter',
+  })
+  .refine(value => /\d/.test(value), {
+    message: 'Password must contain at least one number',
+  })
+  .refine(value => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value), {
+    message: 'Password must contain at least one special character',
+  })
+
 export const RegisterRequestSchema = z
   .object({
-    name: z.string().min(1),
+    name: nameSchema,
     email: emailSchema,
-    password: z.string().min(8),
-    passwordConfirmation: z.string().min(8),
+    password: passwordSchema,
+    passwordConfirmation: passwordSchema,
     deviceName: z.string().min(1).optional(),
   })
   .refine(values => values.password === values.passwordConfirmation, {
@@ -23,14 +52,14 @@ export const RegisterRequestSchema = z
 
 export const LoginRequestSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1),
+  password: z.string().min(1, 'Password is required'),
   deviceName: z.string().min(1).optional(),
 })
 
 const RawAuthenticatedUserSchema = z.object({
   user_id: z.number().optional(),
   id: z.number().optional(),
-  name: z.string().min(1),
+  name: nameSchema,
   email: emailSchema,
   role: z.enum(['admin', 'user', 'viewer']).default('user'),
   storage_used: z.number().optional(),
@@ -87,8 +116,8 @@ export const ResetPasswordRequestSchema = z
   .object({
     email: emailSchema,
     token: z.string().min(1),
-    password: z.string().min(8),
-    passwordConfirmation: z.string().min(8),
+    password: passwordSchema,
+    passwordConfirmation: passwordSchema,
   })
   .refine(values => values.password === values.passwordConfirmation, {
     message: 'Password confirmation must match password',
@@ -100,15 +129,15 @@ export const LogoutSuccessSchema = z.object({
 })
 
 export const UpdateProfileRequestSchema = z.object({
-  name: z.string().min(1),
+  name: nameSchema,
   email: emailSchema,
 })
 
 export const ChangePasswordRequestSchema = z
   .object({
     currentPassword: z.string().min(1),
-    password: z.string().min(8),
-    passwordConfirmation: z.string().min(8),
+    password: passwordSchema,
+    passwordConfirmation: passwordSchema,
   })
   .refine(values => values.password === values.passwordConfirmation, {
     message: 'Password confirmation must match password',

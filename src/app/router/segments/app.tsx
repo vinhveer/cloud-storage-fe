@@ -3,7 +3,7 @@ import { redirect } from '@tanstack/react-router'
 import AppLayout from '@/app/layout/AppLayout'
 import { rootRoute } from '../root'
 import HomePage from '@/app/pages'
-import AccountSettingsPage from '@/app/pages/account-settings'
+import AccountSettingsPage from '@/app/pages/account-settings/account-settings'
 
 export const appRoute = createAccessRoute({
   getParentRoute: () => rootRoute,

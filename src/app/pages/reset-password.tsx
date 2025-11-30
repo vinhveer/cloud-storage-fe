@@ -6,17 +6,18 @@ import FormInput from '@/components/FormGroup/FormInput/FormInput'
 import { Button } from '@/components/Button/Button'
 import { useResetPassword } from '@/api/features/auth/auth.mutations'
 import { AppError } from '@/api/core/error'
+import { useAlert } from '@/components/Alert'
+import { ResetPasswordRequestSchema } from '@/api/features/auth/auth.schemas'
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = React.useState('')
   const [token, setToken] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [passwordConfirmation, setPasswordConfirmation] = React.useState('')
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
 
   const navigate = useNavigate()
   const resetPasswordMutation = useResetPassword()
+  const { showAlert } = useAlert()
 
   React.useEffect(() => {
     if (globalThis.window === undefined) {
@@ -35,23 +36,59 @@ export default function ResetPasswordPage() {
     }
   }, [])
 
-  function passwordsMatch() {
-    return password === passwordConfirmation
+  function validatePassword() {
+    try {
+      ResetPasswordRequestSchema.parse({
+        email,
+        token,
+        password,
+        passwordConfirmation,
+      })
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  function getPasswordErrors() {
+    try {
+      ResetPasswordRequestSchema.parse({
+        email,
+        token,
+        password,
+        passwordConfirmation,
+      })
+      return []
+    } catch (error) {
+      if (error instanceof Error && 'errors' in error) {
+        const zodError = error as { errors: Array<{ path: string[]; message: string }> }
+        return zodError.errors.map(err => err.message)
+      }
+      return []
+    }
   }
 
   async function handleSubmit() {
     if (!email || !token) {
-      setErrorMessage('Liên kết đặt lại mật khẩu không hợp lệ. Vui lòng thử gửi lại email đặt lại mật khẩu.')
+      showAlert({
+        type: 'error',
+        heading: 'Invalid Reset Link',
+        message: 'Invalid reset link. Please request a new password reset email.',
+        duration: 5000
+      })
       return
     }
 
-    if (!passwordsMatch()) {
-      setErrorMessage('Mật khẩu xác nhận không khớp.')
+    if (!validatePassword()) {
+      const errors = getPasswordErrors()
+      showAlert({
+        type: 'error',
+        heading: 'Validation Error',
+        message: errors.join('\n') || 'Please check your password requirements.',
+        duration: 5000
+      })
       return
     }
-
-    setErrorMessage(null)
-    setSuccessMessage(null)
 
     try {
       const response = await resetPasswordMutation.mutateAsync({
@@ -60,7 +97,12 @@ export default function ResetPasswordPage() {
         password,
         passwordConfirmation,
       })
-      setSuccessMessage(response.message || 'Mật khẩu của bạn đã được đặt lại thành công.')
+      showAlert({
+        type: 'success',
+        heading: 'Password Reset Successful',
+        message: response.message || 'Your password has been reset successfully. Please login with your new password.',
+        duration: 5000
+      })
       setPassword('')
       setPasswordConfirmation('')
       setTimeout(() => {
@@ -68,7 +110,12 @@ export default function ResetPasswordPage() {
       }, 1500)
     } catch (unknownError) {
       const applicationError = unknownError as AppError
-      setErrorMessage(applicationError.message || 'Đặt lại mật khẩu thất bại, vui lòng thử lại.')
+      showAlert({
+        type: 'error',
+        heading: 'Reset Failed',
+        message: applicationError.message || 'Failed to reset password. Please try again or request a new link.',
+        duration: 5000
+      })
     }
   }
 
@@ -76,16 +123,19 @@ export default function ResetPasswordPage() {
 
   return (
     <FormCard
-      title="Đặt lại mật khẩu"
-      subtitle="Nhập mật khẩu mới cho tài khoản của bạn"
+      title="Reset Password"
+      subtitle="Enter your new password"
+      footer={(
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Remember your password?{' '}
+          <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Login</Link>
+        </p>
+      )}
     >
       <div className="space-y-4">
-        {errorMessage && (
-          <p className="text-sm text-red-500" role="alert">{errorMessage}</p>
-        )}
-        {successMessage && (
-          <p className="text-sm text-green-600 dark:text-green-400" role="status">{successMessage}</p>
-        )}
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Password must be 8-16 characters, contain at least one letter, one number, and one special character.
+        </p>
 
         <form
           className="space-y-4"
@@ -101,10 +151,11 @@ export default function ResetPasswordPage() {
               value={email}
               onChange={event => setEmail(event.target.value)}
               required
+              disabled
             />
           </FormGroup>
 
-          <FormGroup label="Mật khẩu mới">
+          <FormGroup label="New Password">
             <FormInput
               type="password"
               placeholder="••••••••"
@@ -114,7 +165,7 @@ export default function ResetPasswordPage() {
             />
           </FormGroup>
 
-          <FormGroup label="Nhập lại mật khẩu mới">
+          <FormGroup label="Confirm Password">
             <FormInput
               type="password"
               placeholder="••••••••"
@@ -124,29 +175,19 @@ export default function ResetPasswordPage() {
             />
           </FormGroup>
 
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Nếu bạn không tự yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này và không chia sẻ liên kết cho bất kỳ ai.
-          </p>
-
           <div className="pt-2">
             <Button
               type="submit"
               variant="primary"
               size="lg"
               isLoading={isSubmitting}
-              loadingText="Đang xử lý..."
-              disabled={!email || !password || !passwordConfirmation}
+              loadingText="Resetting..."
+              disabled={!email || !password || !passwordConfirmation || !token}
             >
-              Đặt lại mật khẩu
+              Reset Password
             </Button>
           </div>
         </form>
-
-        <div className="pt-2 text-center">
-          <Link to="/auth/login" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-            Quay lại trang đăng nhập
-          </Link>
-        </div>
       </div>
     </FormCard>
   )

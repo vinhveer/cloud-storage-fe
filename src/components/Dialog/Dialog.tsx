@@ -69,7 +69,7 @@ export default function Dialog({
         >
           <div className="px-6 pt-5 pb-4">
             {!isLoading && (
-              <div className="mb-3">
+              <div className="mb-5">
                 <h3 id={`${modalId}-title`} className="text-xl font-semibold text-gray-900 dark:text-white leading-6">
                   {title}
                 </h3>
