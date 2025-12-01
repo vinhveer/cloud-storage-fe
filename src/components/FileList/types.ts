@@ -1,5 +1,6 @@
 import type React from 'react'
 import type { SelectionToolbarAction } from './SelectionToolbar'
+import type { FilterState } from './FilterDropdown'
 
 export type ViewMode = 'list' | 'grid' | 'tiles' | 'details'
 
@@ -22,7 +23,9 @@ export type FileListProps = {
   className?: string
   /** Height as viewport percentage, e.g. 60 => 60dvh. If set, component fills this height */
   heightVh?: number
-  /** Callback khi user click vào item (khi không ở selection mode) */
+  /** Callback khi user click vào item (single click) */
+  onItemClick?: (file: FileItem, index: number) => void
+  /** Callback khi user double-click vào item (mở/navigate vào folder) */
   onItemOpen?: (file: FileItem, index: number) => void
   /** Callback khi user right-click (context) vào item: (file, index, clientX, clientY) */
   onItemContext?: (file: FileItem, index: number, clientX: number, clientY: number, target?: HTMLElement) => void
@@ -38,8 +41,18 @@ export type FileListProps = {
   onSelectionToolbarAction?: (action: string, items: FileItem[]) => void
   /** Ref để expose handleToolbarAction cho parent gọi từ external toolbar. */
   actionRef?: React.MutableRefObject<((action: SelectionToolbarAction, items: FileItem[]) => void) | null>
-  /** Chế độ context menu đặc biệt, ví dụ trang Trash sẽ ẩn bớt action và chỉ giữ một số mục cơ bản. */
-  contextMenuMode?: 'default' | 'trash'
+  /** Context menu items cho folder */
+  folderContextMenuItems?: MenuItem[]
+  /** Context menu items cho file */
+  fileContextMenuItems?: MenuItem[]
+  /** Ẩn selection button và view mode dropdown */
+  hideToolbar?: boolean
+  /** Ẩn context menu button (dấu ba chấm) */
+  hideContextMenu?: boolean
+  /** Filter state từ bên ngoài (nếu có sẽ override filter state nội bộ) */
+  filterState?: FilterState
+  /** Callback khi filter state thay đổi */
+  onFilterChange?: (filterState: FilterState) => void
 }
 
 export type MenuItem = {

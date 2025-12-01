@@ -1,11 +1,10 @@
 import React from 'react'
-import Table from '@/components/Table/Table'
+import TableData from '@/components/TableData'
 import { createColumns } from '@/components/Table/createColumns'
 import { MagnifyingGlassIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline'
 import { useConfigs, type TableConfigItem } from './hooks/useConfigs'
 import ConfigDetailDialog from './components/ConfigDetailDialog'
 import UpdateConfigDialog from './components/UpdateConfigDialog'
-import Loading from '@/components/Loading/Loading'
 
 export default function AdminConfigsPage() {
   const {
@@ -78,8 +77,8 @@ export default function AdminConfigsPage() {
         </div>
       )}
 
-      <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <section className="space-y-4 flex flex-col h-[calc(100vh-12rem)]">
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between flex-shrink-0">
           <form onSubmit={handleSearchSubmit} className="flex-1 max-w-md">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -96,15 +95,8 @@ export default function AdminConfigsPage() {
           </form>
         </div>
 
-        {isLoading && (
-          <div className="flex items-center justify-center py-12">
-            <Loading size="lg" />
-          </div>
-        )}
-
-        {!isLoading && (
-          <>
-            <Table<TableConfigItem>
+        <div className="flex-1 min-h-0">
+          <TableData<TableConfigItem>
               columns={columns}
               data={configs}
               loading={isLoading}
@@ -129,10 +121,11 @@ export default function AdminConfigsPage() {
                 }
               }}
               onRowClick={(row) => setSelectedConfig(row)}
-            />
+          />
+        </div>
 
-            {pagination && pagination.total_pages > 1 && (
-              <div className="flex items-center justify-between">
+        {pagination && pagination.total_pages > 1 && (
+          <div className="flex items-center justify-between flex-shrink-0">
                 <div className="text-sm text-gray-700 dark:text-gray-300">
                   Showing page {pagination.current_page} of {pagination.total_pages} ({pagination.total_items} total items)
                 </div>
@@ -158,8 +151,6 @@ export default function AdminConfigsPage() {
                   </button>
                 </div>
               </div>
-            )}
-          </>
         )}
       </section>
 

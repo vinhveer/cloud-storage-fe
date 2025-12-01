@@ -24,6 +24,7 @@ export default function Dialog({
   closeOnBackdrop = true,
   className,
   children,
+  buttonLayout = 'full',
 }: Readonly<DialogProps>) {
   const reactId = React.useId()
   const modalId = useMemo(() => id ?? `modal-${reactId}`, [id, reactId])
@@ -97,11 +98,11 @@ export default function Dialog({
                 <Loading size="2xl" />
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className={clsx('flex gap-2', buttonLayout === 'full' ? '' : 'justify-start')}>
                 <Button
                   variant="secondary"
                   size="md"
-                  className="flex-1"
+                  className={buttonLayout === 'full' ? 'flex-1' : ''}
                   onClick={() => {
                     setOpen(false)
                     onCancel?.()
@@ -114,14 +115,14 @@ export default function Dialog({
                 {onConfirm ? (
                   <Button
                     size="md"
-                    className="flex-1"
+                    className={buttonLayout === 'full' ? 'flex-1' : ''}
                     variant={confirmVariant}
                     onClick={onConfirmClick}
                   >
                     {confirmButtonText}
                   </Button>
                 ) : (
-                  <a href={confirmHref} className={clsx('not-prose btn', `btn-${confirmVariant}`, 'btn-md', 'flex-1')}>
+                  <a href={confirmHref} className={clsx('not-prose btn', `btn-${confirmVariant}`, 'btn-md', buttonLayout === 'full' ? 'flex-1' : '')}>
                     {confirmButtonText}
                   </a>
                 )}

@@ -10,7 +10,7 @@ export default function HomePage() {
         tabs={[
           {
             id: 'recent',
-            label: 'Recent Files and Folder',
+            label: 'Recent Files',
             content: <RecentFilesTab />,
           },
           {

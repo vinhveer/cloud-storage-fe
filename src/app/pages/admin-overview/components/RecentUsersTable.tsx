@@ -1,4 +1,4 @@
-import Table from '@/components/Table/Table'
+import TableData from '@/components/TableData'
 import { createColumns } from '@/components/Table/createColumns'
 import type { TableRecentUser } from '../hooks/useAdminOverview'
 
@@ -38,8 +38,8 @@ export default function RecentUsersTable({ users }: RecentUsersTableProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-      <Table<TableRecentUser>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 h-full flex flex-col">
+      <TableData<TableRecentUser>
         columns={columns}
         data={users}
         emptyMessage="No users"

@@ -47,7 +47,7 @@ export default function Offcanvas({
       {/* Panel */}
       <div
         className={clsx(
-          'bg-white dark:bg-gray-900 shadow-2xl transition-transform duration-300 fixed will-change-transform',
+          'bg-white dark:bg-gray-900 shadow-2xl transition-transform duration-300 fixed will-change-transform flex flex-col',
           positionClass,
           widthClass,
           alignment === 'left' && 'animate-[slideInLeft_200ms_ease-out_forwards]',
@@ -57,7 +57,7 @@ export default function Offcanvas({
         )}
       >
         {(hasTitle || closeBtnConfig) && (
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800 gap-2">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800 gap-2 flex-shrink-0">
             <div
               className={clsx(
                 'flex min-w-0 items-center',
@@ -85,7 +85,7 @@ export default function Offcanvas({
           </div>
         )}
 
-        <div className="p-5 text-gray-900 dark:text-gray-100">
+        <div className={clsx('p-5 text-gray-900 dark:text-gray-100 flex-1 min-h-0 overflow-y-auto', className)}>
           {children}
         </div>
       </div>

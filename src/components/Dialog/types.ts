@@ -22,6 +22,8 @@ export type DialogProps = {
   closeOnBackdrop?: boolean
   className?: string
   children?: React.ReactNode
+  /** Layout của buttons: 'full' (full width) hoặc 'auto' (auto width, căn trái) */
+  buttonLayout?: 'full' | 'auto'
 }
 
 

@@ -3,7 +3,7 @@ import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon } from '@heroicons/reac
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
-export default function DetailsView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, highlightedIndex }: FileListViewProps) {
+export default function DetailsView({ files, selectionMode, isSelected, toggleItem, onItemOpen, onItemClick, onItemContext, highlightedIndex, hideContextMenu = false }: FileListViewProps) {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-0">
@@ -19,13 +19,13 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
             <th className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</th>
             <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Modified</th>
             <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Size</th>
-            <th className="px-2 sm:px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-10"></th>
+            {!hideContextMenu && <th className="px-2 sm:px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-10"></th>}
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
           {files.length === 0 && (
             <tr>
-              <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
+              <td colSpan={hideContextMenu ? 4 : 5} className="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
                 <FolderOpenIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
                 <p className="text-gray-500 dark:text-gray-400 text-lg">No files found</p>
               </td>
@@ -93,21 +93,23 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
                     : '-'
                   : file.size ?? 'Unknown'}
               </td>
-              <td className="px-2 sm:px-3 py-4 whitespace-nowrap text-right">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    const btn = e.currentTarget as HTMLButtonElement
-                    const rect = btn.getBoundingClientRect()
-                    onItemContext?.(file, index, rect.right, rect.bottom, btn)
-                  }}
-                  className="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-200"
-                  aria-label="More actions"
-                >
-                  <EllipsisVerticalIcon className="w-5 h-5" />
-                </button>
-              </td>
+              {!hideContextMenu && (
+                <td className="px-2 sm:px-3 py-4 whitespace-nowrap text-right">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      const btn = e.currentTarget as HTMLButtonElement
+                      const rect = btn.getBoundingClientRect()
+                      onItemContext?.(file, index, rect.right, rect.bottom, btn)
+                    }}
+                    className="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-200"
+                    aria-label="More actions"
+                  >
+                    <EllipsisVerticalIcon className="w-5 h-5" />
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

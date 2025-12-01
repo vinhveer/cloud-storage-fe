@@ -13,6 +13,8 @@ export type FileListViewProps = Readonly<{
   tilesAlignLeft?: boolean
   /** Index of the currently highlighted item (single click) */
   highlightedIndex?: number | null
+  /** Ẩn context menu button (dấu ba chấm) */
+  hideContextMenu?: boolean
 }>
 
 
