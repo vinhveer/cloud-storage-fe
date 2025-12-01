@@ -18,10 +18,10 @@ function RouteDataRefresher() {
 }
 
 export const rootRoute = createRootRoute({
-    component: () => (
-        <AlertProvider>
-            <RouteDataRefresher />
-            <Outlet />
-        </AlertProvider>
-    ),
+  component: () => (
+    <AlertProvider>
+      <RouteDataRefresher />
+      <Outlet />
+    </AlertProvider>
+  ),
 })

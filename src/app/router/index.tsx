@@ -1,4 +1,3 @@
-
 import { rootRoute } from './root'
 import { getAppRoutes } from './segments/app'
 import { getAuthRoutes } from './segments/auth'
@@ -7,7 +6,15 @@ import { getVerificationRoutes } from './segments/verification'
 import { getStorageRoutes } from './segments/storage'
 import { getSamplesRoutes } from './segments/sample'
 import { getAdminRoutes } from './segments/admin'
+import { createAccessRoute } from './route-factories'
+import NotFoundPage from '@/app/pages/not-found'
 
+const notFoundRoute = createAccessRoute({
+  getParentRoute: () => rootRoute,
+  path: '$',
+  component: NotFoundPage,
+  access: 'public',
+})
 
 const routeTree = rootRoute.addChildren([
   getPublicRoutes(),
@@ -17,6 +24,7 @@ const routeTree = rootRoute.addChildren([
   ...getVerificationRoutes(),
   getAdminRoutes(),
   getSamplesRoutes(),
+  notFoundRoute,
 ])
 
 import { createRouter } from '@tanstack/react-router'
