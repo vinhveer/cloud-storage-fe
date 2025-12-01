@@ -95,6 +95,62 @@
     animation: slideInRight 0.3s ease-out;
   }
 
+  /* Animation utilities for search modal */
+  @keyframes slideInFromTop {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-in {
+    animation-duration: 0.2s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
+
+  .slide-in-from-top-2 {
+    animation-name: slideInFromTop;
+  }
+
+  .slide-in-from-left-2 {
+    animation-name: slideInFromLeft;
+  }
+
+  .slide-in-from-bottom-2 {
+    animation-name: slideInFromBottom;
+  }
+
   /* Sidebar custom scrollbar */
   .sidebar-scroll,
   .sidebar-scrollbar {

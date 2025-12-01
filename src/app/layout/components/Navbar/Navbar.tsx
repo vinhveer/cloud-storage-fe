@@ -51,9 +51,8 @@ export default function Navbar({
         </div>
 
         {/* Center: Search */}
-        {/* old: <Search onSearch={onSearch} placeholder={searchPlaceholder} className="flex-1 max-w-md mx-8" /> */}
         <div className="hidden lg:flex flex-1 justify-center">
-          <Search onSearch={handleSearch} placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
+          <Search placeholder={searchPlaceholder} className="w-1/2 md:w-3/5 max-w-3xl mx-8" />
         </div>
 
         {/* Right: Actions & Account */}
@@ -85,11 +84,11 @@ export default function Navbar({
         <p className="text-xs text-red-500 text-right mt-1" role="alert">{logoutError}</p>
       )}
 
-      {/* Mobile / tablet search bar (no background overlay; toggle bằng nút search) */}
+      {/* Mobile / tablet search button */}
       {mobileSearchOpen && (
         <div className="fixed inset-x-0 top-[var(--navbar-h)] z-[60] lg:hidden">
           <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 pt-2 pb-3 shadow-md">
-            <Search onSearch={handleSearch} placeholder={searchPlaceholder} className="w-full" />
+            <Search placeholder={searchPlaceholder} className="w-full" />
           </div>
         </div>
       )}

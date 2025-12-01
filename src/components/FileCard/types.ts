@@ -17,6 +17,7 @@ export type FileCardProps = React.HTMLAttributes<HTMLDivElement> & {
   title: string
   subtitle?: string
   detailsHref?: string
+  onDetailsClick?: () => void
   width?: number
   style?: CSSProperties
 }

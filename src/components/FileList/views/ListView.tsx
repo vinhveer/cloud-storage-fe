@@ -67,14 +67,16 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
                     <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{file.type ?? 'File'}</div>
                     <div className="sm:hidden text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                       {file.modified && <span>{file.modified}</span>}
-                      {file.modified && file.size && ' • '}
-                      {file.size && <span>{file.size}</span>}
+                      {file.modified && file.size && file.type?.toLowerCase() !== 'folder' && ' • '}
+                      {file.size && file.type?.toLowerCase() !== 'folder' && <span>{file.size}</span>}
                     </div>
                   </div>
                 </div>
               </td>
               <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{file.modified ?? 'Unknown'}</td>
-              <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{file.size ?? 'Unknown'}</td>
+              <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                {file.type?.toLowerCase() === 'folder' ? '-' : (file.size ?? 'Unknown')}
+              </td>
               <td className="px-2 sm:px-3 py-4 whitespace-nowrap text-right">
                 <button
                   type="button"

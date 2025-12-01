@@ -10,6 +10,7 @@ export const FileCard = ({
   title,
   subtitle,
   detailsHref = '#',
+  onDetailsClick,
   width = 100,
   className,
   style,
@@ -26,6 +27,18 @@ export const FileCard = ({
   else if (icon === 'file-image') defaultColor = 'text-pink-500'
 
   const effectiveIconColor = iconColor === 'text-blue-600' ? defaultColor : iconColor
+
+  const handleDetailsClick = () => {
+    if (onDetailsClick) {
+      onDetailsClick()
+    } else {
+      try {
+        globalThis.location.href = detailsHref
+      } catch {
+        // ignore navigation errors
+      }
+    }
+  }
 
   return (
     <div
@@ -47,13 +60,7 @@ export const FileCard = ({
         <Button
           variant="primary"
           size="md"
-          onClick={() => {
-            try {
-              globalThis.location.href = detailsHref
-            } catch {
-              // ignore navigation errors
-            }
-          }}
+          onClick={handleDetailsClick}
           aria-label="View details"
           className="filecard-cta"
         >

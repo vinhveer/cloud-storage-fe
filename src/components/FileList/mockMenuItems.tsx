@@ -8,6 +8,7 @@ import {
   ArrowUturnRightIcon,
   DocumentDuplicateIcon,
   InformationCircleIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline'
 import type { MenuItem, FileItem } from './types'
 import { useDeleteFolder, useUpdateFolder } from '@/api/features/folder/folder.mutations'
@@ -84,6 +85,7 @@ export function useMockMenuItems() {
     { label: 'Move to', icon: ArrowUturnRightIcon, action: (item: FileItem) => { console.log('Move to', item) } },
     { label: 'Copy to', icon: DocumentDuplicateIcon, action: (item: FileItem) => { console.log('Copy to', item) } },
     { label: 'Details', icon: InformationCircleIcon, action: (item: FileItem) => { console.log('Details', item) } },
+    { label: 'Versions', icon: ClockIcon, action: (item: FileItem) => { console.log('Versions', item) } },
   ]
 
   const fileToolbarItem: MenuItem[] = [

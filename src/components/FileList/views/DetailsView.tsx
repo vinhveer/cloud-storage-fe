@@ -76,9 +76,10 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
                       {file.type ?? 'File'}
                       {(file.modified || file.size) && ' • '}
                       {file.modified && <span className="hidden sm:inline">{file.modified}</span>}
-                      {file.size && <span className="lg:hidden">{file.type?.toLowerCase() === 'folder' && typeof file.itemsCount === 'number'
-                        ? `${file.itemsCount} ${file.itemsCount === 1 ? 'item' : 'items'}`
-                        : file.size}</span>}
+                      {file.size && file.type?.toLowerCase() !== 'folder' && <span className="lg:hidden">{file.size}</span>}
+                      {file.type?.toLowerCase() === 'folder' && typeof file.itemsCount === 'number' && (
+                        <span className="lg:hidden">{file.itemsCount} {file.itemsCount === 1 ? 'item' : 'items'}</span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -86,8 +87,10 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
               <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{file.type ?? 'File'}</td>
               <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{file.modified ?? 'Unknown'}</td>
               <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                {file.type?.toLowerCase() === 'folder' && typeof file.itemsCount === 'number'
-                  ? `${file.itemsCount} ${file.itemsCount === 1 ? 'item' : 'items'}`
+                {file.type?.toLowerCase() === 'folder'
+                  ? typeof file.itemsCount === 'number'
+                    ? `${file.itemsCount} ${file.itemsCount === 1 ? 'item' : 'items'}`
+                    : '-'
                   : file.size ?? 'Unknown'}
               </td>
               <td className="px-2 sm:px-3 py-4 whitespace-nowrap text-right">

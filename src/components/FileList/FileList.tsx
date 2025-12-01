@@ -27,7 +27,8 @@ import ManageAccessDialog from '@/components/Dialog/ManageAccessDialog'
 import MoveMultipleFilesDialog from '@/components/Dialog/MoveMultipleFilesDialog'
 import CopyMultipleFilesDialog from '@/components/Dialog/CopyMultipleFilesDialog'
 import DeleteMultipleFilesDialog from '@/components/Dialog/DeleteMultipleFilesDialog'
-import FileDetailPanel from '@/components/FileList/FileDetailPanel'
+import FileDetailPanel from '@/app/pages/components/FileDetailPanel'
+import FileVersionsOffcanvas from '@/app/pages/components/FileVersionsOffcanvas'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import { useDownloadFile } from '@/api/features/file/file.mutations'
 import { useRestoreTrashItem, useDeleteTrashItem } from '@/api/features/trash/trash.mutations'
@@ -79,6 +80,7 @@ export default function FileList({
   const dropdownRef = React.useRef<HTMLDivElement | null>(null)
 
   const [detailFile, setDetailFile] = React.useState<FileItem | null>(null)
+  const [versionsFile, setVersionsFile] = React.useState<FileItem | null>(null)
 
   // Highlighted item index (single click highlight, not selection mode)
   const [highlightedIndex] = React.useState<number | null>(null)
@@ -501,6 +503,16 @@ export default function FileList({
             ...item,
             action: (file: FileItem) => {
               setDetailFile(file)
+            },
+          }
+        }
+        if (item.label === 'Versions') {
+          return {
+            ...item,
+            action: (file: FileItem) => {
+              if (file.type?.toLowerCase() !== 'folder' && file.id) {
+                setVersionsFile(file)
+              }
             },
           }
         }
@@ -935,6 +947,12 @@ export default function FileList({
         file={detailFile}
         open={detailFile != null}
         onClose={() => setDetailFile(null)}
+      />
+      <FileVersionsOffcanvas
+        fileId={versionsFile?.id && versionsFile.type?.toLowerCase() !== 'folder' ? Number(versionsFile.id) : null}
+        fileName={versionsFile?.name}
+        open={versionsFile != null}
+        onClose={() => setVersionsFile(null)}
       />
       {deleteFolderDialog.open && deleteFolderDialog.folder?.id && (
         <DeleteFolderDialog

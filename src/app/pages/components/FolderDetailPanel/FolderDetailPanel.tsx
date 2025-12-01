@@ -1,7 +1,7 @@
 import React from 'react'
 import { FolderIcon } from '@heroicons/react/24/outline'
 import type { FileItem } from '@/components/FileList/types'
-import { useUpdateFolder } from '@/api/features/folder/folder.mutations'
+import { useFolderDetailPanel } from './hooks/useFolderDetailPanel'
 
 interface FolderDetailPanelProps {
   folder: FileItem | null
@@ -10,23 +10,12 @@ interface FolderDetailPanelProps {
 }
 
 export default function FolderDetailPanel({ folder, open, onClose }: Readonly<FolderDetailPanelProps>) {
-  const [name, setName] = React.useState(folder?.name ?? '')
-  const updateFolderMutation = useUpdateFolder()
-
-  React.useEffect(() => {
-    setName(folder?.name ?? '')
-  }, [folder?.name])
+  const { name, setName, updateFolderMutation, handleSubmit } = useFolderDetailPanel(folder)
 
   if (!open || !folder || !folder.id) return null
 
-  const handleSubmit: React.FormEventHandler = async event => {
-    event.preventDefault()
-    if (!name.trim()) return
-
-    await updateFolderMutation.mutateAsync({
-      folderId: Number(folder.id),
-      folder_name: name.trim(),
-    })
+  const onSubmit = async (event: React.FormEvent) => {
+    await handleSubmit(event)
     onClose()
   }
 
@@ -57,11 +46,11 @@ export default function FolderDetailPanel({ folder, open, onClose }: Readonly<Fo
           <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
             Folder name
           </h3>
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={onSubmit} className="space-y-3">
             <input
               type="text"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100"
               placeholder="Enter folder name"
             />
@@ -87,3 +76,4 @@ export default function FolderDetailPanel({ folder, open, onClose }: Readonly<Fo
     </aside>
   )
 }
+

@@ -8,6 +8,7 @@ import {
     ArrowUturnRightIcon,
     DocumentDuplicateIcon,
     InformationCircleIcon,
+    ClockIcon,
 } from '@heroicons/react/24/outline'
 import { useDeleteFolder, useUpdateFolder } from '@/api/features/folder/folder.mutations'
 import { useDeleteFile, useUpdateFile } from '@/api/features/file/file.mutations'
@@ -202,6 +203,14 @@ export const useMenuItems = () => {
             action: (item) => {
                 console.log('Show details', item)
                 // TODO: Implement details panel
+            },
+        },
+        {
+            label: 'Versions',
+            icon: ClockIcon,
+            action: (item) => {
+                console.log('Versions', item)
+                // TODO: Implement versions functionality
             },
         },
     ]

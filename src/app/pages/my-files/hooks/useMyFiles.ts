@@ -5,7 +5,6 @@ import type { FileItem } from '@/components/FileList'
 import type { SelectionToolbarAction } from '@/components/FileList/SelectionToolbar'
 import { getFolderContents } from '@/api/features/folder/folder.api'
 import { getFolderBreadcrumb } from '@/api/features/folder/folder.api'
-import { getFilePreview } from '@/api/features/file/file.api'
 import { qk } from '@/api/query/keys'
 import { useFileDetail } from '@/api/features/file/file.queries'
 
@@ -117,23 +116,25 @@ export function useMyFiles() {
     return items
   }, [breadcrumbData])
 
-  const handleItemOpen = useCallback(async (file: FileItem) => {
+  const [previewFileId, setPreviewFileId] = useState<number | null>(null)
+  const [previewFileName, setPreviewFileName] = useState<string>('')
+
+  const handleItemOpen = useCallback((file: FileItem) => {
     if (file.type === 'Folder' && file.id != null) {
       navigate({
         to: '/my-files',
         search: { folderId: file.id.toString() }
       })
     } else if (file.id != null && file.type !== 'Folder') {
-      try {
-        const preview = await getFilePreview(Number(file.id))
-        if (preview.preview_url) {
-          window.open(preview.preview_url, '_blank')
-        }
-      } catch (error) {
-        console.error('Failed to get file preview:', error)
-      }
+      setPreviewFileId(Number(file.id))
+      setPreviewFileName(file.name)
     }
   }, [navigate])
+
+  const handleClosePreview = useCallback(() => {
+    setPreviewFileId(null)
+    setPreviewFileName('')
+  }, [])
 
   useEffect(() => {
     const handleFileUploaded = () => {
@@ -184,6 +185,9 @@ export function useMyFiles() {
     handleSelectionChange,
     handleDeselectAll,
     handleToolbarAction,
+    previewFileId,
+    previewFileName,
+    handleClosePreview,
   }
 }
 

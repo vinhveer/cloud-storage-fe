@@ -1,8 +1,9 @@
 import FileList from '@/components/FileList'
 import SelectionToolbar from '@/components/FileList/SelectionToolbar'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
-import { useMyFiles } from '@/hooks/useMyFiles'
+import { useMyFiles } from './hooks/useMyFiles'
 import Loading from '@/components/Loading/Loading'
+import FilePreviewModal from '@/app/pages/components/FilePreviewModal'
 
 export default function MyFilesPage() {
   const {
@@ -17,6 +18,9 @@ export default function MyFilesPage() {
     handleSelectionChange,
     handleDeselectAll,
     handleToolbarAction,
+    previewFileId,
+    previewFileName,
+    handleClosePreview,
   } = useMyFiles()
 
   if (isLoading) {
@@ -56,6 +60,14 @@ export default function MyFilesPage() {
           actionRef={actionRef}
         />
       </section>
+
+      <FilePreviewModal
+        fileId={previewFileId}
+        fileName={previewFileName}
+        open={previewFileId !== null}
+        onClose={handleClosePreview}
+      />
     </div>
   )
 }
+

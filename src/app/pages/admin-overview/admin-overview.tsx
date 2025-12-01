@@ -1,6 +1,9 @@
 import { useAdminOverview } from './hooks/useAdminOverview'
 import MetricsCards from './components/MetricsCards'
 import RecentUsersTable from './components/RecentUsersTable'
+import UserStatsSection from './components/UserStatsSection'
+import FileStatsSection from './components/FileStatsSection'
+import StorageStatsSection from './components/StorageStatsSection'
 import Loading from '@/components/Loading/Loading'
 
 export default function AdminOverviewPage() {
@@ -64,6 +67,12 @@ export default function AdminOverviewPage() {
         </h2>
         <RecentUsersTable users={tableUsers} />
       </section>
+
+      <UserStatsSection />
+
+      <FileStatsSection />
+
+      <StorageStatsSection />
     </div>
   )
 }

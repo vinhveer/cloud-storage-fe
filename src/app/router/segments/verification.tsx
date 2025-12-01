@@ -1,7 +1,7 @@
 import { createAccessRoute } from '../route-factories'
 import { rootRoute } from '../root'
-import EmailVerifiedPage from '@/app/pages/email-verified'
-import ResetPasswordPage from '@/app/pages/reset-password'
+import EmailVerifiedPage from '@/app/pages/auth/email-verified'
+import ResetPasswordPage from '@/app/pages/auth/reset-password'
 
 export function getVerificationRoutes() {
   const emailVerifiedRoute = createAccessRoute({

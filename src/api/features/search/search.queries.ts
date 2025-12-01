@@ -3,10 +3,11 @@ import { globalSearch, searchSuggestions, type SearchParams, type SearchSuggesti
 import type { SearchSuccess, SearchSuggestionsData } from './search.types'
 import type { AppError } from '../../core/error'
 
-export function useGlobalSearch(params: SearchParams) {
+export function useGlobalSearch(params: SearchParams, options?: { enabled?: boolean }) {
   return useQuery<SearchSuccess, AppError>({
     queryKey: ['global-search', params],
     queryFn: () => globalSearch(params),
+    enabled: options?.enabled !== false,
   })
 }
 
