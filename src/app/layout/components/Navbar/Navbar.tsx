@@ -19,7 +19,7 @@ export default function Navbar({
   onToggleSidebar,
 }: Readonly<NavbarProps>) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
-  const { handleLogout, handleSearch, logoutError } = useNavbar()
+  const { handleLogout, logoutError } = useNavbar()
 
   // Fetch user profile
   const { data: user } = useQuery({

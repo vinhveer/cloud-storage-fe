@@ -33,8 +33,6 @@ export default function FileStatsSection() {
   }
 
   const totalFiles = data.file_extension_stats.reduce((sum, stat) => sum + stat.count, 0)
-  const maxCount = Math.max(...data.file_extension_stats.map(s => s.count), 1)
-  const sortedStats = [...data.file_extension_stats].sort((a, b) => b.count - a.count)
 
   return (
     <section className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700 space-y-6">

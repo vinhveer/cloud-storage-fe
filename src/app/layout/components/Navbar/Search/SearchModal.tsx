@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { XMarkIcon, MagnifyingGlassIcon, FolderIcon, DocumentIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 import { useSearchSuggestions } from '@/api/features/search/search.queries'
 import { useGlobalSearch } from '@/api/features/search/search.queries'

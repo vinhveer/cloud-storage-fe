@@ -1,7 +1,7 @@
 import { useAdminUserStats } from '@/api/features/stats/stats.queries'
 import Loading from '@/components/Loading/Loading'
 import { formatNumber } from '../utils'
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 
 export default function UserStatsSection() {
   const { data, isLoading, error } = useAdminUserStats()
@@ -73,12 +73,12 @@ export default function UserStatsSection() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                label={({ name, percent }) => `${name}: ${percent ? (percent * 100).toFixed(1) : '0'}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
               >
-                {rolesData.map((entry, index) => (
+                {rolesData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

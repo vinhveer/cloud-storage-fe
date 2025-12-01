@@ -77,7 +77,7 @@ export default function FileExtensionChart({ data }: FileExtensionChartProps) {
           />
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-            {sortedData.map((entry, index) => (
+            {sortedData.map((_, index) => (
               <Cell key={`cell-${index}`} fill={getBarColor(index)} />
             ))}
           </Bar>
