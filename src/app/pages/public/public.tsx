@@ -1,16 +1,15 @@
 import { useParams } from '@tanstack/react-router'
-import { usePublicLinkPreview } from '@/api/features/public-link/public-link.queries'
-import PublicLinkPreview from './components/PublicLinkPreview'
+import { usePublicLinkDetail } from '@/api/features/public-link/public-link.queries'
+import PublicLinkView from './components/PublicLinkView'
 import Loading from '@/components/Loading/Loading'
 import { useAlert } from '@/components/Alert/AlertProvider'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export default function PublicLinkPage() {
   const params = useParams({ strict: false })
   const token = params.token as string
-  const { data, isLoading, error } = usePublicLinkPreview(token)
+  const { data, isLoading, error } = usePublicLinkDetail(token)
   const { showAlert } = useAlert()
-  const [previewOpen, setPreviewOpen] = useState(true)
 
   useEffect(() => {
     if (error) {
@@ -47,28 +46,6 @@ export default function PublicLinkPage() {
     )
   }
 
-  if (data.shareable_type === 'file' && data.file) {
-    return (
-      <PublicLinkPreview
-        data={data}
-        token={token}
-        open={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-      />
-    )
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="text-center space-y-4 max-w-md">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          Unsupported Content Type
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          This public link type is not supported yet.
-        </p>
-      </div>
-    </div>
-  )
+  return <PublicLinkView data={data} token={token} />
 }
 
