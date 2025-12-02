@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDownTrayIcon } from '@heroicons/react/24/outline'
+import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { getPublicLinkDownload } from '@/api/features/public-link/public-link.api'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import Loading from '@/components/Loading/Loading'
@@ -130,7 +130,7 @@ export default function PublicLinkPreview({ data, token, open, onClose }: Public
           .catch(() => {
             getPublicLinkDownload(token)
               .then(data => {
-                return fetch(data.url).then(res => res.text())
+                return fetch(data.download_url).then(res => res.text())
               })
               .then(text => {
                 setTextContent(text)
@@ -143,7 +143,7 @@ export default function PublicLinkPreview({ data, token, open, onClose }: Public
       } else {
         getPublicLinkDownload(token)
           .then(data => {
-            return fetch(data.url).then(res => res.text())
+            return fetch(data.download_url).then(res => res.text())
           })
           .then(text => {
             setTextContent(text)
@@ -171,7 +171,7 @@ export default function PublicLinkPreview({ data, token, open, onClose }: Public
     try {
       setDownloadLoading(true)
       const downloadData = await getPublicLinkDownload(token)
-      const response = await fetch(downloadData.url)
+      const response = await fetch(downloadData.download_url)
       const blob = await response.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -232,36 +232,40 @@ export default function PublicLinkPreview({ data, token, open, onClose }: Public
     }
   }
 
-  const customHeader = (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800 gap-2 flex-shrink-0">
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-white leading-6 break-words truncate flex-1">
-        {displayFileName || 'File Preview'}
-      </h3>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleDownload}
-          disabled={downloadLoading}
-          className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
-        >
-          <ArrowDownTrayIcon className="w-5 h-5" />
-          <span className="hidden sm:inline">{downloadLoading ? 'Downloading...' : 'Download'}</span>
-        </button>
-      </div>
-    </div>
-  )
-
   return (
     <Offcanvas
       open={open}
       onOpenChange={(isOpen) => !isOpen && onClose()}
       width="100"
       alignment="right"
-      title={displayFileName || 'File Preview'}
-      closeButton={{ position: 'right' }}
+      title=""
+      closeButton={false}
       className="!p-0 flex flex-col"
-      customHeader={customHeader}
     >
+      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800 gap-2 flex-shrink-0 bg-white dark:bg-gray-900">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white leading-6 break-words flex-1 min-w-0 truncate">
+          {displayFileName || 'File Preview'}
+        </h3>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleDownload}
+            disabled={downloadLoading}
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ArrowDownTrayIcon className="w-4 h-4" />
+            <span className="hidden sm:inline">{downloadLoading ? 'Downloading...' : 'Download'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-all"
+            aria-label="Close preview"
+          >
+            <XMarkIcon className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
       <div className="flex-1 overflow-auto bg-white dark:bg-gray-900 min-h-0">
         {renderContent()}
       </div>

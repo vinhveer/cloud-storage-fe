@@ -6,7 +6,8 @@ import { useAlert } from '@/components/Alert/AlertProvider'
 import { useEffect, useState } from 'react'
 
 export default function PublicLinkPage() {
-  const { token } = useParams({ from: '/public/$token' })
+  const params = useParams({ strict: false })
+  const token = params.token as string
   const { data, isLoading, error } = usePublicLinkPreview(token)
   const { showAlert } = useAlert()
   const [previewOpen, setPreviewOpen] = useState(true)
