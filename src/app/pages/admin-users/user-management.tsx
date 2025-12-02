@@ -162,9 +162,6 @@ export default function AdminUserManagementPage() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mt-4">
           User Management
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Manage users, roles, and storage limits
-        </p>
       </header>
 
       <section className="space-y-4 flex flex-col h-[calc(100vh-12rem)]">
@@ -173,7 +170,6 @@ export default function AdminUserManagementPage() {
             <Button
               variant="primary"
               size="md"
-              className="h-12"
               icon={<PlusIcon className="w-4 h-4" />}
               value="Create user"
               onClick={() => setCreateOpen(true)}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { XMarkIcon, MagnifyingGlassIcon, FolderIcon, DocumentIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, MagnifyingGlassIcon, FolderIcon, DocumentIcon, ChevronDownIcon, ChevronUpIcon, MinusIcon } from '@heroicons/react/24/outline'
 import { useSearchSuggestions } from '@/api/features/search/search.queries'
 import { useGlobalSearch } from '@/api/features/search/search.queries'
 import Loading from '@/components/Loading/Loading'
@@ -36,7 +36,7 @@ function highlightText(text: string, query: string): React.ReactNode {
   const parts = text.split(new RegExp(`(${query})`, 'gi'))
   return parts.map((part, idx) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      <mark key={idx} className="bg-yellow-200 dark:bg-yellow-900/50">
+      <mark key={idx} className="bg-blue-300 dark:bg-blue-700 text-gray-900 dark:text-white">
         {part}
       </mark>
     ) : (
@@ -104,7 +104,7 @@ function BasicSearchTab({ query, setQuery }: { query: string; setQuery: (q: stri
               <a
                 key={`${item.type}-${item.id}`}
                 href={isFolder ? `/my-files?folderId=${item.id}` : `/my-files?fileId=${item.id}`}
-                className="block px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:shadow-md hover:scale-[1.01] animate-in fade-in slide-in-from-top-2"
+                className="block px-5 py-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-200 border border-gray-200 dark:border-gray-700 animate-in fade-in slide-in-from-top-2"
                 style={{ animationDelay: `${index * 30}ms` }}
               >
                 <div className="flex items-start gap-4">
@@ -342,7 +342,7 @@ function AdvancedSearchTab() {
                   <a
                     key={`folder-${folder.id}`}
                     href={`/my-files?folderId=${folder.id}`}
-                    className="block px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:shadow-md hover:scale-[1.01] animate-in fade-in slide-in-from-left-2"
+                    className="block px-5 py-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-200 border border-gray-200 dark:border-gray-700 animate-in fade-in slide-in-from-left-2"
                     style={{ animationDelay: `${index * 30}ms` }}
                   >
                     <div className="flex items-start gap-4">
@@ -365,7 +365,7 @@ function AdvancedSearchTab() {
                   <a
                     key={`file-${file.id}`}
                     href={`/my-files?fileId=${file.id}`}
-                    className="block px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:shadow-md hover:scale-[1.01] animate-in fade-in slide-in-from-left-2"
+                    className="block px-5 py-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-200 border border-gray-200 dark:border-gray-700 animate-in fade-in slide-in-from-left-2"
                     style={{ animationDelay: `${index * 30}ms` }}
                   >
                     <div className="flex items-start gap-4">
@@ -373,7 +373,13 @@ function AdvancedSearchTab() {
                       <div className="flex-1 min-w-0">
                         <p className="text-base font-medium text-gray-900 dark:text-white transition-colors duration-200">{file.display_name}</p>
                         <div className="mt-1.5 text-sm text-gray-500 dark:text-gray-400 space-y-1">
-                          <p>Type: File • Size: {formatFileSize(file.file_size)} • Extension: {file.file_extension}</p>
+                          <p className="flex items-center gap-1.5">
+                            <span>Type: File</span>
+                            <MinusIcon className="w-3 h-3 rotate-90" />
+                            <span>Size: {formatFileSize(file.file_size)}</span>
+                            <MinusIcon className="w-3 h-3 rotate-90" />
+                            <span>Extension: {file.file_extension}</span>
+                          </p>
                           <p>MIME Type: {file.mime_type}</p>
                           <p>ID: {file.id}</p>
                           <p>Owner: {file.owner.name} ({file.owner.email})</p>

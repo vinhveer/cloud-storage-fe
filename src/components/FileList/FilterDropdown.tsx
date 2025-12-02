@@ -1,5 +1,5 @@
 import React from 'react'
-import { FunnelIcon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { FunnelIcon, XMarkIcon, ChevronDownIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
 export type FileTypeFilter = 'all' | 'folder' | 'image' | 'document' | 'video' | 'audio' | 'other'
@@ -35,12 +35,19 @@ const dateOptions: { value: DateFilter; label: string }[] = [
     { value: 'month', label: 'This month' },
 ]
 
-const sizeOptions: { value: SizeFilter; label: string }[] = [
+const sizeOptions: { value: SizeFilter; label: React.ReactNode }[] = [
     { value: 'all', label: 'Any size' },
-    { value: 'small', label: 'Small (< 1 MB)' },
+    { value: 'small', label: <>Small (<ArrowLeftIcon className="w-3 h-3 inline align-middle" /> 1 MB)</> },
     { value: 'medium', label: 'Medium (1 - 10 MB)' },
-    { value: 'large', label: 'Large (> 10 MB)' },
+    { value: 'large', label: <>Large (<ArrowRightIcon className="w-3 h-3 inline align-middle" /> 10 MB)</> },
 ]
+
+const sizeOptionLabels: Record<SizeFilter, string> = {
+    'all': 'Any size',
+    'small': 'Small (< 1 MB)',
+    'medium': 'Medium (1 - 10 MB)',
+    'large': 'Large (> 10 MB)',
+}
 
 export default function FilterDropdown({ value, onChange, className }: Readonly<FilterDropdownProps>) {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -106,8 +113,7 @@ export default function FilterDropdown({ value, onChange, className }: Readonly<
             if (option) labels.push(option.label)
         }
         if (value.size !== 'all') {
-            const option = sizeOptions.find(opt => opt.value === value.size)
-            if (option) labels.push(option.label)
+            labels.push(sizeOptionLabels[value.size])
         }
         return labels
     }, [value])

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon, MinusIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
@@ -65,9 +65,11 @@ export default function ListView({ files, selectionMode, isSelected, toggleItem,
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{file.name ?? 'Unknown'}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{file.type ?? 'File'}</div>
-                    <div className="sm:hidden text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    <div className="sm:hidden text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
                       {file.modified && <span>{file.modified}</span>}
-                      {file.modified && file.size && file.type?.toLowerCase() !== 'folder' && ' • '}
+                      {file.modified && file.size && file.type?.toLowerCase() !== 'folder' && (
+                        <MinusIcon className="w-3 h-3 rotate-90" />
+                      )}
                       {file.size && file.type?.toLowerCase() !== 'folder' && <span>{file.size}</span>}
                     </div>
                   </div>

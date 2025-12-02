@@ -4,7 +4,7 @@ import Loading from '@/components/Loading/Loading'
 import TableSelectionToolbar from './TableSelectionToolbar'
 import TableContextMenu from './TableContextMenu'
 import type { TableProps, TableColumn, TableContextMenuAction } from './types'
-import { PlusIcon, TrashIcon, PencilIcon, XMarkIcon, EyeIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon, PencilIcon, XMarkIcon, EyeIcon, EllipsisHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 
 const DEFAULT_CONTEXT_MENU_ACTIONS: TableContextMenuAction[] = [
     { id: 'deselect', label: 'Bỏ chọn', icon: <XMarkIcon className="w-4 h-4" /> },
@@ -249,7 +249,11 @@ export default function Table<T extends { id: string | number }>({
                                     <div className="flex items-center gap-2">
                                         <span>{col.label}</span>
                                         {col.sortable && sortConfig?.key === col.key && (
-                                            <span className="text-xs">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                                            sortConfig.direction === 'asc' ? (
+                                                <ChevronUpIcon className="w-3 h-3" />
+                                            ) : (
+                                                <ChevronDownIcon className="w-3 h-3" />
+                                            )
                                         )}
                                     </div>
                                 </th>

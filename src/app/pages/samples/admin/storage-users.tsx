@@ -3,7 +3,7 @@ import Table from '@/components/Table/Table'
 import { createColumns } from '@/components/Table/createColumns'
 import { useAdminStorageUsers } from '@/api/features/storage/storage.queries'
 import type { StorageUserItem } from '@/api/features/storage/storage.types'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, MinusIcon } from '@heroicons/react/24/outline'
 
 type TableStorageUser = StorageUserItem & {
   id: number
@@ -115,7 +115,7 @@ export default function AdminStorageUsersPage() {
               <span>
                 Page {pagination.current_page} of {pagination.total_pages}
               </span>
-              <span>•</span>
+              <MinusIcon className="w-3 h-3 rotate-90" />
               <span>{pagination.total_items} users</span>
             </div>
           )}

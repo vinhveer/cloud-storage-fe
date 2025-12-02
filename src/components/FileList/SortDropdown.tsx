@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowsUpDownIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { ArrowsUpDownIcon, ChevronDownIcon, ChevronUpIcon, ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
 export type SortOption =
@@ -16,11 +16,11 @@ export type SortDropdownProps = {
     className?: string
 }
 
-const sortOptions: { value: SortOption; label: string; shortLabel: string }[] = [
-    { value: 'name-asc', label: 'Name (A → Z)', shortLabel: 'A→Z' },
-    { value: 'name-desc', label: 'Name (Z → A)', shortLabel: 'Z→A' },
-    { value: 'size-desc', label: 'Size (Largest)', shortLabel: 'Size ↓' },
-    { value: 'size-asc', label: 'Size (Smallest)', shortLabel: 'Size ↑' },
+const sortOptions: { value: SortOption; label: React.ReactNode; shortLabel: React.ReactNode }[] = [
+    { value: 'name-asc', label: <span className="flex items-center gap-1">Name (A <ArrowRightIcon className="w-3.5 h-3.5" /> Z)</span>, shortLabel: <span className="flex items-center gap-0.5">A<ArrowRightIcon className="w-3.5 h-3.5" />Z</span> },
+    { value: 'name-desc', label: <span className="flex items-center gap-1">Name (Z <ArrowLeftIcon className="w-3.5 h-3.5" /> A)</span>, shortLabel: <span className="flex items-center gap-0.5">Z<ArrowLeftIcon className="w-3.5 h-3.5" />A</span> },
+    { value: 'size-desc', label: <>Size (Largest)</>, shortLabel: <span className="flex items-center gap-1">Size <ChevronDownIcon className="w-3.5 h-3.5" /></span> },
+    { value: 'size-asc', label: <>Size (Smallest)</>, shortLabel: <span className="flex items-center gap-1">Size <ChevronUpIcon className="w-3.5 h-3.5" /></span> },
     { value: 'date-desc', label: 'Date (Newest)', shortLabel: 'New' },
     { value: 'date-asc', label: 'Date (Oldest)', shortLabel: 'Old' },
 ]

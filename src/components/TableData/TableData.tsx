@@ -4,7 +4,7 @@ import Loading from '@/components/Loading/Loading'
 import TableSelectionToolbar from '../Table/TableSelectionToolbar'
 import TableContextMenu from '../Table/TableContextMenu'
 import type { TableContextMenuAction } from '../Table/types'
-import { EllipsisHorizontalIcon, XMarkIcon, PlusIcon, TrashIcon, PencilIcon, EyeIcon } from '@heroicons/react/24/outline'
+import { EllipsisHorizontalIcon, XMarkIcon, PlusIcon, TrashIcon, PencilIcon, EyeIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import type { TableDataProps } from './types'
 import { useTableData } from './hooks/useTableData'
 
@@ -193,7 +193,11 @@ export default function TableData<T extends { id: string | number }>({
                   <div className="flex items-center gap-2">
                     <span>{col.label}</span>
                     {col.sortable && sortConfig?.key === col.key && (
-                      <span className="text-xs">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                      sortConfig.direction === 'asc' ? (
+                        <ChevronUpIcon className="w-3 h-3" />
+                      ) : (
+                        <ChevronDownIcon className="w-3 h-3" />
+                      )
                     )}
                   </div>
                 </th>

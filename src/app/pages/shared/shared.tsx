@@ -3,7 +3,7 @@ import Subnav from '@/components/Subnav/Subnav'
 import type { SubnavItem } from '@/components/Subnav/Subnav'
 import ContextMenu from '@/components/FileList/ContextMenu'
 import Dialog from '@/components/Dialog/Dialog'
-import { UserGroupIcon, InformationCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { UserGroupIcon, InformationCircleIcon, TrashIcon, MinusIcon } from '@heroicons/react/24/outline'
 import type { MenuItem } from '@/components/FileList'
 import { useShared } from './hooks/useShared'
 import SharedTable from './components/SharedTable'
@@ -102,9 +102,10 @@ export default function SharedPage() {
 
       <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400">
-          <div>
-            {activeTab === 'with' ? 'With you' : 'By you'} · {items.length}{' '}
-            {items.length === 1 ? 'item' : 'items'}
+          <div className="flex items-center gap-1.5">
+            <span>{activeTab === 'with' ? 'With you' : 'By you'}</span>
+            <MinusIcon className="w-3 h-3 rotate-90" />
+            <span>{items.length} {items.length === 1 ? 'item' : 'items'}</span>
           </div>
         </div>
 

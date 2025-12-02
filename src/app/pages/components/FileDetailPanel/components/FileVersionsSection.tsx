@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, MinusIcon } from '@heroicons/react/24/outline'
 import { useFileVersions } from '@/api/features/file-version/file-version.queries'
 import { useDeleteFileVersion } from '@/api/features/file/file.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
@@ -110,7 +110,7 @@ export default function FileVersionsSection({ fileId }: FileVersionsSectionProps
                   )}
                   <div className="flex items-center gap-3 mt-1 text-xs text-gray-500 dark:text-gray-400">
                     <span>{formatFileSize(version.file_size)}</span>
-                    <span>•</span>
+                    <MinusIcon className="w-3 h-3 rotate-90" />
                     <span>{formatDate(version.created_at)}</span>
                   </div>
                 </div>

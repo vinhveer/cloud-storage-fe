@@ -58,9 +58,6 @@ export default function AdminConfigsPage() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mt-4">
           Config Management
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Quản lý cấu hình hệ thống
-        </p>
       </header>
 
       {error && (

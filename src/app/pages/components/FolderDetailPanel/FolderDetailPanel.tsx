@@ -1,5 +1,5 @@
 import React from 'react'
-import { FolderIcon } from '@heroicons/react/24/outline'
+import { FolderIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import type { FileItem } from '@/components/FileList/types'
 import { useFolderDetailPanel } from './hooks/useFolderDetailPanel'
 
@@ -34,10 +34,10 @@ export default function FolderDetailPanel({ folder, open, onClose }: Readonly<Fo
         <button
           type="button"
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none"
+          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
           aria-label="Close folder details"
         >
-          ×
+          <XMarkIcon className="w-5 h-5" />
         </button>
       </header>
 

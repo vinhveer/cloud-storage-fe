@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, FolderOpenIcon, EllipsisVerticalIcon, MinusIcon } from '@heroicons/react/24/outline'
 import type { FileListViewProps } from '@/components/FileList/views/types'
 import { getDefaultFileIcon } from '@/components/FileList/file-list.icons'
 
@@ -72,9 +72,9 @@ export default function DetailsView({ files, selectionMode, isSelected, toggleIt
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{file.name ?? 'Unknown'}</div>
-                    <div className="md:hidden text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                      {file.type ?? 'File'}
-                      {(file.modified || file.size) && ' • '}
+                    <div className="md:hidden text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
+                      <span>{file.type ?? 'File'}</span>
+                      {(file.modified || file.size) && <MinusIcon className="w-3 h-3 rotate-90" />}
                       {file.modified && <span className="hidden sm:inline">{file.modified}</span>}
                       {file.size && file.type?.toLowerCase() !== 'folder' && <span className="lg:hidden">{file.size}</span>}
                       {file.type?.toLowerCase() === 'folder' && typeof file.itemsCount === 'number' && (

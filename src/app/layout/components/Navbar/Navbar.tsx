@@ -1,7 +1,8 @@
 import clsx from 'clsx'
-import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon, CloudIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, MagnifyingGlassIcon, CloudIcon } from '@heroicons/react/24/outline'
 import AccountDropdown from './AccountDropdown/AccountDropdown'
 import Search from './Search/Search'
+import SearchModal from './Search/SearchModal'
 import ThemeToggle from './ThemeToggle/ThemeToggle'
 import UploadButton from './UploadButton/UploadButton'
 import type { NavbarProps } from './types'
@@ -18,7 +19,7 @@ export default function Navbar({
   currentFolderId = null,
   onToggleSidebar,
 }: Readonly<NavbarProps>) {
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
   const { handleLogout, logoutError } = useNavbar()
 
   // Fetch user profile
@@ -60,15 +61,11 @@ export default function Navbar({
           {/* Mobile / tablet search button */}
           <button
             type="button"
-            onClick={() => setMobileSearchOpen(prev => !prev)}
+            onClick={() => setSearchModalOpen(true)}
             aria-label="Open search"
             className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            {mobileSearchOpen ? (
-              <XMarkIcon className="w-5 h-5" />
-            ) : (
-              <MagnifyingGlassIcon className="w-5 h-5" />
-            )}
+            <MagnifyingGlassIcon className="w-5 h-5" />
           </button>
           <ThemeToggle />
           <UploadButton currentFolderId={currentFolderId} />
@@ -84,14 +81,7 @@ export default function Navbar({
         <p className="text-xs text-red-500 text-right mt-1" role="alert">{logoutError}</p>
       )}
 
-      {/* Mobile / tablet search button */}
-      {mobileSearchOpen && (
-        <div className="fixed inset-x-0 top-[var(--navbar-h)] z-[60] lg:hidden">
-          <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 pt-2 pb-3 shadow-md">
-            <Search placeholder={searchPlaceholder} className="w-full" />
-          </div>
-        </div>
-      )}
+      <SearchModal open={searchModalOpen} onClose={() => setSearchModalOpen(false)} />
     </nav>
   )
 }
