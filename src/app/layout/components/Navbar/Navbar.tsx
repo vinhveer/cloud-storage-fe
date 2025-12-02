@@ -65,7 +65,7 @@ export default function Navbar({
             aria-label="Open search"
             className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <MagnifyingGlassIcon className="w-5 h-5" />
+              <MagnifyingGlassIcon className="w-5 h-5" />
           </button>
           <ThemeToggle />
           <UploadButton currentFolderId={currentFolderId} />

@@ -92,7 +92,7 @@ export default function FileVersionsOffcanvas({
                     onUploadClick={() => {
                       uploadMenu.setUploadMenuOpen(false)
                       uploadVersion.setShowUploadForm(true)
-                    }}
+                          }}
                   />
                 </div>
 

@@ -3,6 +3,7 @@ import { rootRoute } from '../root'
 import LandingPage from '@/app/pages/landing'
 import AppLayout from '@/app/layout/AppLayout'
 import HomePage from '@/app/pages'
+import PublicLinkPage from '@/app/pages/public/public'
 
 function AuthedHomePage() {
   return (
@@ -20,5 +21,12 @@ export function getPublicRoutes() {
     variants: { guest: LandingPage, authed: AuthedHomePage },
   })
 
-  return publicIndexRoute
+  const publicLinkRoute = createAccessRoute({
+    getParentRoute: () => rootRoute,
+    path: '/public/$token',
+    component: PublicLinkPage,
+    access: 'public',
+  })
+
+  return publicIndexRoute.addChildren([publicLinkRoute])
 }

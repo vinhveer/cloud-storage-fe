@@ -13,7 +13,7 @@ import CopyMultipleFilesDialog from './CopyMultipleFilesDialog'
 import DeleteMultipleFilesDialog from './DeleteMultipleFilesDialog'
 import FileDetailPanel from '@/app/pages/components/FileDetailPanel'
 import FileVersionsOffcanvas from '@/app/pages/components/FileVersionsOffcanvas'
-import { ShareModal } from '@/components/Share'
+import ShareModal from '@/app/pages/components/ShareModal/ShareModal'
 import type { FileItem } from '@/components/FileList/types'
 
 interface FileListDialogsProps {
@@ -119,10 +119,9 @@ export default function FileListDialogs({
       <ShareModal
         open={shareModal.open}
         onClose={() => setShareModal({ open: false })}
-        initialShareId={shareModal.shareId}
-        initialCreateType={shareModal.createType}
-        initialCreateId={shareModal.createId}
-        initialCreateName={shareModal.createName}
+        initialShareableType={shareModal.createType}
+        initialShareableId={shareModal.createId}
+        initialShareableName={shareModal.createName}
       />
       {deleteFileDialog.open && deleteFileDialog.file?.id && (
         <DeleteFileDialog
