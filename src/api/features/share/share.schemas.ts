@@ -104,4 +104,17 @@ export const ReceivedSharesSuccessSchema = z.object({
   pagination: ReceivedSharesPaginationSchema,
 })
 
+export const AddShareUsersRequestSchema = z.object({
+  user_ids: z.array(z.number()),
+  permission: z.string(),
+})
+
+export const AddShareUsersSuccessSchema = z.object({
+  added_user_ids: z.array(z.number()),
+  updated_user_ids: z.array(z.number()),
+  skipped_user_ids: z.array(z.number()),
+})
+
+export const AddShareUsersEnvelopeSchema = createApiResponseSchema(AddShareUsersSuccessSchema)
+
 

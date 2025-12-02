@@ -71,17 +71,6 @@ export function useMyFilesContextMenu({ contextMenuMode = 'default', dialogs }: 
         : baseItems
 
       return itemsWithRestore.map(item => {
-        if (item.label === 'Copy link') {
-          return {
-            ...item,
-            action: (folder: FileItem) => {
-              if (!folder.id) return
-              const link = `${window.location.origin}/share/folder/${folder.id}`
-              void navigator.clipboard.writeText(link)
-              showAlert({ type: 'success', heading: 'Link Copied', message: 'Link copied to clipboard.' })
-            },
-          }
-        }
         if (item.label === 'Share') {
           return {
             ...item,
@@ -150,15 +139,6 @@ export function useMyFilesContextMenu({ contextMenuMode = 'default', dialogs }: 
             },
           }
         }
-        if (item.label === 'Manage access') {
-          return {
-            ...item,
-            action: (folder: FileItem) => {
-              if (!folder.id) return
-              dialogs.setManageAccessDialog({ open: true, item: folder, type: 'folder' })
-            },
-          }
-        }
         if (item.label === 'Details') {
           return {
             ...item,
@@ -216,17 +196,6 @@ export function useMyFilesContextMenu({ contextMenuMode = 'default', dialogs }: 
         : baseItems
 
       return itemsWithRestore.map(item => {
-        if (item.label === 'Copy link') {
-          return {
-            ...item,
-            action: (file: FileItem) => {
-              if (!file.id) return
-              const link = `${window.location.origin}/share/file/${file.id}`
-              void navigator.clipboard.writeText(link)
-              showAlert({ type: 'success', heading: 'Link Copied', message: 'Link copied to clipboard.' })
-            },
-          }
-        }
         if (item.label === 'Share') {
           return {
             ...item,
@@ -336,15 +305,6 @@ export function useMyFilesContextMenu({ contextMenuMode = 'default', dialogs }: 
                   showAlert({ type: 'error', heading: 'Download Failed', message: `Failed to download "${file.name}".` })
                 },
               })
-            },
-          }
-        }
-        if (item.label === 'Manage access') {
-          return {
-            ...item,
-            action: (file: FileItem) => {
-              if (!file.id) return
-              dialogs.setManageAccessDialog({ open: true, item: file, type: 'file' })
             },
           }
         }

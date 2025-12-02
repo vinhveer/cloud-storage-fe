@@ -7,6 +7,8 @@ import {
   ShareDetailSchema,
   DeleteShareSuccessSchema,
   ReceivedSharesSuccessSchema,
+  AddShareUsersEnvelopeSchema,
+  AddShareUsersRequestSchema,
 } from './share.schemas'
 import type {
   CreateShareEnvelope,
@@ -18,6 +20,9 @@ import type {
   DeleteShareSuccess,
   RemoveShareUserSuccess,
   ReceivedSharesSuccess,
+  AddShareUsersRequest,
+  AddShareUsersSuccess,
+  AddShareUsersEnvelope,
 } from './share.types'
 
 const createShareEnvelope = CreateShareEnvelopeSchema
@@ -78,6 +83,13 @@ export async function getReceivedShares(params: ReceivedSharesParams = {}): Prom
   })
   const parsed = parseWithZod<ReceivedSharesSuccess>(ReceivedSharesSuccessSchema, response)
   return parsed
+}
+
+export async function addShareUsers(shareId: number, payload: AddShareUsersRequest): Promise<AddShareUsersSuccess> {
+  const validPayload = parseWithZod(AddShareUsersRequestSchema, payload)
+  const response = await post<unknown, AddShareUsersRequest>(`/api/shares/${shareId}/users`, validPayload)
+  const parsed = parseWithZod<AddShareUsersEnvelope>(AddShareUsersEnvelopeSchema, response)
+  return parsed.data
 }
 
 

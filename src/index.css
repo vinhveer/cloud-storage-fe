@@ -26,6 +26,111 @@
   html.dark body {
     background-color: #0D1117;
   }
+
+  /* Custom Scrollbar Styles */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+    border: 1px solid #f1f5f9;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  html.dark * {
+    scrollbar-color: #475569 #1e293b;
+  }
+
+  html.dark *::-webkit-scrollbar-track {
+    background: #1e293b;
+  }
+
+  html.dark *::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-color: #1e293b;
+  }
+
+  html.dark *::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+
+  /* Highlight.js dark mode support */
+  html.dark pre code.hljs {
+    background: #0d1117;
+    color: #c9d1d9;
+  }
+
+  html.dark pre code.hljs .hljs-comment,
+  html.dark pre code.hljs .hljs-quote {
+    color: #8b949e;
+  }
+
+  html.dark pre code.hljs .hljs-variable,
+  html.dark pre code.hljs .hljs-template-variable,
+  html.dark pre code.hljs .hljs-tag,
+  html.dark pre code.hljs .hljs-name,
+  html.dark pre code.hljs .hljs-selector-id,
+  html.dark pre code.hljs .hljs-selector-class,
+  html.dark pre code.hljs .hljs-regexp,
+  html.dark pre code.hljs .hljs-deletion {
+    color: #ff7b72;
+  }
+
+  html.dark pre code.hljs .hljs-number,
+  html.dark pre code.hljs .hljs-built_in,
+  html.dark pre code.hljs .hljs-builtin-name,
+  html.dark pre code.hljs .hljs-literal,
+  html.dark pre code.hljs .hljs-type,
+  html.dark pre code.hljs .hljs-params,
+  html.dark pre code.hljs .hljs-meta,
+  html.dark pre code.hljs .hljs-link {
+    color: #79c0ff;
+  }
+
+  html.dark pre code.hljs .hljs-attribute {
+    color: #ffa657;
+  }
+
+  html.dark pre code.hljs .hljs-string,
+  html.dark pre code.hljs .hljs-symbol,
+  html.dark pre code.hljs .hljs-bullet,
+  html.dark pre code.hljs .hljs-addition {
+    color: #a5d6ff;
+  }
+
+  html.dark pre code.hljs .hljs-title,
+  html.dark pre code.hljs .hljs-section {
+    color: #d2a8ff;
+  }
+
+  html.dark pre code.hljs .hljs-keyword,
+  html.dark pre code.hljs .hljs-selector-tag {
+    color: #ff7b72;
+  }
+
+  html.dark pre code.hljs .hljs-emphasis {
+    font-style: italic;
+  }
+
+  html.dark pre code.hljs .hljs-strong {
+    font-weight: bold;
+  }
 }
 
 @layer components {

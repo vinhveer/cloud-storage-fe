@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { createShare, deleteShare, removeShareUser } from './share.api'
-import type { CreateShareRequest, CreateShareSuccess, DeleteShareSuccess, RemoveShareUserSuccess } from './share.types'
+import { createShare, deleteShare, removeShareUser, addShareUsers } from './share.api'
+import type { CreateShareRequest, CreateShareSuccess, DeleteShareSuccess, RemoveShareUserSuccess, AddShareUsersSuccess } from './share.types'
 import type { AppError } from '../../core/error'
 
 export function useCreateShare() {
@@ -27,6 +27,21 @@ export type RemoveShareUserVariables = {
 export function useRemoveShareUser() {
   return useMutation<RemoveShareUserSuccess, AppError, RemoveShareUserVariables>({
     mutationFn: variables => removeShareUser(variables.shareId, variables.userId),
+  })
+}
+
+export type AddShareUsersVariables = {
+  shareId: number
+  userIds: number[]
+  permission: string
+}
+
+export function useAddShareUsers() {
+  return useMutation<AddShareUsersSuccess, AppError, AddShareUsersVariables>({
+    mutationFn: variables => addShareUsers(variables.shareId, {
+      user_ids: variables.userIds,
+      permission: variables.permission,
+    }),
   })
 }
 

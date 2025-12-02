@@ -145,8 +145,10 @@ export async function getRecentFiles(limit?: number): Promise<RecentFilesSuccess
   return parsed.data
 }
 
-export async function getFilePreview(fileId: number): Promise<FilePreviewSuccess> {
-  const response = await get<unknown>(`/api/files/${fileId}/preview`)
+export async function getFilePreview(fileId: number, token?: string): Promise<FilePreviewSuccess> {
+  const url = `/api/files/${fileId}/preview`
+  const config = token ? { params: { token } } : {}
+  const response = await get<unknown>(url, config)
   const parsed = parseWithZod<FilePreviewEnvelope>(filePreviewEnvelope, response)
   return parsed.data
 }

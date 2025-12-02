@@ -13,4 +13,14 @@ export default defineConfig({
       '@sample': '/src/sample',
     },
   },
+  server: {
+    proxy: {
+      '/storage': {
+        target: 'https://cloud.nguyenquangvinh.id.vn',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path,
+      },
+    },
+  },
 })

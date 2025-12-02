@@ -3,8 +3,6 @@ import {
   TrashIcon,
   ArrowDownTrayIcon,
   ShareIcon,
-  LinkIcon,
-  UserGroupIcon,
   ArrowUturnRightIcon,
   DocumentDuplicateIcon,
   InformationCircleIcon,
@@ -25,8 +23,6 @@ export function useMyFilesMenuItems() {
 
   const folderContextMenuItem: MenuItem[] = [
     { label: 'Share', icon: ShareIcon, action: (item: FileItem) => { console.log('Share folder', item) } },
-    { label: 'Copy link', icon: LinkIcon, action: (item: FileItem) => { console.log('Copy link', item) } },
-    { label: 'Manage access', icon: UserGroupIcon, action: (item: FileItem) => { console.log('Manage access', item) } },
     {
       label: 'Delete',
       icon: TrashIcon,
@@ -65,8 +61,6 @@ export function useMyFilesMenuItems() {
 
   const fileContextMenuItem: MenuItem[] = [
     { label: 'Share', icon: ShareIcon, action: (item: FileItem) => { console.log('Share file', item) } },
-    { label: 'Copy link', icon: LinkIcon, action: (item: FileItem) => { console.log('Copy link', item) } },
-    { label: 'Manage access', icon: UserGroupIcon, action: (item: FileItem) => { console.log('Manage access', item) } },
     {
       label: 'Delete',
       icon: TrashIcon,
