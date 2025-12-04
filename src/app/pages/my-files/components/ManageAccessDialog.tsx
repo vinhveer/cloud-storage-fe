@@ -1,7 +1,6 @@
-import React from 'react'
 import { TrashIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import Offcanvas from '@/components/Offcanvas/Offcanvas'
-import { useListShares, useShareDetail } from '@/api/features/share/share.queries'
+import { useShareByResource } from '@/api/features/share/share.queries'
 import { useRemoveShareUser } from '@/api/features/share/share.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import { useQueryClient } from '@tanstack/react-query'
@@ -25,41 +24,31 @@ export default function ManageAccessDialog({
     const queryClient = useQueryClient()
     const { showAlert } = useAlert()
 
-    // Fetch all shares to find the one for this file/folder
-    const { data: sharesData, isLoading: isLoadingShares } = useListShares({ per_page: 100 })
-
-    // Find the share for this specific file/folder
-    // Note: API doesn't return shareable_id in list, so we match by name
-    const shareItem = React.useMemo(() => {
-        if (!sharesData?.data) return null
-        return sharesData.data.find(
-            share => share.shareable_type === shareableType && share.shareable_name === shareableName
-        )
-    }, [sharesData, shareableType, shareableName, shareableId])
-
-    // Fetch share details if found
-    const { data: shareDetail, isLoading: isLoadingDetail } = useShareDetail(shareItem?.share_id)
+    // Fetch share directly by resource (shareable_type + shareable_id)
+    const { data: shareDetail, isLoading } = useShareByResource(
+        open && shareableId > 0
+            ? { shareable_type: shareableType, shareable_id: shareableId }
+            : null
+    )
 
     const removeUserMutation = useRemoveShareUser()
 
     const handleRemoveUser = async (userId: number, userName: string) => {
-        if (!shareItem?.share_id) return
+        if (!shareDetail?.share_id) return
 
         try {
             await removeUserMutation.mutateAsync({
-                shareId: shareItem.share_id,
+                shareId: shareDetail.share_id,
                 userId,
             })
             showAlert({ type: 'success', heading: 'Access Removed', message: `Removed access for "${userName}"` })
             // Invalidate queries to refresh data
-            await queryClient.invalidateQueries({ queryKey: ['shares'] })
-            await queryClient.invalidateQueries({ queryKey: ['share-detail', shareItem.share_id] })
+            await queryClient.invalidateQueries({ queryKey: ['share-by-resource', shareableType, shareableId] })
         } catch {
             showAlert({ type: 'error', heading: 'Remove Failed', message: `Failed to remove access` })
         }
     }
 
-    const isLoading = isLoadingShares || isLoadingDetail
     const hasAccess = shareDetail?.shared_with && shareDetail.shared_with.length > 0
 
     return (
@@ -85,7 +74,7 @@ export default function ManageAccessDialog({
                     </div>
                 )}
 
-                {!isLoading && !shareItem && (
+                {!isLoading && !shareDetail && (
                     <div className="text-center py-8">
                         <UserCircleIcon className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
                         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -97,7 +86,7 @@ export default function ManageAccessDialog({
                     </div>
                 )}
 
-                {!isLoading && shareItem && !hasAccess && (
+                {!isLoading && shareDetail && !hasAccess && (
                     <div className="text-center py-8">
                         <UserCircleIcon className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
                         <p className="text-sm text-gray-500 dark:text-gray-400">

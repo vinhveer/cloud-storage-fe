@@ -17,6 +17,8 @@ import {
   AddShareUsersRequestSchema,
   AddShareUsersSuccessSchema,
   AddShareUsersEnvelopeSchema,
+  ShareByResourceSchema,
+  ShareByResourceEnvelopeSchema,
 } from './share.schemas'
 
 export type ShareRecipient = z.infer<typeof ShareRecipientSchema>
@@ -45,4 +47,5 @@ export type AddShareUsersRequest = z.infer<typeof AddShareUsersRequestSchema>
 export type AddShareUsersSuccess = z.infer<typeof AddShareUsersSuccessSchema>
 export type AddShareUsersEnvelope = z.infer<typeof AddShareUsersEnvelopeSchema>
 
-
+export type ShareByResource = z.infer<typeof ShareByResourceSchema>
+export type ShareByResourceEnvelope = z.infer<typeof ShareByResourceEnvelopeSchema>

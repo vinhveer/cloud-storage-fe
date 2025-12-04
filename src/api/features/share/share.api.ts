@@ -9,6 +9,7 @@ import {
   ReceivedSharesSuccessSchema,
   AddShareUsersEnvelopeSchema,
   AddShareUsersRequestSchema,
+  ShareByResourceEnvelopeSchema,
 } from './share.schemas'
 import type {
   CreateShareEnvelope,
@@ -23,6 +24,7 @@ import type {
   AddShareUsersRequest,
   AddShareUsersSuccess,
   AddShareUsersEnvelope,
+  ShareByResourceEnvelope,
 } from './share.types'
 
 const createShareEnvelope = CreateShareEnvelopeSchema
@@ -92,4 +94,30 @@ export async function addShareUsers(shareId: number, payload: AddShareUsersReque
   return parsed.data
 }
 
+export type GetShareByResourceParams = {
+  shareable_type: 'file' | 'folder'
+  shareable_id: number
+}
 
+/**
+ * Get share info for a specific resource (file/folder).
+ * Returns ShareDetail if share exists, null if not found (404).
+ */
+export async function getShareByResource(params: GetShareByResourceParams): Promise<ShareDetail | null> {
+  try {
+    const response = await get<unknown>('/api/shares/by-resource', {
+      params: {
+        shareable_type: params.shareable_type,
+        shareable_id: params.shareable_id,
+      },
+    })
+    const parsed = parseWithZod<ShareByResourceEnvelope>(ShareByResourceEnvelopeSchema, response)
+    return parsed.data
+  } catch (error: unknown) {
+    // If 404, return null (no share exists for this resource)
+    if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
+      return null
+    }
+    throw error
+  }
+}

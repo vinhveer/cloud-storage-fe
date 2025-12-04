@@ -117,4 +117,7 @@ export const AddShareUsersSuccessSchema = z.object({
 
 export const AddShareUsersEnvelopeSchema = createApiResponseSchema(AddShareUsersSuccessSchema)
 
+// Schema for share by resource response (nullable - may not exist)
+export const ShareByResourceSchema = ShareDetailSchema.nullable()
 
+export const ShareByResourceEnvelopeSchema = createApiResponseSchema(ShareDetailSchema)

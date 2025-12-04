@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getReceivedShares, getShareDetail, listShares, type ListSharesParams, type ReceivedSharesParams } from './share.api'
+import { getReceivedShares, getShareByResource, getShareDetail, listShares, type GetShareByResourceParams, type ListSharesParams, type ReceivedSharesParams } from './share.api'
 import type { ListSharesSuccess, ReceivedSharesSuccess, ShareDetail } from './share.types'
 import type { AppError } from '../../core/error'
 
@@ -30,6 +30,19 @@ export function useReceivedShares(params: ReceivedSharesParams) {
   })
 }
 
-
-
-
+/**
+ * Hook to get share info for a specific resource (file/folder).
+ * Returns ShareDetail if share exists, null if not found.
+ */
+export function useShareByResource(params: GetShareByResourceParams | null) {
+  return useQuery<ShareDetail | null, AppError>({
+    queryKey: ['share-by-resource', params?.shareable_type, params?.shareable_id],
+    enabled: params !== null && params.shareable_id > 0,
+    queryFn: () => {
+      if (!params) {
+        return Promise.resolve(null)
+      }
+      return getShareByResource(params)
+    },
+  })
+}
