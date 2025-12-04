@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import Subnav from '@/components/Subnav/Subnav'
 import type { SubnavItem } from '@/components/Subnav/Subnav'
 import ContextMenu from '@/components/FileList/ContextMenu'
@@ -18,6 +19,7 @@ const subnavItems: SubnavItem[] = [
 
 export default function SharedPage() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
   const {
     activeTab,
     setActiveTab,
@@ -80,8 +82,16 @@ export default function SharedPage() {
 
   const handleItemClick = (item: SharedItem) => {
     if (activeTab === 'by') {
+      // Tab "By you": Show share details
       setSelectedItem(item)
       setDetailsOpen(true)
+    } else if (activeTab === 'with' && item.shareableId) {
+      // Tab "With you": Navigate to the shared file/folder
+      if (item.shareableType === 'file') {
+        navigate({ to: '/my-files', search: { fileId: String(item.shareableId) } })
+      } else {
+        navigate({ to: '/my-files', search: { folderId: String(item.shareableId) } })
+      }
     }
   }
 

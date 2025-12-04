@@ -69,6 +69,7 @@ export function useShared() {
     sharedDate: formatDate(item.shared_at),
     shareId: item.share_id,
     shareableType: item.shareable_type,
+    shareableId: item.shareable_id,
   }))
 
   const byYouItems: SharedItem[] = (sharedByYouData?.data || []).map((item) => ({

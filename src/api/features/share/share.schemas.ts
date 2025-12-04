@@ -87,6 +87,7 @@ export const ReceivedShareOwnerSchema = z.object({
 export const ReceivedShareItemSchema = z.object({
   share_id: z.number(),
   shareable_type: z.enum(['file', 'folder']),
+  shareable_id: z.number(),
   shareable_name: z.string(),
   owner: ReceivedShareOwnerSchema,
   permission: z.string(),
