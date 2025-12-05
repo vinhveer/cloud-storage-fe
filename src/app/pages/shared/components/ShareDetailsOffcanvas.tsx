@@ -1,6 +1,6 @@
 import Offcanvas from '@/components/Offcanvas/Offcanvas'
 import Loading from '@/components/Loading/Loading'
-import { FolderIcon, DocumentIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { FolderIcon, DocumentIcon } from '@heroicons/react/24/outline'
 import type { ShareDetail } from '@/api/features/share/share.types'
 
 export type ShareDetailsOffcanvasProps = {
