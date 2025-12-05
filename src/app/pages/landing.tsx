@@ -33,7 +33,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-                No credit card required. 15GB free storage.
+                No credit card required. 10GB free storage.
               </p>
             </div>
           </div>
