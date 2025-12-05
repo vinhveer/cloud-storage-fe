@@ -30,8 +30,8 @@ export default function CreateShareForm({
   const shareableId = initialShareableId || 0
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedUsers, setSelectedUsers] = useState<SelectedUser[]>([])
-  const [permission, setPermission] = useState('view')
   const [formError, setFormError] = useState<string | null>(null)
+  const defaultPermission = 'download'
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -84,17 +84,12 @@ export default function CreateShareForm({
       return
     }
 
-    if (!permission.trim()) {
-      setFormError('Permission is required.')
-      return
-    }
-
     try {
       await createShareMutation.mutateAsync({
         shareable_type: shareableType,
         shareable_id: shareableId,
         user_ids: selectedUsers.map((u) => u.user_id),
-        permission,
+        permission: defaultPermission,
       })
       showAlert({ type: 'success', message: 'Share created successfully' })
       onSuccess()
@@ -210,20 +205,6 @@ export default function CreateShareForm({
             </div>
           </div>
         )}
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Permission
-          </label>
-          <select
-            value={permission}
-            onChange={(e) => setPermission(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="view">View</option>
-            <option value="edit">Edit</option>
-          </select>
-        </div>
 
         {formError && (
           <div className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3">

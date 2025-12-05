@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { copyFolder, createFolder, deleteFolder, moveFolder, updateFolder } from './folder.api'
+import { copyFolder, createFolder, deleteFolder, downloadFolder, moveFolder, updateFolder } from './folder.api'
 import type {
   CreateFolderRequest,
   CreateFolderSuccess,
@@ -98,6 +98,12 @@ export function useCopyFolder() {
       queryClient.invalidateQueries({ queryKey: ['folder-tree'] })
       queryClient.invalidateQueries({ queryKey: ['folders'], exact: false })
     },
+  })
+}
+
+export function useDownloadFolder() {
+  return useMutation<Blob, AppError, number>({
+    mutationFn: (folderId: number) => downloadFolder(folderId),
   })
 }
 

@@ -45,6 +45,10 @@ export type UpdatePublicLinkEnvelope = z.infer<typeof UpdatePublicLinkEnvelopeSc
 export type PublicLinkPreviewData = z.infer<typeof PublicLinkPreviewDataSchema>
 export type PublicLinkPreviewEnvelope = z.infer<typeof PublicLinkPreviewEnvelopeSchema>
 
+import { PublicLinkFolderPreviewDataSchema, PublicLinkFolderPreviewEnvelopeSchema } from './public-link.schemas'
+export type PublicLinkFolderPreviewData = z.infer<typeof PublicLinkFolderPreviewDataSchema>
+export type PublicLinkFolderPreviewEnvelope = z.infer<typeof PublicLinkFolderPreviewEnvelopeSchema>
+
 export type PublicLinkDownloadData = z.infer<typeof PublicLinkDownloadDataSchema>
 export type PublicLinkDownloadEnvelope = z.infer<typeof PublicLinkDownloadEnvelopeSchema>
 

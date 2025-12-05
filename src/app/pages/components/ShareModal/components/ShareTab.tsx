@@ -11,7 +11,6 @@ import {
 import { useListShares, useShareByResource } from '@/api/features/share/share.queries'
 import { useDeleteShare, useRemoveShareUser } from '@/api/features/share/share.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
-import { useQueryClient } from '@tanstack/react-query'
 import Loading from '@/components/Loading/Loading'
 import CreateShareForm from './CreateShareForm'
 import ShareDetailModal from './ShareDetailModal'
@@ -22,21 +21,18 @@ interface ShareTabProps {
   initialShareableType?: 'file' | 'folder'
   initialShareableId?: number
   initialShareableName?: string
-  onRefresh: () => void
 }
 
 export default function ShareTab({
   initialShareableType,
   initialShareableId,
   initialShareableName,
-  onRefresh,
 }: ShareTabProps) {
   const [page, setPage] = useState(1)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [showAddUsers, setShowAddUsers] = useState(false)
   const [selectedShareId, setSelectedShareId] = useState<number | null>(null)
   
-  const queryClient = useQueryClient()
   const { showAlert } = useAlert()
   
   // Mode: per-resource (when initialShareableId is provided)
@@ -45,7 +41,8 @@ export default function ShareTab({
   // Fetch share by resource (for resource mode)
   const { 
     data: resourceShare, 
-    isLoading: isLoadingResourceShare 
+    isLoading: isLoadingResourceShare,
+    isFetching: isFetchingResourceShare,
   } = useShareByResource(
     isResourceMode 
       ? { shareable_type: initialShareableType, shareable_id: initialShareableId }
@@ -67,12 +64,6 @@ export default function ShareTab({
     try {
       await deleteShareMutation.mutateAsync({ id: shareId })
       showAlert({ type: 'success', message: 'Stopped sharing successfully' })
-      if (isResourceMode) {
-        await queryClient.invalidateQueries({ 
-          queryKey: ['share-by-resource', initialShareableType, initialShareableId] 
-        })
-      }
-      onRefresh()
     } catch {
       showAlert({ type: 'error', message: 'Failed to stop sharing' })
     }
@@ -87,10 +78,6 @@ export default function ShareTab({
         userId,
       })
       showAlert({ type: 'success', message: `Removed access for "${userName}"` })
-      await queryClient.invalidateQueries({ 
-        queryKey: ['share-by-resource', initialShareableType, initialShareableId] 
-      })
-      onRefresh()
     } catch {
       showAlert({ type: 'error', message: 'Failed to remove user' })
     }
@@ -98,22 +85,10 @@ export default function ShareTab({
 
   const handleCreateSuccess = () => {
     setShowCreateForm(false)
-    if (isResourceMode) {
-      queryClient.invalidateQueries({ 
-        queryKey: ['share-by-resource', initialShareableType, initialShareableId] 
-      })
-    }
-    onRefresh()
   }
 
   const handleAddUsersSuccess = () => {
     setShowAddUsers(false)
-    if (isResourceMode) {
-      queryClient.invalidateQueries({ 
-        queryKey: ['share-by-resource', initialShareableType, initialShareableId] 
-      })
-    }
-    onRefresh()
   }
 
   // Show create form
@@ -147,14 +122,13 @@ export default function ShareTab({
       <ShareDetailModal
         shareId={selectedShareId}
         onClose={() => setSelectedShareId(null)}
-        onRefresh={onRefresh}
       />
     )
   }
 
   // ========== RESOURCE MODE: Show share for specific file/folder ==========
   if (isResourceMode) {
-    if (isLoadingResourceShare) {
+    if (isLoadingResourceShare || isFetchingResourceShare) {
       return (
         <div className="flex items-center justify-center py-12">
           <Loading size="lg" />

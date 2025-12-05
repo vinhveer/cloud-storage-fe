@@ -21,7 +21,7 @@ export default function CreatePublicLinkForm({
 }: CreatePublicLinkFormProps) {
   const shareableType = initialShareableType || 'file'
   const shareableId = initialShareableId || 0
-  const [permission, setPermission] = useState('view')
+  const defaultPermission = 'download'
   const [expiredAt, setExpiredAt] = useState('')
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -37,11 +37,6 @@ export default function CreatePublicLinkForm({
       return
     }
 
-    if (!permission.trim()) {
-      setFormError('Permission is required.')
-      return
-    }
-
     if (expiredAt && new Date(expiredAt) <= new Date()) {
       setFormError('Expiration date must be in the future.')
       return
@@ -51,7 +46,7 @@ export default function CreatePublicLinkForm({
       await createMutation.mutateAsync({
         shareable_type: shareableType,
         shareable_id: shareableId,
-        permission,
+        permission: defaultPermission,
         expired_at: expiredAt || null,
       })
       showAlert({ type: 'success', message: 'Public link created successfully' })
@@ -84,21 +79,6 @@ export default function CreatePublicLinkForm({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Permission
-          </label>
-          <select
-            value={permission}
-            onChange={(e) => setPermission(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="view">View</option>
-            <option value="edit">Edit</option>
-            <option value="download">Download</option>
-          </select>
-        </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Expiration Date (Optional)

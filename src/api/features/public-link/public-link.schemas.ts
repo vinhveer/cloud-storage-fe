@@ -58,6 +58,7 @@ export const PublicLinkOwnerSchema = z.object({
 export const PublicLinkDetailSchema = z.object({
   public_link_id: z.number(),
   shareable_type: z.enum(['file', 'folder']),
+  shareable_id: z.number().optional(),
   shareable_name: z.string(),
   permission: z.string(),
   token: z.string(),
@@ -96,6 +97,53 @@ export const PublicLinkPreviewFileSchema = z.object({
   url: z.string(),
 })
 
+export const PublicLinkPreviewFolderStatsSchema = z.object({
+  total_files: z.number(),
+  total_folders: z.number(),
+  total_size: z.number(),
+  total_size_formatted: z.string(),
+})
+
+export const PublicLinkPreviewFolderItemSchema = z.object({
+  folder_id: z.number(),
+  folder_name: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+})
+
+export const PublicLinkPreviewFileItemSchema = z.object({
+  file_id: z.number(),
+  display_name: z.string(),
+  file_size: z.number(),
+  mime_type: z.string(),
+  file_extension: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  last_opened_at: z.string().nullable(),
+})
+
+export const PublicLinkPreviewFolderContentsSchema = z.object({
+  folders: z.array(PublicLinkPreviewFolderItemSchema),
+  files: z.array(PublicLinkPreviewFileItemSchema),
+})
+
+export const PublicLinkPreviewFolderSchema = z.object({
+  folder_id: z.number(),
+  folder_name: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+})
+
+export const PublicLinkFolderPreviewDataSchema = z.object({
+  shareable_type: z.literal('folder'),
+  folder: PublicLinkPreviewFolderSchema,
+  stats: PublicLinkPreviewFolderStatsSchema,
+  contents: PublicLinkPreviewFolderContentsSchema,
+  token: z.string(),
+})
+
+export const PublicLinkFolderPreviewEnvelopeSchema = createApiResponseSchema(PublicLinkFolderPreviewDataSchema)
+
 export const PublicLinkPreviewDataSchema = z.object({
   shareable_type: z.literal('file'),
   file: PublicLinkPreviewFileSchema,
@@ -105,7 +153,9 @@ export const PublicLinkPreviewEnvelopeSchema = createApiResponseSchema(PublicLin
 
 export const PublicLinkDownloadDataSchema = z.object({
   success: z.literal(true),
+  shareable_type: z.enum(['file', 'folder']).optional(),
   download_url: z.string(),
+  name: z.string().optional(),
 })
 
 export const PublicLinkDownloadEnvelopeSchema = createApiResponseSchema(PublicLinkDownloadDataSchema)

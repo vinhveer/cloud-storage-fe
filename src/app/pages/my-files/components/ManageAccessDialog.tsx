@@ -3,7 +3,6 @@ import Offcanvas from '@/components/Offcanvas/Offcanvas'
 import { useShareByResource } from '@/api/features/share/share.queries'
 import { useRemoveShareUser } from '@/api/features/share/share.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
-import { useQueryClient } from '@tanstack/react-query'
 import Loading from '@/components/Loading/Loading'
 
 export type ManageAccessDialogProps = {
@@ -21,7 +20,6 @@ export default function ManageAccessDialog({
     shareableId,
     shareableName,
 }: Readonly<ManageAccessDialogProps>) {
-    const queryClient = useQueryClient()
     const { showAlert } = useAlert()
 
     // Fetch share directly by resource (shareable_type + shareable_id)
@@ -42,8 +40,6 @@ export default function ManageAccessDialog({
                 userId,
             })
             showAlert({ type: 'success', heading: 'Access Removed', message: `Removed access for "${userName}"` })
-            // Invalidate queries to refresh data
-            await queryClient.invalidateQueries({ queryKey: ['share-by-resource', shareableType, shareableId] })
         } catch {
             showAlert({ type: 'error', heading: 'Remove Failed', message: `Failed to remove access` })
         }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   ArrowDownTrayIcon, 
   DocumentIcon, 
@@ -7,10 +7,10 @@ import {
   EyeIcon,
   GlobeAltIcon,
 } from '@heroicons/react/24/outline'
-import { getPublicLinkDownload } from '@/api/features/public-link/public-link.api'
+import { getPublicLinkDownload, getPublicLinkFolderPreview } from '@/api/features/public-link/public-link.api'
 import { usePublicLinkPreview } from '@/api/features/public-link/public-link.queries'
 import { useAlert } from '@/components/Alert/AlertProvider'
-import type { PublicLinkDetail } from '@/api/features/public-link/public-link.types'
+import type { PublicLinkDetail, PublicLinkFolderPreviewData } from '@/api/features/public-link/public-link.types'
 
 interface PublicLinkViewProps {
   data: PublicLinkDetail
@@ -41,9 +41,22 @@ function getFileTypeLabel(mimeType: string): string {
 export default function PublicLinkView({ data, token }: PublicLinkViewProps) {
   const { showAlert } = useAlert()
   const [downloadLoading, setDownloadLoading] = useState(false)
+  const [folderPreview, setFolderPreview] = useState<PublicLinkFolderPreviewData | null>(null)
+  const [folderPreviewLoading, setFolderPreviewLoading] = useState(false)
   
   // Fetch preview data for additional file info
   const { data: previewData } = usePublicLinkPreview(data.shareable_type === 'file' ? token : null)
+
+  // Fetch folder preview data using public link token
+  useEffect(() => {
+    if (data.shareable_type === 'folder') {
+      setFolderPreviewLoading(true)
+      getPublicLinkFolderPreview(token)
+        .then(setFolderPreview)
+        .catch(() => setFolderPreview(null))
+        .finally(() => setFolderPreviewLoading(false))
+    }
+  }, [data.shareable_type, token])
 
   const handleDownload = async () => {
     try {
@@ -59,6 +72,26 @@ export default function PublicLinkView({ data, token }: PublicLinkViewProps) {
       showAlert({ type: 'success', message: 'Download started.' })
     } catch {
       showAlert({ type: 'error', message: 'Failed to download file. Please try again.' })
+    } finally {
+      setDownloadLoading(false)
+    }
+  }
+
+  const handleDownloadFolder = async () => {
+    try {
+      setDownloadLoading(true)
+      const downloadData = await getPublicLinkDownload(token)
+      // Redirect to download URL for folder ZIP
+      const a = document.createElement('a')
+      a.href = downloadData.download_url
+      a.download = downloadData.name || `${data.shareable_name}.zip`
+      a.target = '_blank'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      showAlert({ type: 'success', message: 'Folder download started.' })
+    } catch {
+      showAlert({ type: 'error', message: 'Failed to download folder. Please try again.' })
     } finally {
       setDownloadLoading(false)
     }
@@ -112,8 +145,45 @@ export default function PublicLinkView({ data, token }: PublicLinkViewProps) {
                   </p>
                 </div>
               )}
+
+              {/* Folder stats from preview */}
+              {!isFile && folderPreview && (
+                <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
+                  <p>Size: {folderPreview.stats.total_size_formatted}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                    {folderPreview.stats.total_files} files, {folderPreview.stats.total_folders} folders
+                  </p>
+                </div>
+              )}
+              {!isFile && folderPreviewLoading && (
+                <p className="text-xs text-gray-400 dark:text-gray-500">Loading folder info...</p>
+              )}
             </div>
           </div>
+
+          {/* Folder contents preview */}
+          {!isFile && folderPreview && (folderPreview.contents.folders.length > 0 || folderPreview.contents.files.length > 0) && (
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Contents</p>
+              </div>
+              <div className="max-h-64 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
+                {folderPreview.contents.folders.map((folder) => (
+                  <div key={folder.folder_id} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                    <FolderIcon className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{folder.folder_name}</span>
+                  </div>
+                ))}
+                {folderPreview.contents.files.map((file) => (
+                  <div key={file.file_id} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                    <DocumentIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate flex-1">{file.display_name}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">{formatFileSize(file.file_size)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Owner info */}
           {data.owner && (
@@ -156,18 +226,30 @@ export default function PublicLinkView({ data, token }: PublicLinkViewProps) {
             </div>
           )}
 
-          {/* Folder message */}
+          {/* Folder download */}
           {!isFile && (
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="text-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                <FolderIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Folder preview is not available.
-                </p>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                  Please download individual files from within the folder.
-                </p>
-              </div>
+              {canDownload ? (
+                <button
+                  type="button"
+                  onClick={handleDownloadFolder}
+                  disabled={downloadLoading}
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  <ArrowDownTrayIcon className="w-5 h-5" />
+                  {downloadLoading ? 'Downloading...' : 'Download as ZIP'}
+                </button>
+              ) : (
+                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <FolderIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    This folder is shared for viewing only.
+                  </p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    Contact the owner if you need download access.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>

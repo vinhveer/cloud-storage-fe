@@ -3,6 +3,7 @@ import { ArrowUturnRightIcon } from '@heroicons/react/24/outline'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMyFilesMenuItems } from './useMyFilesMenuItems'
 import { useDownloadFile } from '@/api/features/file/file.mutations'
+import { useDownloadFolder } from '@/api/features/folder/folder.mutations'
 import { useRestoreTrashItem, useDeleteTrashItem } from '@/api/features/trash/trash.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import type { FileItem } from '@/components/FileList/types'
@@ -31,6 +32,7 @@ export function useMyFilesContextMenu({ contextMenuMode = 'default', dialogs }: 
   const { folderContextMenuItem, fileContextMenuItem } = useMyFilesMenuItems()
   const isTrashContextMenu = contextMenuMode === 'trash'
   const downloadFileMutation = useDownloadFile()
+  const downloadFolderMutation = useDownloadFolder()
   const restoreTrashItemMutation = useRestoreTrashItem()
   const deleteTrashItemMutation = useDeleteTrashItem()
   const { showAlert } = useAlert()
@@ -147,11 +149,36 @@ export function useMyFilesContextMenu({ contextMenuMode = 'default', dialogs }: 
             },
           }
         }
+        if (item.label === 'Download') {
+          return {
+            ...item,
+            action: (folder: FileItem) => {
+              if (!folder.id) return
+              downloadFolderMutation.mutate(Number(folder.id), {
+                onSuccess: (blob) => {
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = `${folder.name}.zip`
+                  document.body.appendChild(a)
+                  a.click()
+                  document.body.removeChild(a)
+                  URL.revokeObjectURL(url)
+                  showAlert({ type: 'success', heading: 'Downloaded', message: `Downloaded "${folder.name}" as ZIP successfully.` })
+                },
+                onError: () => {
+                  showAlert({ type: 'error', heading: 'Download Failed', message: `Failed to download "${folder.name}".` })
+                },
+              })
+            },
+          }
+        }
         return item
       })
     },
     [
       deleteTrashItemMutation,
+      downloadFolderMutation,
       folderContextMenuItem,
       isTrashContextMenu,
       restoreTrashItemMutation,

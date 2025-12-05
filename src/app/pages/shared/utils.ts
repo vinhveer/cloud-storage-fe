@@ -1,5 +1,13 @@
 export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
+  let date = new Date(dateStr)
+  if (Number.isNaN(date.getTime())) {
+    const normalized = dateStr.includes(' ') ? dateStr.replace(' ', 'T') : dateStr
+    date = new Date(normalized)
+    if (Number.isNaN(date.getTime())) {
+      return dateStr
+    }
+  }
+
   const now = new Date()
   const isThisYear = date.getFullYear() === now.getFullYear()
 

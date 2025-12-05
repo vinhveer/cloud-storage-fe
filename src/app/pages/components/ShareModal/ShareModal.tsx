@@ -97,14 +97,12 @@ export default function ShareModal({
                 initialShareableType={initialShareableType}
                 initialShareableId={initialShareableId}
                 initialShareableName={initialShareableName}
-                onRefresh={refetchShares}
               />
             ) : (
               <PublicLinkTab
                 initialShareableType={initialShareableType}
                 initialShareableId={initialShareableId}
                 initialShareableName={initialShareableName}
-                onRefresh={refetchPublicLinks}
               />
             )}
           </div>

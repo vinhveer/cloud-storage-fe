@@ -127,3 +127,66 @@ export async function copyFolder(folderId: number, payload: CopyFolderRequest): 
   const parsed = parseWithZod<CopyFolderEnvelope>(copyFolderEnvelope, response)
   return parsed.data
 }
+
+export async function downloadFolder(folderId: number): Promise<Blob> {
+  const response = await get<Blob>(`/api/folders/${folderId}/download`, {
+    responseType: 'blob',
+    headers: {
+      Accept: 'application/zip',
+    },
+  })
+  return response
+}
+
+export async function downloadFolderWithToken(folderId: number, token: string): Promise<Blob> {
+  const response = await get<Blob>(`/api/folders/${folderId}/download`, {
+    params: { token },
+    responseType: 'blob',
+    headers: {
+      Accept: 'application/zip',
+    },
+  })
+  return response
+}
+
+export type FolderPreviewStats = {
+  total_files: number
+  total_folders: number
+  total_size: number
+  total_size_formatted: string
+}
+
+export type FolderPreviewFolder = {
+  folder_id: number
+  folder_name: string
+  created_at: string
+  updated_at: string
+}
+
+export type FolderPreviewFile = {
+  file_id: number
+  display_name: string
+  file_size: number
+  mime_type: string
+  file_extension: string
+  created_at: string
+  updated_at: string
+  last_opened_at: string | null
+}
+
+export type FolderPreviewContents = {
+  folders: FolderPreviewFolder[]
+  files: FolderPreviewFile[]
+}
+
+export type FolderPreviewData = {
+  folder: FolderPreviewFolder
+  stats: FolderPreviewStats
+  contents: FolderPreviewContents
+}
+
+export async function getFolderPreview(folderId: number, token?: string): Promise<FolderPreviewData> {
+  const config = token ? { params: { token } } : {}
+  const response = await get<{ success: boolean; data: FolderPreviewData }>(`/api/folders/${folderId}/preview`, config)
+  return response.data
+}

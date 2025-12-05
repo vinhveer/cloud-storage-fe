@@ -8,6 +8,7 @@ import {
   UpdatePublicLinkEnvelopeSchema,
   UpdatePublicLinkRequestSchema,
   PublicLinkPreviewEnvelopeSchema,
+  PublicLinkFolderPreviewEnvelopeSchema,
   PublicLinkDownloadEnvelopeSchema,
   RevokePublicLinkEnvelopeSchema,
   FilePublicLinksEnvelopeSchema,
@@ -25,6 +26,8 @@ import type {
   UpdatePublicLinkSuccess,
   PublicLinkPreviewData,
   PublicLinkPreviewEnvelope,
+  PublicLinkFolderPreviewData,
+  PublicLinkFolderPreviewEnvelope,
   PublicLinkDownloadData,
   PublicLinkDownloadEnvelope,
   RevokePublicLinkEnvelope,
@@ -81,6 +84,12 @@ export async function updatePublicLink(id: number, payload: UpdatePublicLinkRequ
 export async function getPublicLinkPreview(token: string): Promise<PublicLinkPreviewData> {
   const response = await get<unknown>(`/api/public-links/${token}/preview`)
   const parsed = parseWithZod<PublicLinkPreviewEnvelope>(publicLinkPreviewEnvelope, response)
+  return parsed.data
+}
+
+export async function getPublicLinkFolderPreview(token: string): Promise<PublicLinkFolderPreviewData> {
+  const response = await get<unknown>(`/api/public-links/${token}/preview`)
+  const parsed = parseWithZod<PublicLinkFolderPreviewEnvelope>(PublicLinkFolderPreviewEnvelopeSchema, response)
   return parsed.data
 }
 

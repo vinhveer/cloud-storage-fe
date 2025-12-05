@@ -29,6 +29,7 @@ export function useMyFilesMenuItems() {
       variant: 'danger',
       action: (item: FileItem) => { if (item.id) deleteFolderMutation.mutate(Number(item.id)) },
     },
+    { label: 'Download', icon: ArrowDownTrayIcon, action: (item: FileItem) => { console.log('Download folder', item) } },
     {
       label: 'Rename',
       icon: PencilIcon,

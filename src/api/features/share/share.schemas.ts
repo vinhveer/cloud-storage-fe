@@ -87,7 +87,7 @@ export const ReceivedShareOwnerSchema = z.object({
 export const ReceivedShareItemSchema = z.object({
   share_id: z.number(),
   shareable_type: z.enum(['file', 'folder']),
-  shareable_id: z.number(),
+  shareable_id: z.number().optional(),
   shareable_name: z.string(),
   owner: ReceivedShareOwnerSchema,
   permission: z.string(),
@@ -104,6 +104,8 @@ export const ReceivedSharesSuccessSchema = z.object({
   data: z.array(ReceivedShareItemSchema),
   pagination: ReceivedSharesPaginationSchema,
 })
+
+export const ReceivedSharesEnvelopeSchema = createApiResponseSchema(ReceivedSharesSuccessSchema)
 
 export const AddShareUsersRequestSchema = z.object({
   user_ids: z.array(z.number()),

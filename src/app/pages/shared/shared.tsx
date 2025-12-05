@@ -4,8 +4,11 @@ import Subnav from '@/components/Subnav/Subnav'
 import type { SubnavItem } from '@/components/Subnav/Subnav'
 import ContextMenu from '@/components/FileList/ContextMenu'
 import Dialog from '@/components/Dialog/Dialog'
-import { UserGroupIcon, InformationCircleIcon, TrashIcon, MinusIcon } from '@heroicons/react/24/outline'
+import { UserGroupIcon, InformationCircleIcon, TrashIcon, MinusIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 import type { MenuItem } from '@/components/FileList'
+import { useDownloadFile } from '@/api/features/file/file.mutations'
+import { useDownloadFolder } from '@/api/features/folder/folder.mutations'
+import { useAlert } from '@/components/Alert/AlertProvider'
 import { useShared } from './hooks/useShared'
 import SharedTable from './components/SharedTable'
 import ShareDetailsOffcanvas from './components/ShareDetailsOffcanvas'
@@ -20,6 +23,9 @@ const subnavItems: SubnavItem[] = [
 export default function SharedPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const downloadFileMutation = useDownloadFile()
+  const downloadFolderMutation = useDownloadFolder()
+  const { showAlert } = useAlert()
   const {
     activeTab,
     setActiveTab,
@@ -36,6 +42,7 @@ export default function SharedPage() {
     items,
     isLoading,
     handleRemoveUser,
+    handleAddUsers,
     handleDeleteShare,
     removeShareUserMutation,
   } = useShared()
@@ -73,6 +80,89 @@ export default function SharedPage() {
       },
     },
   ]
+
+  const getWithYouMenuItems = (item: SharedItem): MenuItem[] => {
+    const base: MenuItem[] = [
+      {
+        label: 'Details',
+        icon: InformationCircleIcon,
+        action: () => {
+          setSelectedItem(item)
+          setDetailsOpen(true)
+        },
+      },
+    ]
+
+    // Show Download for files (requires shareableId from backend)
+    if (item.shareableType === 'file') {
+      base.push({
+        label: 'Download',
+        icon: ArrowDownTrayIcon,
+        action: (file) => {
+          const shared = file as SharedItem
+          if (!shared.shareableId) {
+            showAlert({ type: 'error', heading: 'Download failed', message: 'File ID not available. Backend needs to return shareable_id.' })
+            return
+          }
+          const fileId = Number(shared.shareableId)
+          if (Number.isNaN(fileId)) return
+
+          downloadFileMutation.mutate(fileId, {
+            onSuccess: (blob) => {
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = shared.name
+              document.body.appendChild(a)
+              a.click()
+              document.body.removeChild(a)
+              URL.revokeObjectURL(url)
+              showAlert({ type: 'success', heading: 'Downloaded', message: `Downloaded "${shared.name}" successfully.` })
+            },
+            onError: () => {
+              showAlert({ type: 'error', heading: 'Download failed', message: `Failed to download "${shared.name}".` })
+            },
+          })
+        },
+      })
+    }
+
+    // Show Download for folders (requires shareableId from backend)
+    if (item.shareableType === 'folder') {
+      base.push({
+        label: 'Download',
+        icon: ArrowDownTrayIcon,
+        action: (folder) => {
+          const shared = folder as SharedItem
+          if (!shared.shareableId) {
+            showAlert({ type: 'error', heading: 'Download failed', message: 'Folder ID not available. Backend needs to return shareable_id.' })
+            return
+          }
+          const folderId = Number(shared.shareableId)
+          if (Number.isNaN(folderId)) return
+
+          downloadFolderMutation.mutate(folderId, {
+            onSuccess: (blob) => {
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = `${shared.name}.zip`
+              document.body.appendChild(a)
+              a.click()
+              document.body.removeChild(a)
+              URL.revokeObjectURL(url)
+              showAlert({ type: 'success', heading: 'Downloaded', message: `Downloaded "${shared.name}" as ZIP successfully.` })
+            },
+            onError: () => {
+              showAlert({ type: 'error', heading: 'Download failed', message: `Failed to download "${shared.name}".` })
+            },
+          })
+        },
+      })
+    }
+
+    return base
+  }
 
   const handleMoreClick = (e: React.MouseEvent, item: SharedItem) => {
     e.stopPropagation()
@@ -124,17 +214,21 @@ export default function SharedPage() {
           isLoading={isLoading}
           activeTab={activeTab}
           onItemClick={handleItemClick}
-          onMoreClick={activeTab === 'by' ? handleMoreClick : undefined}
+          onMoreClick={handleMoreClick}
         />
       </section>
 
-      {contextMenu && activeTab === 'by' && (
+      {contextMenu && (
         <ContextMenu
           file={contextMenu.item}
           x={contextMenu.x}
           y={contextMenu.y}
           containerRect={containerRef.current?.getBoundingClientRect()}
-          menuItems={getByYouMenuItems(contextMenu.item)}
+          menuItems={
+            activeTab === 'by'
+              ? getByYouMenuItems(contextMenu.item)
+              : getWithYouMenuItems(contextMenu.item)
+          }
           onClose={() => setContextMenu(null)}
         />
       )}
@@ -152,6 +246,7 @@ export default function SharedPage() {
         shareDetail={shareDetail}
         isLoading={isLoadingDetail}
         onRemoveUser={handleRemoveUser}
+        onAddUsers={handleAddUsers}
         isRemoving={removeShareUserMutation.isPending}
       />
 

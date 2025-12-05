@@ -9,10 +9,9 @@ import AddUsersForm from './AddUsersForm'
 interface ShareDetailModalProps {
   shareId: number
   onClose: () => void
-  onRefresh: () => void
 }
 
-export default function ShareDetailModal({ shareId, onClose, onRefresh }: ShareDetailModalProps) {
+export default function ShareDetailModal({ shareId, onClose }: ShareDetailModalProps) {
   const [showAddUsers, setShowAddUsers] = useState(false)
   const { data: shareDetail, isLoading } = useShareDetail(shareId)
   const removeUserMutation = useRemoveShareUser()
@@ -24,7 +23,6 @@ export default function ShareDetailModal({ shareId, onClose, onRefresh }: ShareD
     try {
       await removeUserMutation.mutateAsync({ shareId, userId })
       showAlert({ type: 'success', message: 'User removed successfully' })
-      onRefresh()
     } catch {
       showAlert({ type: 'error', message: 'Failed to remove user' })
     }
@@ -32,7 +30,6 @@ export default function ShareDetailModal({ shareId, onClose, onRefresh }: ShareD
 
   const handleAddUsersSuccess = () => {
     setShowAddUsers(false)
-    onRefresh()
   }
 
   if (isLoading) {

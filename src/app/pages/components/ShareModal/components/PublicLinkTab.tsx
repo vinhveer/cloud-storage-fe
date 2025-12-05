@@ -13,7 +13,6 @@ import {
 import { usePublicLinks, useFilePublicLinks } from '@/api/features/public-link/public-link.queries'
 import { useRevokePublicLink, useUpdatePublicLink } from '@/api/features/public-link/public-link.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
-import { useQueryClient } from '@tanstack/react-query'
 import Loading from '@/components/Loading/Loading'
 import CreatePublicLinkForm from './CreatePublicLinkForm'
 import { env } from '@/api/config/env'
@@ -23,20 +22,17 @@ interface PublicLinkTabProps {
   initialShareableType?: 'file' | 'folder'
   initialShareableId?: number
   initialShareableName?: string
-  onRefresh: () => void
 }
 
 export default function PublicLinkTab({
   initialShareableType,
   initialShareableId,
   initialShareableName,
-  onRefresh,
 }: PublicLinkTabProps) {
   const [page, setPage] = useState(1)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [copiedToken, setCopiedToken] = useState<string | null>(null)
   
-  const queryClient = useQueryClient()
   const { showAlert } = useAlert()
   
   // Mode: per-resource (when initialShareableId is provided for file)
@@ -79,10 +75,6 @@ export default function PublicLinkTab({
     try {
       await revokeMutation.mutateAsync({ id })
       showAlert({ type: 'success', message: 'Public link revoked successfully' })
-      if (isResourceMode) {
-        await queryClient.invalidateQueries({ queryKey: ['file-public-links', initialShareableId] })
-      }
-      onRefresh()
     } catch {
       showAlert({ type: 'error', message: 'Failed to revoke public link' })
     }
@@ -92,10 +84,6 @@ export default function PublicLinkTab({
     try {
       await updateMutation.mutateAsync({ id, permission })
       showAlert({ type: 'success', message: 'Permission updated' })
-      if (isResourceMode) {
-        await queryClient.invalidateQueries({ queryKey: ['file-public-links', initialShareableId] })
-      }
-      onRefresh()
     } catch {
       showAlert({ type: 'error', message: 'Failed to update permission' })
     }
@@ -103,10 +91,6 @@ export default function PublicLinkTab({
 
   const handleCreateSuccess = () => {
     setShowCreateForm(false)
-    if (isResourceMode) {
-      queryClient.invalidateQueries({ queryKey: ['file-public-links', initialShareableId] })
-    }
-    onRefresh()
   }
 
   // Show create form
@@ -201,7 +185,7 @@ export default function PublicLinkTab({
         <div className="space-y-4">
           {activeLinks.map((link: FilePublicLinkItem) => {
             const isExpired = link.expired_at ? new Date(link.expired_at) < new Date() : false
-            const linkUrl = link.url || getPublicLinkUrl(link.token)
+            const linkUrl = getPublicLinkUrl(link.token)
 
             return (
               <div

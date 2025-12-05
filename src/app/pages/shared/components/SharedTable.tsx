@@ -19,6 +19,13 @@ export default function SharedTable({
   onItemClick,
   onMoreClick,
 }: Readonly<SharedTableProps>) {
+  console.log('SharedTable props', {
+    activeTab,
+    isLoading,
+    itemsLength: items.length,
+    items,
+  })
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -44,7 +51,7 @@ export default function SharedTable({
           <th className="px-6 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
             {activeTab === 'with' ? 'Shared by' : 'Shared with'}
           </th>
-          {activeTab === 'by' && (
+          {onMoreClick && (
             <th className="px-6 py-3 text-right font-medium text-gray-600 dark:text-gray-400 w-12"></th>
           )}
         </tr>
@@ -66,7 +73,7 @@ export default function SharedTable({
             </td>
             <td className="px-6 py-3 text-gray-700 dark:text-gray-300">{item.sharedDate}</td>
             <td className="px-6 py-3 text-gray-700 dark:text-gray-300">{item.owner}</td>
-            {activeTab === 'by' && (
+            {onMoreClick && (
               <td className="px-6 py-3 text-right">
                 <button
                   onClick={(e) => {

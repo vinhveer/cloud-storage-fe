@@ -7,6 +7,7 @@ import {
   ShareDetailSchema,
   DeleteShareSuccessSchema,
   ReceivedSharesSuccessSchema,
+  ReceivedSharesEnvelopeSchema,
   AddShareUsersEnvelopeSchema,
   AddShareUsersRequestSchema,
   ShareByResourceEnvelopeSchema,
@@ -83,8 +84,26 @@ export async function getReceivedShares(params: ReceivedSharesParams = {}): Prom
       per_page: params.per_page,
     },
   })
-  const parsed = parseWithZod<ReceivedSharesSuccess>(ReceivedSharesSuccessSchema, response)
-  return parsed
+
+  const envelopeParsed = ReceivedSharesEnvelopeSchema.safeParse(response)
+  if (envelopeParsed.success) {
+    return envelopeParsed.data.data
+  }
+
+  const plainParsed = ReceivedSharesSuccessSchema.safeParse(response)
+  if (plainParsed.success) {
+    return plainParsed.data
+  }
+
+  // Fallback: coerce minimal shape without throwing to keep UI working even if backend changes slightly
+  const anyResp = response as any
+  const data = Array.isArray(anyResp?.data) ? anyResp.data : []
+  const pagination = anyResp?.pagination ?? {
+    current_page: 1,
+    total_pages: 1,
+    total_items: data.length,
+  }
+  return { data, pagination }
 }
 
 export async function addShareUsers(shareId: number, payload: AddShareUsersRequest): Promise<AddShareUsersSuccess> {

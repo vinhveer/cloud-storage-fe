@@ -19,6 +19,7 @@ import {
   AddShareUsersEnvelopeSchema,
   ShareByResourceSchema,
   ShareByResourceEnvelopeSchema,
+  ReceivedSharesEnvelopeSchema,
 } from './share.schemas'
 
 export type ShareRecipient = z.infer<typeof ShareRecipientSchema>
@@ -40,6 +41,7 @@ export type DeleteShareSuccess = z.infer<typeof DeleteShareSuccessSchema>
 export type ReceivedShareItem = z.infer<typeof ReceivedShareItemSchema>
 export type ReceivedSharesPagination = z.infer<typeof ReceivedSharesPaginationSchema>
 export type ReceivedSharesSuccess = z.infer<typeof ReceivedSharesSuccessSchema>
+export type ReceivedSharesEnvelope = z.infer<typeof ReceivedSharesEnvelopeSchema>
 
 export type RemoveShareUserSuccess = DeleteShareSuccess
 

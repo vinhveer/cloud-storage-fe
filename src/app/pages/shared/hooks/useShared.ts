@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useListShares, useReceivedShares, useShareDetail } from '@/api/features/share/share.queries'
-import { useDeleteShare, useRemoveShareUser } from '@/api/features/share/share.mutations'
+import { useDeleteShare, useRemoveShareUser, useAddShareUsers } from '@/api/features/share/share.mutations'
 import { useAlert } from '@/components/Alert/AlertProvider'
 import type { SharedItem, Tab } from '../types'
 import { formatDate, getFileTypeFromName } from '../utils'
@@ -22,6 +22,7 @@ export function useShared() {
 
   const deleteShareMutation = useDeleteShare()
   const removeShareUserMutation = useRemoveShareUser()
+  const addShareUsersMutation = useAddShareUsers()
 
   const handleRemoveUser = useCallback(
     (userId: number) => {
@@ -61,6 +62,21 @@ export function useShared() {
     )
   }, [selectedItem, deleteShareMutation, queryClient, showAlert])
 
+  const handleAddUsers = useCallback(
+    async (userIds: number[]) => {
+      if (!shareDetail?.share_id) throw new Error('No share selected')
+      await addShareUsersMutation.mutateAsync({
+        shareId: shareDetail.share_id,
+        userIds,
+        permission: 'download',
+      })
+      queryClient.invalidateQueries({ queryKey: ['share-detail', shareDetail.share_id] })
+      queryClient.invalidateQueries({ queryKey: ['shares'] })
+      showAlert({ type: 'success', message: 'Users added successfully.' })
+    },
+    [shareDetail, addShareUsersMutation, queryClient, showAlert]
+  )
+
   const withYouItems: SharedItem[] = (receivedData?.data || []).map((item) => ({
     id: String(item.share_id),
     name: item.shareable_name,
@@ -85,6 +101,7 @@ export function useShared() {
   const items = activeTab === 'with' ? withYouItems : byYouItems
   const isLoading = activeTab === 'with' ? isLoadingReceived : isLoadingByYou
 
+  
   return {
     activeTab,
     setActiveTab,
@@ -101,6 +118,7 @@ export function useShared() {
     items,
     isLoading,
     handleRemoveUser,
+    handleAddUsers,
     handleDeleteShare,
     deleteShareMutation,
     removeShareUserMutation,

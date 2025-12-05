@@ -161,8 +161,7 @@ export default function TrashPage() {
               onSelectionChange={setSelectedItems}
               onItemOpen={handleItemOpen}
               actionRef={selectionActionRef}
-              folderContextMenuItems={[]}
-              fileContextMenuItems={[]}
+              hideContextMenu
               toolbarRight={
                 <>
                   <span className="hidden sm:inline-block text-sm text-gray-500 dark:text-gray-400 mr-2">
