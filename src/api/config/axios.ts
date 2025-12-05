@@ -45,14 +45,6 @@ httpClient.interceptors.request.use(config => {
     }
   }
 
-  const method = (config.method ?? 'get').toUpperCase()
-  // eslint-disable-next-line no-console
-  console.log('[HTTP REQUEST]', method, config.url, {
-    params: config.params,
-    data: config.data,
-    headers: config.headers,
-  })
-
   return config
 })
 
@@ -70,16 +62,12 @@ httpClient.interceptors.request.use(config => {
  */
 httpClient.interceptors.response.use(
   response => {
-    // eslint-disable-next-line no-console
-    console.log('[HTTP RESPONSE]', response.status, response.config.url, response.data)
     return response
   },
 
   async error => {
     const axiosError = error as AxiosError
     const status = axiosError.response?.status
-    // eslint-disable-next-line no-console
-    console.log('[HTTP ERROR]', status, axiosError.config?.url, axiosError.response?.data ?? axiosError.message)
 
     if (status === 401) {
       clearTokens()
